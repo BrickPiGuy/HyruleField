@@ -35,6 +35,7 @@ pages.forEach((page) => {
 const indexHtml = read("index.html");
 assert.match(indexHtml, /DevOps Triforce: Rise of Lord Ganonix/, "index page title text missing");
 assert.match(indexHtml, /id="quiz-submit"/, "index quiz interaction missing");
+assert.match(indexHtml, /assets\/icons\/triforce\.png/, "index should use optimized asset path for hero image");
 assert.match(indexHtml, /js\/engine\/random-seed\.js/, "index should load random seed engine");
 assert.match(indexHtml, /js\/engine\/incidents\.js/, "index should load incidents engine");
 assert.match(indexHtml, /js\/ui\/daily-mode\.js/, "index should load daily mode UI module");
