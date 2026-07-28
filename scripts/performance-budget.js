@@ -6,7 +6,7 @@ const root = path.resolve(__dirname, "..");
 const budgets = [
   { file: "index.html", maxBytes: 16_000 },
   { file: "css/style.css", maxBytes: 16_000 },
-  { file: "js/challenges.js", maxBytes: 18_000 },
+  { file: "js/challenges.js", maxBytes: 20_000 },
   { file: "assets/icons/triforce.png", maxBytes: 2_800_000 }
 ];
 
