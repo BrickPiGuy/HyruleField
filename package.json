@@ -1,0 +1,9 @@
+{
+  "name": "devops-triforce",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive DevOps learning site",
+  "scripts": {
+    "test": "node tests/site.test.js"
+  }
+}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Final Battle | DevOps Triforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="final">
+  <div class="site-shell">
+    <nav class="top-nav">
+      <strong>Final Battle</strong>
+      <ul>
+        <li><a href="index.html">Kingdom</a></li>
+        <li><a href="power.html">Power</a></li>
+        <li><a href="wisdom.html">Wisdom</a></li>
+        <li><a href="courage.html">Courage</a></li>
+      </ul>
+    </nav>
+
+    <section class="status-bar">
+      <div>
+        <div class="triforce-progress">
+          <div class="triangle" data-piece="power"></div>
+          <div class="triangle" data-piece="wisdom"></div>
+          <div class="triangle" data-piece="courage"></div>
+        </div>
+        <p id="temple-count">0 / 3 temples restored</p>
+      </div>
+      <div class="corruption">
+        <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
+        <div class="meter"><div class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <h1>The Final Battle</h1>
+    <p>Complete every operation in order to defeat Lord Ganonix.</p>
+
+    <section class="card-grid">
+      <article class="card">
+        <h2>Battle Checklist</h2>
+        <label class="quiz-option"><input data-final-task type="checkbox"> Repair the build.</label>
+        <label class="quiz-option"><input data-final-task type="checkbox"> Make all tests pass.</label>
+        <label class="quiz-option"><input data-final-task type="checkbox"> Resolve all security findings.</label>
+        <label class="quiz-option"><input data-final-task type="checkbox"> Protect production environment.</label>
+        <label class="quiz-option"><input data-final-task type="checkbox"> Obtain release approval.</label>
+        <label class="quiz-option"><input data-final-task type="checkbox"> Deploy the restored release.</label>
+        <p><button id="finish-battle">Resolve Release</button></p>
+        <p id="battle-result"></p>
+      </article>
+
+      <article class="card">
+        <h2>Pipeline Health Dashboard</h2>
+        <div class="pipeline">
+          <div class="pipeline-step active">Commit</div>
+          <div class="pipeline-step active">Build</div>
+          <div class="pipeline-step active">Test</div>
+          <div class="pipeline-step active">Security Scan</div>
+          <div class="pipeline-step active">Review / Approval</div>
+          <div class="pipeline-step active">Deploy</div>
+        </div>
+      </article>
+    </section>
+
+    <section id="certificate" class="completion-certificate hidden" style="margin-top:1rem;">
+      <h2>Printable Completion Badge</h2>
+      <p>This certifies you restored the DevOps Triforce and secured production against Lord Ganonix.</p>
+      <p><strong>Title:</strong> Guardian of the Deployment Gate</p>
+      <p><button id="print-badge">Print Badge</button></p>
+    </section>
+  </div>
+
+  <script src="js/progress.js"></script>
+  <script src="js/challenges.js"></script>
+</body>
+</html>

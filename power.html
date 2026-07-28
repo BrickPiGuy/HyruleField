@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Temple of Power | DevOps Triforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="power">
+  <div class="site-shell">
+    <nav class="top-nav">
+      <strong>Temple of Power</strong>
+      <ul>
+        <li><a href="index.html">Kingdom</a></li>
+        <li><a href="wisdom.html">Wisdom</a></li>
+        <li><a href="courage.html">Courage</a></li>
+        <li><a href="final-battle.html">Final Battle</a></li>
+      </ul>
+    </nav>
+
+    <section class="status-bar">
+      <div>
+        <div class="triforce-progress" aria-label="Triforce progress">
+          <div class="triangle" data-piece="power"></div>
+          <div class="triangle" data-piece="wisdom"></div>
+          <div class="triangle" data-piece="courage"></div>
+        </div>
+        <p id="temple-count">0 / 3 temples restored</p>
+      </div>
+      <div class="corruption">
+        <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
+        <div class="meter"><div class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <h1>Temple of Power: Continuous Integration Forge</h1>
+    <p>Restore the forge by proving each commit passes build, lint, tests, and artifact packaging.</p>
+
+    <section class="card-grid">
+      <article class="card">
+        <h2>Pipeline Stages</h2>
+        <div class="pipeline">
+          <div class="pipeline-step" data-ci-step="1">Checkout</div>
+          <div class="pipeline-step" data-ci-step="2">Install Dependencies</div>
+          <div class="pipeline-step" data-ci-step="3">Lint</div>
+          <div class="pipeline-step" data-ci-step="4">Unit Tests</div>
+          <div class="pipeline-step" data-ci-step="5">Artifact Build</div>
+        </div>
+      </article>
+
+      <article class="console">
+        <h2>Simulated GitHub Actions Console</h2>
+        <div id="ci-log" class="log">Waiting for workflow dispatch...</div>
+        <p>
+          <button id="run-ci">Run CI Workflow</button>
+        </p>
+        <p id="power-status"></p>
+      </article>
+    </section>
+  </div>
+
+  <script src="js/progress.js"></script>
+  <script src="js/challenges.js"></script>
+</body>
+</html>

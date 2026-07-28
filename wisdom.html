@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Temple of Wisdom | DevOps Triforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="wisdom">
+  <div class="site-shell">
+    <nav class="top-nav">
+      <strong>Temple of Wisdom</strong>
+      <ul>
+        <li><a href="index.html">Kingdom</a></li>
+        <li><a href="power.html">Power</a></li>
+        <li><a href="courage.html">Courage</a></li>
+        <li><a href="final-battle.html">Final Battle</a></li>
+      </ul>
+    </nav>
+
+    <section class="status-bar">
+      <div>
+        <div class="triforce-progress">
+          <div class="triangle" data-piece="power"></div>
+          <div class="triangle" data-piece="wisdom"></div>
+          <div class="triangle" data-piece="courage"></div>
+        </div>
+        <p id="temple-count">0 / 3 temples restored</p>
+      </div>
+      <div class="corruption">
+        <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
+        <div class="meter"><div class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <h1>Temple of Wisdom: DevSecOps Wards</h1>
+    <p>Secure the gates by clearing each threat and exposing the hidden unsafe workflow.</p>
+
+    <section class="card-grid">
+      <article class="card" data-security-card="secrets">
+        <h2>Secret Curse</h2>
+        <p>Rotate leaked credentials and add secret scanning rules.</p>
+        <button>Apply Fix</button>
+      </article>
+
+      <article class="card" data-security-card="dependency">
+        <h2>Dependency Blight</h2>
+        <p>Patch a vulnerable third-party package and re-run checks.</p>
+        <button>Apply Fix</button>
+      </article>
+
+      <article class="card" data-security-card="codeql">
+        <h2>Theft of Wisdom</h2>
+        <p>Enable code analysis and least-privilege workflow permissions.</p>
+        <button>Apply Fix</button>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top: 1rem;">
+      <h2>Hidden Ganonix Workflow</h2>
+      <p>Describe the unsafe pattern you detected.</p>
+      <input id="hidden-workflow-input" type="text" style="width:100%; padding:0.55rem; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:#0a1518; color:#eaf1e7;" placeholder="Example: deploy every commit directly to production">
+      <p><button id="hidden-workflow-check">Reveal Corruption</button></p>
+      <p id="hidden-workflow-result"></p>
+      <p id="wisdom-status"></p>
+    </section>
+  </div>
+
+  <script src="js/progress.js"></script>
+  <script src="js/challenges.js"></script>
+</body>
+</html>

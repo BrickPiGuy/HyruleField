@@ -1,0 +1,19 @@
+name: Ganonix Shadow Workflow (Training Artifact)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unsafe-direct-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dangerous deploy simulation
+        run: |
+          echo "This intentionally bad workflow demonstrates a direct deploy pattern."
+          echo "Never deploy every commit directly to production without checks."

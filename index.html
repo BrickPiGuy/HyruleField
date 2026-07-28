@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DevOps Triforce: Rise of Lord Ganonix</title>
+  <meta name="description" content="Master CI/CD, secure the pipeline, and stop the Shadow Deploy Lord from corrupting production.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="index">
+  <div class="site-shell">
+    <nav class="top-nav">
+      <strong>HyruleField Academy</strong>
+      <ul>
+        <li><a href="index.html">Kingdom</a></li>
+        <li><a href="power.html">Power</a></li>
+        <li><a href="wisdom.html">Wisdom</a></li>
+        <li><a href="courage.html">Courage</a></li>
+        <li><a href="final-battle.html">Final Battle</a></li>
+      </ul>
+      <button id="reset-progress" class="secondary">Reset Progress</button>
+    </nav>
+
+    <section class="status-bar">
+      <div>
+        <div class="triforce-progress" aria-label="Triforce progress">
+          <div class="triangle" data-piece="power" title="Power"></div>
+          <div class="triangle" data-piece="wisdom" title="Wisdom"></div>
+          <div class="triangle" data-piece="courage" title="Courage"></div>
+        </div>
+        <p id="temple-count">0 / 3 temples restored</p>
+      </div>
+      <div class="corruption">
+        <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
+        <div class="meter"><div class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <section class="hero">
+      <div>
+        <h1>DevOps Triforce: Rise of Lord Ganonix</h1>
+        <p><strong>Master CI/CD, secure the pipeline, and stop the Shadow Deploy Lord from corrupting production.</strong></p>
+        <p class="warning">Do not assemble the Triforce before the gates are secure. Build, test, scan, review, then deploy.</p>
+        <div class="choice-panel">
+          <h2>Pipeline Fate Choice</h2>
+          <p>Choose your next command:</p>
+          <button id="safe-path">Run Full Gate Sequence</button>
+          <button id="reckless-path" class="danger">Deploy Immediately</button>
+          <p id="choice-result"></p>
+        </div>
+      </div>
+      <img src="triforce.png" alt="Golden triforce symbol glowing over a dark kingdom map">
+    </section>
+
+    <section class="timeline-panel" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">Pipeline Timeline Simulator</h2>
+      <p>Run the release path and watch each gate ignite in sequence.</p>
+      <div class="timeline-controls">
+        <button id="timeline-run">Run Timeline</button>
+        <button id="timeline-replay" class="secondary">Replay</button>
+      </div>
+      <div class="timeline-track" id="timeline-track">
+        <div class="timeline-node" data-timeline-step="commit"><span>Commit</span></div>
+        <div class="timeline-node" data-timeline-step="build"><span>Build</span></div>
+        <div class="timeline-node" data-timeline-step="test"><span>Test</span></div>
+        <div class="timeline-node" data-timeline-step="scan"><span>Security Scan</span></div>
+        <div class="timeline-node" data-timeline-step="review"><span>Review</span></div>
+        <div class="timeline-node" data-timeline-step="deploy"><span>Deploy</span></div>
+      </div>
+      <p id="timeline-status" class="timeline-status">Timeline idle. Awaiting command.</p>
+    </section>
+
+    <section class="card-grid">
+      <article class="card">
+        <h2>Knowledge Check</h2>
+        <p>Which release order keeps production secure?</p>
+        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="deploy-build-fix"> Deploy, then patch errors</label>
+        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-test-scan-review-deploy"> Build, test, scan, review, deploy</label>
+        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-scan-deploy-test"> Build, scan, deploy, then test</label>
+        <button id="quiz-submit">Submit Answer</button>
+        <p id="quiz-result"></p>
+      </article>
+
+      <article class="compare-panel">
+        <h2>CI vs CD vs DevOps vs DevSecOps</h2>
+        <table>
+          <thead>
+            <tr><th>Practice</th><th>Primary Focus</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>CI</td><td>Frequent integration with build and test automation</td></tr>
+            <tr><td>CD</td><td>Reliable release flow to deploy-ready state or production</td></tr>
+            <tr><td>DevOps</td><td>Shared ownership between development and operations</td></tr>
+            <tr><td>DevSecOps</td><td>Security checks integrated into delivery workflows</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="badge-panel">
+        <h2>Achievement Badges</h2>
+        <div class="badges">
+          <span class="badge" data-badge="power">Power Keeper</span>
+          <span class="badge" data-badge="wisdom">Wisdom Warden</span>
+          <span class="badge" data-badge="courage">Courage Captain</span>
+          <span class="badge" data-badge="champion">Ganonix Slayer</span>
+        </div>
+        <p>Unlock all badges by restoring all temples with low corruption.</p>
+      </article>
+    </section>
+
+    <p class="footer-note">Start at the Temple of Power and finish at the Final Battle to complete your printable victory badge.</p>
+  </div>
+
+  <script src="js/progress.js"></script>
+  <script src="js/challenges.js"></script>
+</body>
+</html>
