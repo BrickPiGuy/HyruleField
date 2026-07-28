@@ -23,6 +23,29 @@ function isReducedMotionPreferred() {
   return Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 }
 
+function computeBaseStepDelay(targetMs, initialDelay, divisor, reducedMotion) {
+  if (reducedMotion) {
+    return 0;
+  }
+
+  return Math.round((targetMs - initialDelay) / Math.max(divisor, 1));
+}
+
+function estimateReadableDelay(text, reducedMotion) {
+  if (reducedMotion) {
+    return 0;
+  }
+
+  const minVisibleMs = 850;
+  const charsPerSecond = 24;
+  const estimatedMs = Math.ceil((text.length / charsPerSecond) * 1000);
+  return Math.max(minVisibleMs, estimatedMs);
+}
+
+function stepDelayForText(baseStepDelay, text, reducedMotion) {
+  return Math.max(baseStepDelay, estimateReadableDelay(text, reducedMotion));
+}
+
 function emitStory(eventKey, actionResult) {
   if (!window.HyruleStoryEngine || !window.HyruleStoryLog) {
     return;
@@ -141,20 +164,8 @@ function setupPipelineTimeline() {
   const reducedMotion = isReducedMotionPreferred();
   const timelineTargetMs = 6000;
   const initialDelay = reducedMotion ? 0 : 260;
-  const baseStepDelay = reducedMotion ? 0 : Math.round((timelineTargetMs - initialDelay) / Math.max(nodes.length - 1, 1));
+  const baseStepDelay = computeBaseStepDelay(timelineTargetMs, initialDelay, nodes.length - 1, reducedMotion);
   let running = false;
-
-  function readDelayForStatus(text) {
-    if (reducedMotion) {
-      return 0;
-    }
-
-    // Approximate reading time, with a floor so status changes are visible.
-    const minVisibleMs = 850;
-    const charsPerSecond = 24;
-    const estimatedMs = Math.ceil((text.length / charsPerSecond) * 1000);
-    return Math.max(minVisibleMs, estimatedMs);
-  }
 
   const runSequence = (corruptAtDeploy) => {
     if (running) {
@@ -167,7 +178,7 @@ function setupPipelineTimeline() {
     replayButton.disabled = true;
 
     const statusMessages = labels.map((label) => `${label} gate engaged...`);
-    const stepDelays = statusMessages.map((message) => Math.max(baseStepDelay, readDelayForStatus(message)));
+    const stepDelays = statusMessages.map((message) => stepDelayForText(baseStepDelay, message, reducedMotion));
 
     nodes.forEach((node, index) => {
       const delayToStep = stepDelays.slice(0, index).reduce((total, value) => total + value, initialDelay);
@@ -284,26 +295,37 @@ async function setupPowerPage() {
 
     logNode.textContent = "CI Console Booting...";
     const reducedMotion = isReducedMotionPreferred();
-    let delay = reducedMotion ? 0 : 240;
+    const sequenceTargetMs = 6000;
+    const initialDelay = reducedMotion ? 0 : 260;
+    const baseStepDelay = computeBaseStepDelay(sequenceTargetMs, initialDelay, steps.length + 1, reducedMotion);
+    let delay = initialDelay;
+
+    if (runButton) {
+      runButton.disabled = true;
+    }
 
     steps.forEach((step, index) => {
+      const line = `Step ${index + 1}: ${step} ... OK`;
+      const stepDelay = stepDelayForText(baseStepDelay, line, reducedMotion);
       setTimeout(() => {
-        appendLog(logNode, `Step ${index + 1}: ${step} ... OK`);
+        appendLog(logNode, line);
         const stage = document.querySelector(`[data-ci-step='${index + 1}']`);
         stage?.classList.add("active");
       }, delay);
-      delay += reducedMotion ? 0 : 260;
+      delay += stepDelay;
     });
 
+    const completionLine = "Artifact signed and ready for security gates.";
+    const completionDelay = stepDelayForText(baseStepDelay, completionLine, reducedMotion);
     setTimeout(() => {
-      appendLog(logNode, "Artifact signed and ready for security gates.");
+      appendLog(logNode, completionLine);
       doneNode.textContent = "Temple of Power restored.";
       dispatchAction({
         type: window.HyruleActions.TYPES.COMPLETE_TEMPLE,
         piece: "power"
       });
       runButton.disabled = true;
-    }, delay + (reducedMotion ? 0 : 200));
+    }, delay + completionDelay);
   });
 }
 
