@@ -46,6 +46,30 @@ function stepDelayForText(baseStepDelay, text, reducedMotion) {
   return Math.max(baseStepDelay, estimateReadableDelay(text, reducedMotion));
 }
 
+function hiddenWorkflowMessage(context) {
+  const {
+    attempt,
+    valid,
+    allCardsDone,
+    hadWisdomBefore,
+    hasWisdomNow
+  } = context;
+
+  if (!valid) {
+    return `Attempt ${attempt}: hint - identify the workflow that deploys directly without checks.`;
+  }
+
+  if (!allCardsDone && !hasWisdomNow) {
+    return `Attempt ${attempt}: hidden workflow exposed. Clear all wards to restore Wisdom.`;
+  }
+
+  if (!hadWisdomBefore && hasWisdomNow) {
+    return `Attempt ${attempt}: hidden workflow exposed. Wisdom restored.`;
+  }
+
+  return `Attempt ${attempt}: corruption pattern confirmed again.`;
+}
+
 function emitStory(eventKey, actionResult) {
   if (!window.HyruleStoryEngine || !window.HyruleStoryLog) {
     return;
@@ -355,6 +379,8 @@ async function setupWisdomPage() {
   }
 
   const cards = document.querySelectorAll("[data-security-card]");
+  let workflowAttempts = 0;
+  let workflowRevealed = false;
 
   cards.forEach((card) => {
     const button = card.querySelector("button");
@@ -375,6 +401,7 @@ async function setupWisdomPage() {
   });
 
   workflowCheck?.addEventListener("click", () => {
+    workflowAttempts += 1;
     const text = (workflowInput?.value || "").toLowerCase();
     const requiredWords = (mission.hiddenWorkflow && mission.hiddenWorkflow.requiredWords) || ["deploy"];
     const anyPhrases = (mission.hiddenWorkflow && mission.hiddenWorkflow.anyPhrases) || ["every commit", "direct"];
@@ -382,23 +409,41 @@ async function setupWisdomPage() {
       && anyPhrases.some((phrase) => text.includes(String(phrase).toLowerCase()));
 
     if (!valid) {
-      workflowResult.textContent = "Hint: identify the workflow that deploys directly without checks.";
       dispatchAction({
         type: window.HyruleActions.TYPES.HIDDEN_WORKFLOW_CHECK,
         valid: false,
         allCardsDone: false
       });
+      workflowResult.textContent = hiddenWorkflowMessage({
+        attempt: workflowAttempts,
+        valid,
+        allCardsDone: false,
+        hadWisdomBefore: false,
+        hasWisdomNow: false
+      });
       return;
     }
 
+    const stateBefore = window.HyruleEngine.getState();
+    const hadWisdomBefore = Boolean(stateBefore && stateBefore.wisdom);
     const allCardsDone = Array.from(cards).every((n) => n.getAttribute("data-cleared") === "true");
-    dispatchAction({
+    const result = dispatchAction({
       type: window.HyruleActions.TYPES.HIDDEN_WORKFLOW_CHECK,
       valid: true,
       allCardsDone
     });
 
-    workflowResult.textContent = "Hidden workflow exposed. Wisdom restored.";
+    const hasWisdomNow = Boolean(result && result.state && result.state.wisdom);
+    if (!workflowRevealed) {
+      workflowRevealed = true;
+    }
+    workflowResult.textContent = hiddenWorkflowMessage({
+      attempt: workflowAttempts,
+      valid,
+      allCardsDone,
+      hadWisdomBefore,
+      hasWisdomNow
+    });
   });
 }
 
@@ -517,32 +562,43 @@ async function setupFinalBattlePage() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const page = document.body.getAttribute("data-page");
-  const missionName = {
-    index: "kingdom",
-    power: "power",
-    wisdom: "wisdom",
-    courage: "courage",
-    final: "final-battle"
-  }[page] || "unknown";
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    const page = document.body.getAttribute("data-page");
+    const missionName = {
+      index: "kingdom",
+      power: "power",
+      wisdom: "wisdom",
+      courage: "courage",
+      final: "final-battle"
+    }[page] || "unknown";
 
-  trackTelemetry(telemetryEventName("MISSION_STARTED"), {
-    mission: missionName,
-    page
+    trackTelemetry(telemetryEventName("MISSION_STARTED"), {
+      mission: missionName,
+      page
+    });
+
+    if (page === "index") {
+      setupIndexPage();
+    } else if (page === "power") {
+      setupPowerPage();
+    } else if (page === "wisdom") {
+      setupWisdomPage();
+    } else if (page === "courage") {
+      setupCouragePage();
+    } else if (page === "final") {
+      setupFinalBattlePage();
+    }
+
+    setupKeyboardShortcuts(page);
   });
+}
 
-  if (page === "index") {
-    setupIndexPage();
-  } else if (page === "power") {
-    setupPowerPage();
-  } else if (page === "wisdom") {
-    setupWisdomPage();
-  } else if (page === "courage") {
-    setupCouragePage();
-  } else if (page === "final") {
-    setupFinalBattlePage();
-  }
-
-  setupKeyboardShortcuts(page);
-});
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    computeBaseStepDelay,
+    estimateReadableDelay,
+    stepDelayForText,
+    hiddenWorkflowMessage
+  };
+}
