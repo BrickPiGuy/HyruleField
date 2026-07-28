@@ -19,7 +19,16 @@
     FINAL_BATTLE_RESOLVE: "FINAL_BATTLE_RESOLVE"
   };
 
+  const TELEMETRY_EVENTS = {
+    MISSION_STARTED: "mission_started",
+    MISSION_RETRY: "mission_retry",
+    MISSION_FAILED: "mission_failed",
+    MISSION_COMPLETED: "mission_completed",
+    ACTION_RESOLVED: "action_resolved"
+  };
+
   return {
-    TYPES
+    TYPES,
+    TELEMETRY_EVENTS
   };
 });

@@ -26,6 +26,8 @@ pages.forEach((page) => {
   assert.match(html, /js\/engine\/rules-engine\.js/, `${page} should load rules engine`);
   assert.match(html, /js\/content\/mission-loader\.js/, `${page} should load mission loader`);
   assert.match(html, /js\/content\/story-engine\.js/, `${page} should load story engine`);
+  assert.match(html, /js\/telemetry\/session\.js/, `${page} should load telemetry session module`);
+  assert.match(html, /js\/telemetry\/events\.js/, `${page} should load telemetry events module`);
   assert.match(html, /js\/ui\/hud\.js/, `${page} should load HUD module`);
   assert.match(html, /js\/progress\.js/, `${page} should load progress script`);
   assert.match(html, /js\/ui\/story-log\.js/, `${page} should load story log module`);
@@ -48,5 +50,10 @@ const jsChallenges = read("js/challenges.js");
 assert.match(jsChallenges, /setupFinalBattlePage/, "final battle setup missing");
 assert.match(jsChallenges, /HIDDEN_WORKFLOW_CHECK/, "hidden workflow action dispatch missing");
 assert.match(jsChallenges, /setupKeyboardShortcuts/, "keyboard shortcut setup missing");
+assert.match(jsChallenges, /MISSION_STARTED/, "telemetry mission start tracking missing");
+
+const telemetryDocs = read("docs/telemetry-events.md");
+assert.match(telemetryDocs, /Event Types/, "telemetry event documentation missing event type section");
+assert.match(telemetryDocs, /mission_started/, "telemetry event documentation missing mission_started event");
 
 console.log("All site checks passed.");

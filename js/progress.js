@@ -2,6 +2,18 @@ function loadState() {
   return window.HyruleSave.loadState();
 }
 
+function telemetryEventName(key) {
+  return (window.HyruleActions && window.HyruleActions.TELEMETRY_EVENTS && window.HyruleActions.TELEMETRY_EVENTS[key]) || key.toLowerCase();
+}
+
+function trackTelemetry(eventName, payload) {
+  if (!window.HyruleTelemetry || typeof window.HyruleTelemetry.trackEvent !== "function") {
+    return;
+  }
+
+  window.HyruleTelemetry.trackEvent(eventName, payload);
+}
+
 function saveState(state) {
   window.HyruleSave.saveState(state);
 }
@@ -60,6 +72,46 @@ function dispatch(action) {
   const result = window.HyruleRules.reduceGameState(current, action);
   saveState(result.state);
   updateGlobalUI(result.state);
+
+  const outcome = result.outcome || {};
+  trackTelemetry(telemetryEventName("ACTION_RESOLVED"), {
+    actionType: action.type,
+    ok: outcome.ok !== false,
+    outcomeReason: outcome.reason || null,
+    corruptionBefore: current.corruption,
+    corruptionAfter: result.state.corruption
+  });
+
+  ["power", "wisdom", "courage"].forEach((piece) => {
+    if (!current[piece] && result.state[piece]) {
+      trackTelemetry(telemetryEventName("MISSION_COMPLETED"), {
+        mission: piece,
+        sourceAction: action.type
+      });
+    }
+  });
+
+  if (action.type === window.HyruleActions.TYPES.FINAL_BATTLE_RESOLVE && outcome.ok) {
+    trackTelemetry(telemetryEventName("MISSION_COMPLETED"), {
+      mission: "final-battle",
+      sourceAction: action.type
+    });
+  }
+
+  if (outcome.ok === false) {
+    trackTelemetry(telemetryEventName("MISSION_FAILED"), {
+      actionType: action.type,
+      outcomeReason: outcome.reason || null
+    });
+  }
+
+  if (action.type === window.HyruleActions.TYPES.RESET_GAME) {
+    trackTelemetry(telemetryEventName("MISSION_RETRY"), {
+      mission: "full-campaign",
+      sourceAction: action.type
+    });
+  }
+
   return result;
 }
 

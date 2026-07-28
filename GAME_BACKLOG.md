@@ -291,7 +291,7 @@ Target: 2 to 3 weeks after P1
 - Sprint 1 (completed): P0-1, P0-2, P0-3, P0-4, P0-5
 - Sprint 2 (in progress): P1-1, P1-2, P1-3 complete
 - Sprint 3 (completed): P1-4 and P1-5
-- Sprint 4 (active): P2-1 performance and asset pipeline
+- Sprint 4 (active): P2-1 and P2-2 complete, begin P2-3
 
 ## Definition of Done for the Robust Game
 

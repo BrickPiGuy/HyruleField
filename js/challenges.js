@@ -7,6 +7,18 @@ function dispatchAction(action) {
   return window.HyruleEngine.dispatch(action);
 }
 
+function telemetryEventName(key) {
+  return (window.HyruleActions && window.HyruleActions.TELEMETRY_EVENTS && window.HyruleActions.TELEMETRY_EVENTS[key]) || key.toLowerCase();
+}
+
+function trackTelemetry(eventName, payload) {
+  if (!window.HyruleTelemetry || typeof window.HyruleTelemetry.trackEvent !== "function") {
+    return;
+  }
+
+  window.HyruleTelemetry.trackEvent(eventName, payload);
+}
+
 function isReducedMotionPreferred() {
   return Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 }
@@ -179,6 +191,10 @@ function setupPipelineTimeline() {
   });
 
   replayButton.addEventListener("click", () => {
+    trackTelemetry(telemetryEventName("MISSION_RETRY"), {
+      mission: "kingdom-timeline",
+      trigger: "timeline-replay"
+    });
     runSequence(false);
   });
 
@@ -464,6 +480,18 @@ async function setupFinalBattlePage() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const page = document.body.getAttribute("data-page");
+  const missionName = {
+    index: "kingdom",
+    power: "power",
+    wisdom: "wisdom",
+    courage: "courage",
+    final: "final-battle"
+  }[page] || "unknown";
+
+  trackTelemetry(telemetryEventName("MISSION_STARTED"), {
+    mission: missionName,
+    page
+  });
 
   if (page === "index") {
     setupIndexPage();
