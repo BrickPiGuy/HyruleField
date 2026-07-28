@@ -20,7 +20,20 @@ test("core journey restores all temples and wins final battle", async ({ page })
 
   await page.goto("/power.html");
   await page.click("#run-ci");
-  await expect(page.locator("#power-status")).toContainText("Temple of Power restored.", { timeout: 12000 });
+  await expect.poll(async () => page.evaluate(() => {
+    const raw = localStorage.getItem("devopsTriforceState");
+    if (!raw) {
+      return false;
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      return Boolean(parsed.power);
+    } catch (_error) {
+      return false;
+    }
+  }), { timeout: 15000 }).toBe(true);
+  await expect(page.locator("#power-status")).toContainText("Temple of Power restored.", { timeout: 5000 });
 
   await page.goto("/wisdom.html");
   const securityFixButtons = page.locator("[data-security-card] button");
