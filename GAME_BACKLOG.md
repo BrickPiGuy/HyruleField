@@ -231,6 +231,19 @@ Target: 2 to 3 weeks after P1
 - Acceptance criteria:
   - Home page interactive in under 2 seconds on typical broadband.
 
+### P2-1a Front Image Stretched on Front Page
+
+- Priority: P2
+- Estimate: S
+- Goal: Make the front page hero image stretch cleanly across the available space.
+- Refactor files:
+  - Update: index.html
+  - Update: css/style.css
+- Deliverables:
+  - Responsive full-width hero image treatment on the front page.
+- Acceptance criteria:
+  - The front image fills the intended area without distortion or layout shift.
+
 ### P2-2 Telemetry and Balance Dashboard Data
 
 - Priority: P2
@@ -249,18 +262,7 @@ Target: 2 to 3 weeks after P1
 
 ### P2-3 Content Authoring Toolkit
 
-- Priority: P2
-- Estimate: M
-- Goal: Add mission validation for faster content iteration.
-- Refactor files:
-  - Create: scripts/validate-missions.js
-  - Create: docs/mission-authoring.md
-  - Update: package.json
-  - Update: .github/workflows/ci.yml
-- Deliverables:
-  - CLI validator for mission schema and dependency loops.
-- Acceptance criteria:
-  - Invalid mission configs fail CI with clear errors.
+- [x] P2-3 Content Authoring Toolkit (implemented)
 
 ### P2-4 Instructor Mode and Analytics View
 

@@ -46,6 +46,11 @@ const jsProgress = read("js/progress.js");
 assert.match(jsProgress, /HyruleEngine/, "central engine interface missing from progress layer");
 assert.match(jsProgress, /window\.HyruleSave\.loadState/, "save schema integration missing");
 
+const css = read("css/style.css");
+assert.match(css, /\.hero\s*\{[\s\S]*align-items:\s*center;/, "hero layout should center the front image area");
+assert.match(css, /\.hero img\s*\{[\s\S]*object-fit:\s*contain;/, "hero image should fit the available area without cropping");
+assert.match(css, /\.hero img\s*\{[\s\S]*height:\s*auto;/, "hero image should preserve its aspect ratio");
+
 const jsChallenges = read("js/challenges.js");
 assert.match(jsChallenges, /setupFinalBattlePage/, "final battle setup missing");
 assert.match(jsChallenges, /HIDDEN_WORKFLOW_CHECK/, "hidden workflow action dispatch missing");

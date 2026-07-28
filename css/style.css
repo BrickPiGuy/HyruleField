@@ -411,9 +411,18 @@ input:focus-visible {
   margin: 1.3rem 0;
 }
 
+.hero > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .hero img {
   width: 100%;
-  max-width: 460px;
+  height: auto;
+  max-width: 520px;
+  object-fit: contain;
+  border-radius: 18px;
   justify-self: center;
   animation: heroRise 900ms ease both;
 }

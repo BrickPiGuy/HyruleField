@@ -27,6 +27,9 @@ jobs:
       - name: Run performance budget checks
         run: npm run test:perf
 
+      - name: Validate mission content
+        run: npm run test:validate-missions
+
       - name: Run unit tests
         run: npm test
 
