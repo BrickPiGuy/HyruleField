@@ -48,9 +48,9 @@
       title: "Temple of Wisdom Notes",
       label: "Security Wards",
       expectedAnswers: [
-        "Required hidden workflow words: deploy",
-        "Required hidden workflow phrases: every commit, direct",
-        "Security cards: secrets, dependency, codeql"
+        "Describe one unsafe workflow in a single sentence.",
+        "Include action, frequency, and skipped safety gates.",
+        "Reference direct production flow and bypassed checks."
       ],
       riskMap: [
         "Unfixed secrets, dependencies, or code analysis findings keep the temple corrupted.",
@@ -59,7 +59,7 @@
       hints: [
         "The hidden workflow box is the clue to expose the corruption.",
         "Clear all three security cards before validating the hidden workflow.",
-        "Use the required words and phrases to reveal the unsafe pattern."
+        "Guide learners to describe the pattern type without giving the exact phrase."
       ]
     },
     courage: {
@@ -151,24 +151,19 @@
     }
 
     if (pageId === "wisdom" && mission) {
-      const requiredWords = mission.hiddenWorkflow && Array.isArray(mission.hiddenWorkflow.requiredWords)
-        ? mission.hiddenWorkflow.requiredWords.join(", ")
-        : "deploy";
-      const anyPhrases = mission.hiddenWorkflow && Array.isArray(mission.hiddenWorkflow.anyPhrases)
-        ? mission.hiddenWorkflow.anyPhrases.join(", ")
-        : "every commit, direct";
-
       return {
         ...config,
         expectedAnswers: [
-          `Required hidden workflow words: ${requiredWords}`,
-          `Required hidden workflow phrases: ${anyPhrases}`,
+          "Describe one unsafe workflow in a single sentence.",
+          "Include action, frequency, and skipped safety gates.",
+          "Reference direct production flow and bypassed checks.",
           ...(Array.isArray(mission.securityCards) ? mission.securityCards.map((card) => card.title) : [])
         ],
         hints: [
           mission.objective || config.hints[0],
           "The reveal action is about identifying direct deploy behavior.",
-          "Every security ward must be cleared first."
+          "Every security ward must be cleared first.",
+          "Coach with pattern categories, not an exact answer phrase."
         ]
       };
     }
