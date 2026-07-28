@@ -44,6 +44,7 @@
       <article class="card">
         <h2>Battle Checklist</h2>
         <div id="final-checklist"></div>
+        <p id="battle-progress">0 / 0 tasks complete</p>
         <p><button id="finish-battle">Resolve Release</button></p>
         <p id="battle-result" aria-live="polite"></p>
       </article>
@@ -55,11 +56,48 @@
       </article>
     </section>
 
-    <section id="certificate" class="completion-certificate hidden" style="margin-top:1rem;">
-      <h2>Printable Completion Badge</h2>
-      <p>This certifies you restored the DevOps Triforce and secured production against Lord Ganonix.</p>
-      <p><strong>Title:</strong> Guardian of the Deployment Gate</p>
-      <p><button id="print-badge">Print Badge</button></p>
+    <section id="certificate" class="completion-certificate hidden" aria-live="polite">
+      <header class="certificate-header">
+        <p class="certificate-kicker">Printable Completion Badge</p>
+        <h2>Hero of DevOps</h2>
+        <p class="certificate-subtitle">Order of the Triforce Defender</p>
+        <p>This certifies you restored the DevOps Triforce, stabilized every pipeline gate, and secured production against Lord Ganonix.</p>
+      </header>
+      <div class="certificate-body">
+        <img src="assets/icons/badge.png" alt="Hero of DevOps badge" class="certificate-badge-image" width="240" height="240">
+        <dl class="certificate-meta">
+          <div>
+            <dt>Champion</dt>
+            <dd id="certificate-champion">Hyrule Operator</dd>
+          </div>
+          <div>
+            <dt>Total Score</dt>
+            <dd id="certificate-score">0</dd>
+          </div>
+          <div>
+            <dt>Final Corruption</dt>
+            <dd id="certificate-corruption">0%</dd>
+          </div>
+          <div>
+            <dt>Victory Recorded</dt>
+            <dd id="certificate-time">Pending</dd>
+          </div>
+          <div>
+            <dt>Record Code</dt>
+            <dd id="certificate-code">HF-0000</dd>
+          </div>
+        </dl>
+      </div>
+      <section class="certificate-seals" aria-label="Victory seals">
+        <h3>Seals Earned</h3>
+        <ul id="certificate-seals-list">
+          <li>Pending final verification...</li>
+        </ul>
+      </section>
+      <p class="certificate-actions">
+        <button id="print-badge" disabled>Print Badge</button>
+        <a href="index.html" class="btn-link" role="button">Return to Kingdom</a>
+      </p>
     </section>
   </main>
 
