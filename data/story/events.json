@@ -1,0 +1,68 @@
+{
+  "events": {
+    "path-choice": {
+      "branches": [
+        {
+          "id": "stabilize",
+          "when": { "outcomeReason": "safe_path" },
+          "title": "Stability Restored",
+          "text": "The release wards hum in harmony. Your team held the line and kept the gates intact."
+        },
+        {
+          "id": "chaos",
+          "when": { "outcomeReason": "reckless_path" },
+          "title": "Chaos Surge",
+          "text": "A rushed deploy cracked the gate seals. Ganonix gains ground across production."
+        }
+      ]
+    },
+    "intro-quiz": {
+      "branches": [
+        {
+          "id": "quiz-pass",
+          "when": { "outcomeReason": "quiz_correct" },
+          "title": "Gate Doctrine Learned",
+          "text": "You chose the secure order: build, test, scan, review, deploy."
+        },
+        {
+          "id": "quiz-fail",
+          "when": { "outcomeReason": "quiz_incorrect" },
+          "title": "Sequence Broken",
+          "text": "Pipeline order collapsed. Testing and review must come before deployment."
+        }
+      ]
+    },
+    "deploy-attempt": {
+      "branches": [
+        {
+          "id": "deploy-success",
+          "when": { "outcomeReason": "deploy_success" },
+          "title": "Gate of Courage Holds",
+          "text": "Approval, CI, and security checks aligned. Deployment succeeded with discipline."
+        },
+        {
+          "id": "deploy-blocked",
+          "when": { "outcomeReason": "deploy_blocked" },
+          "title": "Gate Denied",
+          "text": "Deployment was denied by upstream gates. Complete Power and Wisdom first."
+        }
+      ]
+    },
+    "final-battle": {
+      "branches": [
+        {
+          "id": "victory",
+          "when": { "outcomeReason": "battle_won" },
+          "title": "Ganonix Defeated",
+          "text": "The Triforce is balanced. Your pipeline now resists shadow deployments."
+        },
+        {
+          "id": "setback",
+          "when": { "outcomeReason": "battle_failed" },
+          "title": "Shadow Resistance",
+          "text": "Ganonix endures. Recover every gate and return to the final release sequence."
+        }
+      ]
+    }
+  }
+}

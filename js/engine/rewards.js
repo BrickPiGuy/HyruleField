@@ -24,6 +24,7 @@
 
   return {
     pointsForRank,
-    finalVictoryBonus
+    finalVictoryBonus,
+    rankPoints
   };
 });

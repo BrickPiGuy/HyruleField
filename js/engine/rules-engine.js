@@ -17,6 +17,20 @@
         return "Silver";
       }
       return "Bronze";
+    },
+    calculateTempleAward(rank) {
+      const map = { Legend: 180, Gold: 130, Silver: 90, Bronze: 60 };
+      const basePoints = map[rank] || 0;
+      return {
+        basePoints,
+        finalPoints: basePoints,
+        multipliers: {
+          safetyMultiplier: 1,
+          consistencyMultiplier: 1,
+          riskPenalty: 0,
+          combinedMultiplier: 1
+        }
+      };
     }
   };
 
@@ -35,7 +49,11 @@
       state.rewards = {
         totalScore: 0,
         rewardPoints: 0,
+        safeActionStreak: 0,
+        recklessActionCount: 0,
         templeRanks: { power: null, wisdom: null, courage: null },
+        templeScores: { power: 0, wisdom: 0, courage: 0 },
+        lastTempleAward: null,
         finalVictoryAwarded: false
       };
     }
@@ -43,6 +61,54 @@
     if (!state.rewards.templeRanks) {
       state.rewards.templeRanks = { power: null, wisdom: null, courage: null };
     }
+
+    if (!state.rewards.templeScores) {
+      state.rewards.templeScores = { power: 0, wisdom: 0, courage: 0 };
+    }
+
+    if (typeof state.rewards.safeActionStreak !== "number") {
+      state.rewards.safeActionStreak = 0;
+    }
+
+    if (typeof state.rewards.recklessActionCount !== "number") {
+      state.rewards.recklessActionCount = 0;
+    }
+
+    if (!Object.prototype.hasOwnProperty.call(state.rewards, "lastTempleAward")) {
+      state.rewards.lastTempleAward = null;
+    }
+  }
+
+  function incrementSafeStreak(state) {
+    state.rewards.safeActionStreak += 1;
+  }
+
+  function markReckless(state) {
+    state.rewards.recklessActionCount += 1;
+    state.rewards.safeActionStreak = 0;
+  }
+
+  function awardTempleCompletion(state, piece) {
+    if (!piece || state.rewards.templeRanks[piece]) {
+      return;
+    }
+
+    const rank = scoring.rankForCorruption(HyruleGameState.clampCorruption(state.corruption));
+    const award = scoring.calculateTempleAward(rank, {
+      corruption: state.corruption,
+      safeActionStreak: state.rewards.safeActionStreak,
+      recklessActionCount: state.rewards.recklessActionCount
+    });
+
+    state.rewards.templeRanks[piece] = rank;
+    state.rewards.templeScores[piece] = award.finalPoints;
+    state.rewards.totalScore += award.finalPoints;
+    state.rewards.rewardPoints += award.finalPoints;
+    state.rewards.lastTempleAward = {
+      piece,
+      rank,
+      ...award
+    };
   }
   function updateMissionStatus(state) {
     state.missions.wisdom.status = state.power ? "available" : "locked";
@@ -69,11 +135,15 @@
 
       case HyruleActions.TYPES.SAFE_PATH: {
         next.corruption -= 5;
+        incrementSafeStreak(next);
+        result.outcome = { ok: true, reason: "safe_path" };
         break;
       }
 
       case HyruleActions.TYPES.RECKLESS_PATH: {
         next.corruption += 12;
+        markReckless(next);
+        result.outcome = { ok: true, reason: "reckless_path" };
         break;
       }
 
@@ -94,12 +164,7 @@
           if (!next[piece]) {
             next[piece] = true;
             next.corruption -= 7;
-
-            const rank = scoring.rankForCorruption(HyruleGameState.clampCorruption(next.corruption));
-            const points = rewards.pointsForRank(rank);
-            next.rewards.templeRanks[piece] = rank;
-            next.rewards.totalScore += points;
-            next.rewards.rewardPoints += points;
+            awardTempleCompletion(next, piece);
           }
         }
         break;
@@ -125,6 +190,7 @@
         if (action.allCardsDone && !next.wisdom) {
           next.wisdom = true;
           next.corruption -= 7;
+          awardTempleCompletion(next, "wisdom");
         }
 
         result.outcome = { ok: true, reason: "workflow_revealed" };
@@ -150,6 +216,7 @@
         if (!next.courage) {
           next.courage = true;
           next.corruption -= 8;
+          awardTempleCompletion(next, "courage");
         }
         result.outcome = { ok: true, reason: "deploy_success" };
         break;
@@ -157,6 +224,7 @@
 
       case HyruleActions.TYPES.RUSH_RELEASE: {
         next.corruption += 12;
+        markReckless(next);
         break;
       }
 

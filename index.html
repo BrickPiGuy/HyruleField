@@ -73,6 +73,13 @@
       <p id="timeline-status" class="timeline-status">Timeline idle. Awaiting command.</p>
     </section>
 
+    <section id="daily-mode-panel" class="card" aria-labelledby="daily-mode-title" style="margin-bottom:1rem;">
+      <h2 id="daily-mode-title">Daily Challenge Seed</h2>
+      <p id="daily-seed">Daily Seed: loading...</p>
+      <ul id="daily-challenge-list"></ul>
+      <p><button id="daily-mode-reroll" class="secondary">Switch to Heroic Seed</button></p>
+    </section>
+
     <section class="card-grid">
       <article class="card">
         <h2>Knowledge Check</h2>
@@ -120,10 +127,15 @@
   <script src="js/engine/actions.js"></script>
   <script src="js/engine/scoring.js"></script>
   <script src="js/engine/rewards.js"></script>
+  <script src="js/engine/random-seed.js"></script>
+  <script src="js/engine/incidents.js"></script>
   <script src="js/engine/rules-engine.js"></script>
   <script src="js/content/mission-loader.js"></script>
+  <script src="js/content/story-engine.js"></script>
   <script src="js/ui/hud.js"></script>
   <script src="js/ui/rewards-panel.js"></script>
+  <script src="js/ui/story-log.js"></script>
+  <script src="js/ui/daily-mode.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/challenges.js"></script>
 </body>

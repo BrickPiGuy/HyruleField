@@ -22,14 +22,19 @@ pages.forEach((page) => {
   assert.match(html, /js\/engine\/game-state\.js/, `${page} should load game state engine`);
   assert.match(html, /js\/engine\/rules-engine\.js/, `${page} should load rules engine`);
   assert.match(html, /js\/content\/mission-loader\.js/, `${page} should load mission loader`);
+  assert.match(html, /js\/content\/story-engine\.js/, `${page} should load story engine`);
   assert.match(html, /js\/ui\/hud\.js/, `${page} should load HUD module`);
   assert.match(html, /js\/progress\.js/, `${page} should load progress script`);
+  assert.match(html, /js\/ui\/story-log\.js/, `${page} should load story log module`);
   assert.match(html, /js\/challenges\.js/, `${page} should load challenge script`);
 });
 
 const indexHtml = read("index.html");
 assert.match(indexHtml, /DevOps Triforce: Rise of Lord Ganonix/, "index page title text missing");
 assert.match(indexHtml, /id="quiz-submit"/, "index quiz interaction missing");
+assert.match(indexHtml, /js\/engine\/random-seed\.js/, "index should load random seed engine");
+assert.match(indexHtml, /js\/engine\/incidents\.js/, "index should load incidents engine");
+assert.match(indexHtml, /js\/ui\/daily-mode\.js/, "index should load daily mode UI module");
 
 const jsProgress = read("js/progress.js");
 assert.match(jsProgress, /HyruleEngine/, "central engine interface missing from progress layer");

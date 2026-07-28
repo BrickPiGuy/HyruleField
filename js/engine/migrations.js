@@ -54,6 +54,12 @@
     return merged;
   }
 
+  function toV4(state) {
+    const merged = mergeLegacyState(state);
+    merged.saveVersion = 4;
+    return merged;
+  }
+
   function migrateState(inputState) {
     const raw = inputState && typeof inputState === "object" ? inputState : {};
     const version = Number(raw.saveVersion || 1);
@@ -65,6 +71,10 @@
 
     if (version < 3) {
       migrated = toV3(migrated);
+    }
+
+    if (version < 4) {
+      migrated = toV4(migrated);
     }
 
     migrated.corruption = HyruleGameState.clampCorruption(Number(migrated.corruption || 35));

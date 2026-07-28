@@ -7,6 +7,22 @@ function dispatchAction(action) {
   return window.HyruleEngine.dispatch(action);
 }
 
+function emitStory(eventKey, actionResult) {
+  if (!window.HyruleStoryEngine || !window.HyruleStoryLog) {
+    return;
+  }
+
+  window.HyruleStoryEngine.getNarrative(eventKey, actionResult)
+    .then((entry) => {
+      if (entry) {
+        window.HyruleStoryLog.addEntry(entry);
+      }
+    })
+    .catch(() => {
+      // Narrative logging should not interrupt core gameplay flow.
+    });
+}
+
 function setTimelineProgress(track, index, total) {
   const pct = Math.round(((index + 1) / total) * 100);
   track.style.setProperty("--progress", `${pct}%`);
@@ -99,12 +115,14 @@ function setupIndexPage() {
   const narrativeResult = document.getElementById("choice-result");
 
   safeButton?.addEventListener("click", () => {
-    dispatchAction({ type: window.HyruleActions.TYPES.SAFE_PATH });
+    const result = dispatchAction({ type: window.HyruleActions.TYPES.SAFE_PATH });
+    emitStory("path-choice", result);
     narrativeResult.textContent = "The kingdom stabilizes. You insisted on the full pipeline gates.";
   });
 
   recklessButton?.addEventListener("click", () => {
-    dispatchAction({ type: window.HyruleActions.TYPES.RECKLESS_PATH });
+    const result = dispatchAction({ type: window.HyruleActions.TYPES.RECKLESS_PATH });
+    emitStory("path-choice", result);
     narrativeResult.textContent = "Ganonix harvests chaos from your rushed deploy.";
   });
 
@@ -119,10 +137,11 @@ function setupIndexPage() {
     }
 
     const correct = selected.value === "build-test-scan-review-deploy";
-    dispatchAction({
+    const result = dispatchAction({
       type: window.HyruleActions.TYPES.INTRO_QUIZ,
       correct
     });
+    emitStory("intro-quiz", result);
 
     quizResult.textContent = correct
       ? "Correct. You defended the release gates."
@@ -281,6 +300,7 @@ async function setupCouragePage() {
       type: window.HyruleActions.TYPES.DEPLOY_RELEASE,
       prereqsMet
     });
+    emitStory("deploy-attempt", result);
 
     if (!result.outcome.ok) {
       statusNode.textContent = "Cannot deploy yet. Complete Power and Wisdom, then obtain approval.";
@@ -344,6 +364,7 @@ async function setupFinalBattlePage() {
       allMarked,
       requiredKeysMet
     });
+    emitStory("final-battle", result);
 
     if (!result.outcome.ok) {
       resultNode.textContent = failureMessage;

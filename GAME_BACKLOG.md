@@ -118,6 +118,13 @@ Implemented test files:
 
 Target: 2 to 4 weeks after P0
 
+Current status:
+- [x] P1-1 Scoring, Ranks, and Unlock Economy (implemented baseline + multiplier expansion)
+- [x] P1-2 Branching Narrative Events
+- [x] P1-3 Incident Cards and Daily Seed Mode
+- [ ] P1-4 Accessibility and Reduced Motion Pass
+- [ ] P1-5 End-to-End Regression Tests
+
 ### P1-1 Scoring, Ranks, and Unlock Economy
 
 - Priority: P1
@@ -282,8 +289,8 @@ Target: 2 to 3 weeks after P1
 ## Suggested Sprint Split
 
 - Sprint 1 (completed): P0-1, P0-2, P0-3, P0-4, P0-5
-- Sprint 2 (next): P1-1, P1-2
-- Sprint 3: P1-3, P1-4, begin P1-5
+- Sprint 2 (in progress): P1-1, P1-2, P1-3 complete
+- Sprint 3 (next): P1-4, begin P1-5
 - Sprint 4: finish P1-5, select highest-value P2 items
 
 ## Definition of Done for the Robust Game

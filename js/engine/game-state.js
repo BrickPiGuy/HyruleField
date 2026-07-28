@@ -5,7 +5,7 @@
     module.exports = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : window, function () {
-  const CURRENT_SAVE_VERSION = 3;
+  const CURRENT_SAVE_VERSION = 4;
 
   function createDefaultState() {
     return {
@@ -23,11 +23,19 @@
       rewards: {
         totalScore: 0,
         rewardPoints: 0,
+        safeActionStreak: 0,
+        recklessActionCount: 0,
         templeRanks: {
           power: null,
           wisdom: null,
           courage: null
         },
+        templeScores: {
+          power: 0,
+          wisdom: 0,
+          courage: 0
+        },
+        lastTempleAward: null,
         finalVictoryAwarded: false
       },
       missions: {

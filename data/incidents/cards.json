@@ -1,0 +1,40 @@
+{
+  "cards": [
+    {
+      "id": "artifact-tamper",
+      "title": "Dark Artifact",
+      "description": "A build artifact checksum mismatch is detected before release.",
+      "impact": "security"
+    },
+    {
+      "id": "shadow-merge",
+      "title": "Shadow Merge",
+      "description": "Unreviewed code was merged into main by a bypassed gate.",
+      "impact": "process"
+    },
+    {
+      "id": "secret-curse",
+      "title": "Secret Curse",
+      "description": "A repository scan found leaked credentials in commit history.",
+      "impact": "security"
+    },
+    {
+      "id": "dependency-blight",
+      "title": "Dependency Blight",
+      "description": "A critical third-party package vulnerability is disclosed.",
+      "impact": "security"
+    },
+    {
+      "id": "gate-surge",
+      "title": "Unprotected Gate",
+      "description": "A production environment approval rule was disabled.",
+      "impact": "deployment"
+    },
+    {
+      "id": "rollback-riddle",
+      "title": "Rollback Riddle",
+      "description": "A failed deploy requires selecting the safest rollback route.",
+      "impact": "deployment"
+    }
+  ]
+}

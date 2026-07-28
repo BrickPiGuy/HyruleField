@@ -22,11 +22,16 @@ assert.strictEqual(scoring.rankForCorruption(80), "Bronze", "high corruption sho
 
 const afterPower = run({ type: actions.TYPES.COMPLETE_TEMPLE, piece: "power" }, start);
 assert.strictEqual(afterPower.rewards.templeRanks.power, "Gold", "power rank should be assigned on completion");
-assert.strictEqual(afterPower.rewards.totalScore, 130, "gold completion should award 130 score");
-assert.strictEqual(afterPower.rewards.rewardPoints, 130, "gold completion should award 130 reward points");
+assert.strictEqual(afterPower.rewards.totalScore, 143, "gold completion should apply multiplier-based score");
+assert.strictEqual(afterPower.rewards.rewardPoints, 143, "gold completion should apply multiplier-based reward points");
 
 const duplicatePower = run({ type: actions.TYPES.COMPLETE_TEMPLE, piece: "power" }, afterPower);
-assert.strictEqual(duplicatePower.rewards.totalScore, 130, "duplicate temple completion should not re-award score");
+assert.strictEqual(duplicatePower.rewards.totalScore, 143, "duplicate temple completion should not re-award score");
+
+let withSafeStreak = run({ type: actions.TYPES.SAFE_PATH }, start);
+withSafeStreak = run({ type: actions.TYPES.SAFE_PATH }, withSafeStreak);
+const streakAward = run({ type: actions.TYPES.COMPLETE_TEMPLE, piece: "power" }, withSafeStreak);
+assert.ok(streakAward.rewards.templeScores.power > afterPower.rewards.templeScores.power, "safe streak should improve award points");
 
 let progressed = run({ type: actions.TYPES.COMPLETE_TEMPLE, piece: "wisdom" }, afterPower);
 progressed = run({ type: actions.TYPES.COMPLETE_TEMPLE, piece: "courage" }, progressed);
