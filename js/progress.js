@@ -49,6 +49,10 @@ function updateGlobalUI(state) {
   if (window.HyruleHUD && typeof window.HyruleHUD.update === "function") {
     window.HyruleHUD.update(state);
   }
+
+  if (window.HyruleRewardsPanel && typeof window.HyruleRewardsPanel.update === "function") {
+    window.HyruleRewardsPanel.update(state);
+  }
 }
 
 function dispatch(action) {

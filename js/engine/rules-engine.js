@@ -1,10 +1,49 @@
 (function (root, factory) {
-  const api = factory(root.HyruleGameState, root.HyruleActions);
+  const api = factory(root.HyruleGameState, root.HyruleActions, root.HyruleScoring, root.HyruleRewards);
   root.HyruleRules = api;
   if (typeof module !== "undefined" && module.exports) {
     module.exports = api;
   }
-})(typeof globalThis !== "undefined" ? globalThis : window, function (HyruleGameState, HyruleActions) {
+})(typeof globalThis !== "undefined" ? globalThis : window, function (HyruleGameState, HyruleActions, HyruleScoring, HyruleRewards) {
+  const scoring = HyruleScoring || {
+    rankForCorruption(corruption) {
+      if (corruption <= 20) {
+        return "Legend";
+      }
+      if (corruption <= 35) {
+        return "Gold";
+      }
+      if (corruption <= 55) {
+        return "Silver";
+      }
+      return "Bronze";
+    }
+  };
+
+  const rewards = HyruleRewards || {
+    pointsForRank(rank) {
+      const map = { Legend: 180, Gold: 130, Silver: 90, Bronze: 60 };
+      return map[rank] || 0;
+    },
+    finalVictoryBonus() {
+      return 250;
+    }
+  };
+
+  function ensureRewardsState(state) {
+    if (!state.rewards) {
+      state.rewards = {
+        totalScore: 0,
+        rewardPoints: 0,
+        templeRanks: { power: null, wisdom: null, courage: null },
+        finalVictoryAwarded: false
+      };
+    }
+
+    if (!state.rewards.templeRanks) {
+      state.rewards.templeRanks = { power: null, wisdom: null, courage: null };
+    }
+  }
   function updateMissionStatus(state) {
     state.missions.wisdom.status = state.power ? "available" : "locked";
     state.missions.courage.status = state.power && state.wisdom ? "available" : "locked";
@@ -13,6 +52,7 @@
 
   function reduceGameState(state, action) {
     const next = HyruleGameState.cloneState(state);
+    ensureRewardsState(next);
     const result = {
       state: next,
       outcome: { ok: true }
@@ -54,6 +94,12 @@
           if (!next[piece]) {
             next[piece] = true;
             next.corruption -= 7;
+
+            const rank = scoring.rankForCorruption(HyruleGameState.clampCorruption(next.corruption));
+            const points = rewards.pointsForRank(rank);
+            next.rewards.templeRanks[piece] = rank;
+            next.rewards.totalScore += points;
+            next.rewards.rewardPoints += points;
           }
         }
         break;
@@ -125,6 +171,12 @@
         }
 
         next.corruption -= 10;
+        if (!next.rewards.finalVictoryAwarded) {
+          const bonus = rewards.finalVictoryBonus();
+          next.rewards.totalScore += bonus;
+          next.rewards.rewardPoints += bonus;
+          next.rewards.finalVictoryAwarded = true;
+        }
         result.outcome = { ok: true, reason: "battle_won", victory: true };
         break;
       }

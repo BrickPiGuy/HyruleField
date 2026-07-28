@@ -5,7 +5,7 @@
     module.exports = api;
   }
 })(typeof globalThis !== "undefined" ? globalThis : window, function () {
-  const CURRENT_SAVE_VERSION = 2;
+  const CURRENT_SAVE_VERSION = 3;
 
   function createDefaultState() {
     return {
@@ -19,6 +19,16 @@
       quizzes: {},
       challenges: {
         securityCards: {}
+      },
+      rewards: {
+        totalScore: 0,
+        rewardPoints: 0,
+        templeRanks: {
+          power: null,
+          wisdom: null,
+          courage: null
+        },
+        finalVictoryAwarded: false
       },
       missions: {
         power: { status: "available" },
