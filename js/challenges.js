@@ -139,9 +139,22 @@ function setupPipelineTimeline() {
   const nodes = Array.from(track.querySelectorAll(".timeline-node"));
   const labels = ["Commit", "Build", "Test", "Security Scan", "Review", "Deploy"];
   const reducedMotion = isReducedMotionPreferred();
-  const initialDelay = reducedMotion ? 0 : 140;
-  const stepDelay = reducedMotion ? 0 : 360;
+  const timelineTargetMs = 6000;
+  const initialDelay = reducedMotion ? 0 : 260;
+  const baseStepDelay = reducedMotion ? 0 : Math.round((timelineTargetMs - initialDelay) / Math.max(nodes.length - 1, 1));
   let running = false;
+
+  function readDelayForStatus(text) {
+    if (reducedMotion) {
+      return 0;
+    }
+
+    // Approximate reading time, with a floor so status changes are visible.
+    const minVisibleMs = 850;
+    const charsPerSecond = 24;
+    const estimatedMs = Math.ceil((text.length / charsPerSecond) * 1000);
+    return Math.max(minVisibleMs, estimatedMs);
+  }
 
   const runSequence = (corruptAtDeploy) => {
     if (running) {
@@ -153,7 +166,11 @@ function setupPipelineTimeline() {
     runButton.disabled = true;
     replayButton.disabled = true;
 
+    const statusMessages = labels.map((label) => `${label} gate engaged...`);
+    const stepDelays = statusMessages.map((message) => Math.max(baseStepDelay, readDelayForStatus(message)));
+
     nodes.forEach((node, index) => {
+      const delayToStep = stepDelays.slice(0, index).reduce((total, value) => total + value, initialDelay);
       setTimeout(() => {
         const prev = nodes[index - 1];
         if (prev) {
@@ -163,7 +180,7 @@ function setupPipelineTimeline() {
 
         node.classList.add("active");
         setTimelineProgress(track, index, nodes.length);
-        statusNode.textContent = `${labels[index]} gate engaged...`;
+        statusNode.textContent = statusMessages[index];
 
         if (corruptAtDeploy && index === nodes.length - 1) {
           node.classList.remove("active", "complete");
@@ -182,7 +199,7 @@ function setupPipelineTimeline() {
           runButton.disabled = false;
           replayButton.disabled = false;
         }
-      }, index * stepDelay + initialDelay);
+      }, delayToStep);
     });
   };
 

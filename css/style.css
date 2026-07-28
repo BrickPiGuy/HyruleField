@@ -305,6 +305,7 @@ input:focus-visible {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.65rem;
   padding-top: 1.2rem;
+  overflow: hidden;
 }
 
 .timeline-track::before,
@@ -323,7 +324,7 @@ input:focus-visible {
 }
 
 .timeline-track::after {
-  width: var(--progress);
+  width: calc(var(--progress) * 0.96);
   right: auto;
   background: linear-gradient(90deg, rgba(242, 200, 75, 0.85), rgba(255, 234, 166, 1));
   box-shadow: 0 0 12px rgba(242, 200, 75, 0.55);
