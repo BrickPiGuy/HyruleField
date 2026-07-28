@@ -1,0 +1,111 @@
+@media print {
+  @page {
+    margin: 0.5in;
+  }
+
+  .top-nav,
+  .status-bar,
+  .footer-note,
+  button,
+  .warning {
+    display: none;
+  }
+
+  body {
+    background: #ffffff;
+    color: #111111;
+  }
+
+  .site-shell {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  body[data-page="final"] .site-shell > * {
+    display: none;
+  }
+
+  body[data-page="final"] #certificate {
+    display: block;
+    margin: 0;
+    max-width: 7.5in;
+    min-height: 9.2in;
+    padding: 0.42in;
+    page-break-inside: avoid;
+    border: 2px solid #b58a1f;
+    background: #fffaf0;
+    color: #1d1d1d;
+    box-shadow: none;
+    animation: none;
+  }
+
+  body[data-page="final"] .certificate-header {
+    text-align: center;
+    margin-bottom: 0.3in;
+  }
+
+  body[data-page="final"] .certificate-header h2 {
+    font-size: 28pt;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.12in;
+  }
+
+  body[data-page="final"] .certificate-body {
+    grid-template-columns: 2.55in 1fr;
+    gap: 0.28in;
+    align-items: start;
+  }
+
+  body[data-page="final"] .certificate-badge-image {
+    width: 2.55in;
+    border: 1px solid #c8ab59;
+    box-shadow: none;
+    background: #fff;
+    padding: 0.1in;
+  }
+
+  body[data-page="final"] .certificate-meta {
+    grid-template-columns: 1fr;
+    gap: 0.08in;
+  }
+
+  body[data-page="final"] .certificate-meta div {
+    padding: 0.1in 0.12in;
+  }
+
+  body[data-page="final"] .certificate-seals {
+    margin-top: 0.2in;
+    padding-top: 0.14in;
+  }
+
+  body[data-page="final"] .certificate-seals h3 {
+    margin-bottom: 0.08in;
+  }
+
+  body[data-page="final"] #certificate-seals-list {
+    columns: 2;
+    column-gap: 0.32in;
+  }
+
+  body[data-page="final"] .certificate-actions {
+    display: none;
+  }
+
+  body[data-page="final"] .certificate-kicker,
+  body[data-page="final"] .certificate-meta dt {
+    color: #5b4a1a;
+  }
+
+  body[data-page="final"] .certificate-meta dd {
+    color: #1a1a1a;
+  }
+
+  body[data-page="final"] .certificate-meta div {
+    border-color: #d8c289;
+    background: #fff;
+  }
+
+  body[data-page="final"] .certificate-subtitle {
+    color: #5b4a1a;
+  }
+}
