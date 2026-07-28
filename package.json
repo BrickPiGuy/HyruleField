@@ -5,7 +5,7 @@
   "description": "Interactive DevOps learning site",
   "scripts": {
     "test": "npm run test:unit",
-    "test:unit": "node tests/site.test.js && node tests/rules-engine.test.js && node tests/reducer-flow.test.js && node tests/reducer-failure-flow.test.js && node tests/save-migrations.test.js && node tests/missions-content.test.js && node tests/mission-validator.test.js && node tests/scoring.test.js && node tests/story-engine.test.js && node tests/story-content.test.js && node tests/incidents-engine.test.js && node tests/incidents-content.test.js && node tests/accessibility.test.js && node tests/telemetry-events.test.js",
+    "test:unit": "node tests/site.test.js && node tests/rules-engine.test.js && node tests/reducer-flow.test.js && node tests/reducer-failure-flow.test.js && node tests/save-migrations.test.js && node tests/missions-content.test.js && node tests/mission-validator.test.js && node tests/instructor-mode.test.js && node tests/scoring.test.js && node tests/story-engine.test.js && node tests/story-content.test.js && node tests/incidents-engine.test.js && node tests/incidents-content.test.js && node tests/accessibility.test.js && node tests/telemetry-events.test.js",
     "test:perf": "node scripts/performance-budget.js",
     "test:validate-missions": "node scripts/validate-missions.js",
     "test:e2e": "playwright test",

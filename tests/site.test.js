@@ -28,6 +28,7 @@ pages.forEach((page) => {
   assert.match(html, /js\/content\/story-engine\.js/, `${page} should load story engine`);
   assert.match(html, /js\/telemetry\/session\.js/, `${page} should load telemetry session module`);
   assert.match(html, /js\/telemetry\/events\.js/, `${page} should load telemetry events module`);
+  assert.match(html, /js\/ui\/instructor-mode\.js/, `${page} should load instructor mode module`);
   assert.match(html, /js\/ui\/hud\.js/, `${page} should load HUD module`);
   assert.match(html, /js\/progress\.js/, `${page} should load progress script`);
   assert.match(html, /js\/ui\/story-log\.js/, `${page} should load story log module`);

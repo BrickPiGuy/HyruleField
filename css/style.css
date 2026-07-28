@@ -385,6 +385,88 @@ input:focus-visible {
   min-height: 1.6rem;
 }
 
+.instructor-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: min(420px, calc(100vw - 2rem));
+  max-height: min(80vh, 760px);
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid rgba(242, 200, 75, 0.45);
+  border-radius: 18px;
+  background: rgba(6, 15, 19, 0.96);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  z-index: 1200;
+}
+
+.instructor-panel.hidden {
+  display: none;
+}
+
+.instructor-panel__header {
+  display: flex;
+  gap: 0.85rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.instructor-kicker {
+  margin: 0 0 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  color: var(--gold-soft);
+}
+
+.instructor-label,
+.instructor-hint-title {
+  margin: 0;
+  color: #aee3d1;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.92rem;
+}
+
+.instructor-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.instructor-grid section,
+.instructor-hints {
+  padding: 0.85rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.instructor-grid h3 {
+  margin-bottom: 0.45rem;
+  font-size: 1.05rem;
+}
+
+.instructor-grid ul,
+.instructor-hints p,
+.instructor-grid li {
+  margin-top: 0;
+}
+
+.instructor-grid ul {
+  padding-left: 1.1rem;
+}
+
+.instructor-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+#instructor-toggle {
+  white-space: nowrap;
+}
+
 @keyframes shakeCorrupt {
   0% {
     transform: translateX(0);
@@ -560,6 +642,11 @@ button:disabled {
 
   .timeline-node::before {
     display: none;
+  }
+
+  .instructor-panel {
+    inset: auto 0.75rem 0.75rem;
+    width: auto;
   }
 }
 

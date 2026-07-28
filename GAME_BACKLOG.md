@@ -266,21 +266,7 @@ Target: 2 to 3 weeks after P1
 
 ### P2-4 Instructor Mode and Analytics View
 
-- Priority: P2
-- Estimate: M
-- Goal: Add optional instructor overlay for classroom use.
-- Refactor files:
-  - Create: js/ui/instructor-mode.js
-  - Update: index.html
-  - Update: power.html
-  - Update: wisdom.html
-  - Update: courage.html
-  - Update: final-battle.html
-  - Update: css/style.css
-- Deliverables:
-  - Toggle that reveals expected answers, risk mapping, and hint controls.
-- Acceptance criteria:
-  - Instructor mode does not affect player scoring when disabled.
+- [x] P2-4 Instructor Mode and Analytics View
 
 ## Execution Order
 
@@ -293,7 +279,7 @@ Target: 2 to 3 weeks after P1
 - Sprint 1 (completed): P0-1, P0-2, P0-3, P0-4, P0-5
 - Sprint 2 (in progress): P1-1, P1-2, P1-3 complete
 - Sprint 3 (completed): P1-4 and P1-5
-- Sprint 4 (active): P2-1 and P2-2 complete, begin P2-3
+- Sprint 4 (completed): P2-1, P2-2, P2-3, and P2-4
 
 ## Definition of Done for the Robust Game
 
