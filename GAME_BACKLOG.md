@@ -277,7 +277,7 @@ Target: 2 to 3 weeks after P1
 ## Suggested Sprint Split
 
 - Sprint 1 (completed): P0-1, P0-2, P0-3, P0-4, P0-5
-- Sprint 2 (in progress): P1-1, P1-2, P1-3 complete
+- Sprint 2 (completed): P1-1, P1-2, P1-3
 - Sprint 3 (completed): P1-4 and P1-5
 - Sprint 4 (completed): P2-1, P2-2, P2-3, and P2-4
 
