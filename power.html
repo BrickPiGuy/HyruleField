@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="power">
-  <div class="site-shell">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
     <nav class="top-nav">
       <strong>Temple of Power</strong>
       <ul>
@@ -48,14 +49,14 @@
 
       <article class="console">
         <h2>Simulated GitHub Actions Console</h2>
-        <div id="ci-log" class="log">Waiting for workflow dispatch...</div>
+        <div id="ci-log" class="log" aria-live="polite">Waiting for workflow dispatch...</div>
         <p>
           <button id="run-ci">Run CI Workflow</button>
         </p>
-        <p id="power-status"></p>
+        <p id="power-status" aria-live="polite"></p>
       </article>
     </section>
-  </div>
+  </main>
 
   <script src="js/engine/game-state.js"></script>
   <script src="js/engine/migrations.js"></script>

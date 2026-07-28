@@ -18,7 +18,10 @@ function read(filePath) {
 
 pages.forEach((page) => {
   const html = read(page);
+  assert.match(html, /class="skip-link"/, `${page} should include a skip link`);
+  assert.match(html, /id="main-content"/, `${page} should include main content landmark`);
   assert.match(html, /<nav class="top-nav">/, `${page} should include top navigation`);
+  assert.match(html, /aria-live="polite"/, `${page} should include at least one live region`);
   assert.match(html, /js\/engine\/game-state\.js/, `${page} should load game state engine`);
   assert.match(html, /js\/engine\/rules-engine\.js/, `${page} should load rules engine`);
   assert.match(html, /js\/content\/mission-loader\.js/, `${page} should load mission loader`);
@@ -43,5 +46,6 @@ assert.match(jsProgress, /window\.HyruleSave\.loadState/, "save schema integrati
 const jsChallenges = read("js/challenges.js");
 assert.match(jsChallenges, /setupFinalBattlePage/, "final battle setup missing");
 assert.match(jsChallenges, /HIDDEN_WORKFLOW_CHECK/, "hidden workflow action dispatch missing");
+assert.match(jsChallenges, /setupKeyboardShortcuts/, "keyboard shortcut setup missing");
 
 console.log("All site checks passed.");

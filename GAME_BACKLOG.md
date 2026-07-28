@@ -122,8 +122,8 @@ Current status:
 - [x] P1-1 Scoring, Ranks, and Unlock Economy (implemented baseline + multiplier expansion)
 - [x] P1-2 Branching Narrative Events
 - [x] P1-3 Incident Cards and Daily Seed Mode
-- [ ] P1-4 Accessibility and Reduced Motion Pass
-- [ ] P1-5 End-to-End Regression Tests
+- [x] P1-4 Accessibility and Reduced Motion Pass
+- [x] P1-5 End-to-End Regression Tests
 
 ### P1-1 Scoring, Ranks, and Unlock Economy
 

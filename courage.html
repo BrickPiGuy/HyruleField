@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="courage">
-  <div class="site-shell">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
     <nav class="top-nav">
       <strong>Temple of Courage</strong>
       <ul>
@@ -47,7 +48,7 @@
         <p><button id="approve-release" class="secondary">Grant Approval</button></p>
         <p><button id="deploy-release" disabled>Deploy to Production</button></p>
         <p><button id="rush-release" class="danger">Force Deploy Without Gates</button></p>
-        <p id="courage-status"></p>
+        <p id="courage-status" aria-live="polite"></p>
       </article>
 
       <article class="card">
@@ -61,7 +62,7 @@
         </ol>
       </article>
     </section>
-  </div>
+  </main>
 
   <script src="js/engine/game-state.js"></script>
   <script src="js/engine/migrations.js"></script>

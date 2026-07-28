@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="index">
-  <div class="site-shell">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
     <nav class="top-nav">
       <strong>HyruleField Academy</strong>
       <ul>
@@ -49,7 +50,7 @@
           <p>Choose your next command:</p>
           <button id="safe-path">Run Full Gate Sequence</button>
           <button id="reckless-path" class="danger">Deploy Immediately</button>
-          <p id="choice-result"></p>
+          <p id="choice-result" aria-live="polite"></p>
         </div>
       </div>
       <img src="triforce.png" alt="Golden triforce symbol glowing over a dark kingdom map">
@@ -70,7 +71,7 @@
         <div class="timeline-node" data-timeline-step="review"><span>Review</span></div>
         <div class="timeline-node" data-timeline-step="deploy"><span>Deploy</span></div>
       </div>
-      <p id="timeline-status" class="timeline-status">Timeline idle. Awaiting command.</p>
+      <p id="timeline-status" class="timeline-status" aria-live="polite">Timeline idle. Awaiting command.</p>
     </section>
 
     <section id="daily-mode-panel" class="card" aria-labelledby="daily-mode-title" style="margin-bottom:1rem;">
@@ -88,7 +89,7 @@
         <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-test-scan-review-deploy"> Build, test, scan, review, deploy</label>
         <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-scan-deploy-test"> Build, scan, deploy, then test</label>
         <button id="quiz-submit">Submit Answer</button>
-        <p id="quiz-result"></p>
+        <p id="quiz-result" aria-live="polite"></p>
       </article>
 
       <article class="compare-panel">
@@ -119,7 +120,7 @@
     </section>
 
     <p class="footer-note">Start at the Temple of Power and finish at the Final Battle to complete your printable victory badge.</p>
-  </div>
+  </main>
 
   <script src="js/engine/game-state.js"></script>
   <script src="js/engine/migrations.js"></script>

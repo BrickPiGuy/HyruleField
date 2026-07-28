@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="final">
-  <div class="site-shell">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
     <nav class="top-nav">
       <strong>Final Battle</strong>
       <ul>
@@ -44,7 +45,7 @@
         <h2>Battle Checklist</h2>
         <div id="final-checklist"></div>
         <p><button id="finish-battle">Resolve Release</button></p>
-        <p id="battle-result"></p>
+        <p id="battle-result" aria-live="polite"></p>
       </article>
 
       <article class="card">
@@ -60,7 +61,7 @@
       <p><strong>Title:</strong> Guardian of the Deployment Gate</p>
       <p><button id="print-badge">Print Badge</button></p>
     </section>
-  </div>
+  </main>
 
   <script src="js/engine/game-state.js"></script>
   <script src="js/engine/migrations.js"></script>

@@ -7,6 +7,10 @@ function dispatchAction(action) {
   return window.HyruleEngine.dispatch(action);
 }
 
+function isReducedMotionPreferred() {
+  return Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+}
+
 function emitStory(eventKey, actionResult) {
   if (!window.HyruleStoryEngine || !window.HyruleStoryLog) {
     return;
@@ -21,6 +25,80 @@ function emitStory(eventKey, actionResult) {
     .catch(() => {
       // Narrative logging should not interrupt core gameplay flow.
     });
+}
+
+function clickButton(id) {
+  const node = document.getElementById(id);
+  if (node && !node.disabled) {
+    node.click();
+  }
+}
+
+function shouldIgnoreShortcut(target) {
+  if (!target) {
+    return false;
+  }
+
+  const tag = String(target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea" || tag === "select") {
+    return true;
+  }
+
+  if (target.isContentEditable) {
+    return true;
+  }
+
+  return false;
+}
+
+function setupKeyboardShortcuts(page) {
+  const keyMap = {
+    index: {
+      "1": "safe-path",
+      "2": "reckless-path",
+      q: "quiz-submit",
+      t: "timeline-run"
+    },
+    power: {
+      r: "run-ci"
+    },
+    wisdom: {
+      c: "hidden-workflow-check"
+    },
+    courage: {
+      a: "approve-release",
+      d: "deploy-release",
+      f: "rush-release"
+    },
+    final: {
+      v: "finish-battle",
+      p: "print-badge"
+    }
+  };
+
+  const map = keyMap[page];
+  if (!map) {
+    return;
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (!event.altKey || !event.shiftKey || event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    if (shouldIgnoreShortcut(event.target)) {
+      return;
+    }
+
+    const key = String(event.key || "").toLowerCase();
+    const targetId = map[key];
+    if (!targetId) {
+      return;
+    }
+
+    event.preventDefault();
+    clickButton(targetId);
+  });
 }
 
 function setTimelineProgress(track, index, total) {
@@ -48,6 +126,9 @@ function setupPipelineTimeline() {
 
   const nodes = Array.from(track.querySelectorAll(".timeline-node"));
   const labels = ["Commit", "Build", "Test", "Security Scan", "Review", "Deploy"];
+  const reducedMotion = isReducedMotionPreferred();
+  const initialDelay = reducedMotion ? 0 : 140;
+  const stepDelay = reducedMotion ? 0 : 360;
   let running = false;
 
   const runSequence = (corruptAtDeploy) => {
@@ -89,7 +170,7 @@ function setupPipelineTimeline() {
           runButton.disabled = false;
           replayButton.disabled = false;
         }
-      }, index * 360 + 140);
+      }, index * stepDelay + initialDelay);
     });
   };
 
@@ -169,7 +250,8 @@ async function setupPowerPage() {
     }
 
     logNode.textContent = "CI Console Booting...";
-    let delay = 240;
+    const reducedMotion = isReducedMotionPreferred();
+    let delay = reducedMotion ? 0 : 240;
 
     steps.forEach((step, index) => {
       setTimeout(() => {
@@ -177,7 +259,7 @@ async function setupPowerPage() {
         const stage = document.querySelector(`[data-ci-step='${index + 1}']`);
         stage?.classList.add("active");
       }, delay);
-      delay += 260;
+      delay += reducedMotion ? 0 : 260;
     });
 
     setTimeout(() => {
@@ -188,7 +270,7 @@ async function setupPowerPage() {
         piece: "power"
       });
       runButton.disabled = true;
-    }, delay + 200);
+    }, delay + (reducedMotion ? 0 : 200));
   });
 }
 
@@ -394,4 +476,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (page === "final") {
     setupFinalBattlePage();
   }
+
+  setupKeyboardShortcuts(page);
 });

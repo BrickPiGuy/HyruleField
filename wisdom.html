@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="wisdom">
-  <div class="site-shell">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
     <nav class="top-nav">
       <strong>Temple of Wisdom</strong>
       <ul>
@@ -47,10 +48,10 @@
       <p>Describe the unsafe pattern you detected.</p>
       <input id="hidden-workflow-input" type="text" style="width:100%; padding:0.55rem; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:#0a1518; color:#eaf1e7;" placeholder="Example: deploy every commit directly to production">
       <p><button id="hidden-workflow-check">Reveal Corruption</button></p>
-      <p id="hidden-workflow-result"></p>
-      <p id="wisdom-status"></p>
+      <p id="hidden-workflow-result" aria-live="polite"></p>
+      <p id="wisdom-status" aria-live="polite"></p>
     </section>
-  </div>
+  </main>
 
   <script src="js/engine/game-state.js"></script>
   <script src="js/engine/migrations.js"></script>
