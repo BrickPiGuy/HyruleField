@@ -3,6 +3,10 @@ function appendLog(node, line) {
   node.scrollTop = node.scrollHeight;
 }
 
+function dispatchAction(action) {
+  return window.HyruleEngine.dispatch(action);
+}
+
 function setTimelineProgress(track, index, total) {
   const pct = Math.round(((index + 1) / total) * 100);
   track.style.setProperty("--progress", `${pct}%`);
@@ -95,12 +99,12 @@ function setupIndexPage() {
   const narrativeResult = document.getElementById("choice-result");
 
   safeButton?.addEventListener("click", () => {
-    window.HyruleState.decreaseCorruption(5);
+    dispatchAction({ type: window.HyruleActions.TYPES.SAFE_PATH });
     narrativeResult.textContent = "The kingdom stabilizes. You insisted on the full pipeline gates.";
   });
 
   recklessButton?.addEventListener("click", () => {
-    window.HyruleState.increaseCorruption(12);
+    dispatchAction({ type: window.HyruleActions.TYPES.RECKLESS_PATH });
     narrativeResult.textContent = "Ganonix harvests chaos from your rushed deploy.";
   });
 
@@ -115,9 +119,9 @@ function setupIndexPage() {
     }
 
     const correct = selected.value === "build-test-scan-review-deploy";
-    window.HyruleState.withState((state) => {
-      state.quizzes.intro = correct;
-      state.corruption += correct ? -4 : 6;
+    dispatchAction({
+      type: window.HyruleActions.TYPES.INTRO_QUIZ,
+      correct
     });
 
     quizResult.textContent = correct
@@ -126,17 +130,19 @@ function setupIndexPage() {
   });
 }
 
-function setupPowerPage() {
+async function setupPowerPage() {
   const logNode = document.getElementById("ci-log");
+  const pipelineNode = document.getElementById("ci-pipeline");
   const runButton = document.getElementById("run-ci");
   const doneNode = document.getElementById("power-status");
-  const steps = [
-    "Checkout source",
-    "Install dependencies",
-    "Run lint",
-    "Run unit tests",
-    "Package artifact"
-  ];
+  const mission = await window.HyruleMissionLoader.loadMission("power");
+  const steps = mission.ciSteps || [];
+
+  if (pipelineNode) {
+    pipelineNode.innerHTML = steps
+      .map((step, index) => `<div class="pipeline-step" data-ci-step="${index + 1}">${step}</div>`)
+      .join("");
+  }
 
   runButton?.addEventListener("click", () => {
     if (!logNode) {
@@ -158,18 +164,41 @@ function setupPowerPage() {
     setTimeout(() => {
       appendLog(logNode, "Artifact signed and ready for security gates.");
       doneNode.textContent = "Temple of Power restored.";
-      window.HyruleState.completeTemple("power");
+      dispatchAction({
+        type: window.HyruleActions.TYPES.COMPLETE_TEMPLE,
+        piece: "power"
+      });
       runButton.disabled = true;
     }, delay + 200);
   });
 }
 
-function setupWisdomPage() {
-  const cards = document.querySelectorAll("[data-security-card]");
+async function setupWisdomPage() {
+  const cardsRoot = document.getElementById("security-cards");
+  const objectiveNode = document.getElementById("wisdom-objective");
   const resolveNode = document.getElementById("wisdom-status");
   const workflowInput = document.getElementById("hidden-workflow-input");
   const workflowCheck = document.getElementById("hidden-workflow-check");
   const workflowResult = document.getElementById("hidden-workflow-result");
+  const mission = await window.HyruleMissionLoader.loadMission("wisdom");
+
+  if (objectiveNode && mission.objective) {
+    objectiveNode.textContent = mission.objective;
+  }
+
+  if (cardsRoot && Array.isArray(mission.securityCards)) {
+    cardsRoot.innerHTML = mission.securityCards.map((card) => {
+      const buttonLabel = card.fixLabel || "Apply Fix";
+      return `
+      <article class="card" data-security-card="${card.id}">
+        <h2>${card.title}</h2>
+        <p>${card.description}</p>
+        <button>${buttonLabel}</button>
+      </article>`;
+    }).join("");
+  }
+
+  const cards = document.querySelectorAll("[data-security-card]");
 
   cards.forEach((card) => {
     const button = card.querySelector("button");
@@ -177,7 +206,10 @@ function setupWisdomPage() {
       card.setAttribute("data-cleared", "true");
       button.disabled = true;
       button.textContent = "Secured";
-      window.HyruleState.decreaseCorruption(2);
+      dispatchAction({
+        type: window.HyruleActions.TYPES.SECURITY_CARD_CLEARED,
+        cardId: card.getAttribute("data-security-card")
+      });
 
       const remaining = Array.from(cards).some((n) => n.getAttribute("data-cleared") !== "true");
       if (!remaining) {
@@ -188,85 +220,138 @@ function setupWisdomPage() {
 
   workflowCheck?.addEventListener("click", () => {
     const text = (workflowInput?.value || "").toLowerCase();
-    const valid = text.includes("deploy") && (text.includes("every commit") || text.includes("direct"));
+    const requiredWords = (mission.hiddenWorkflow && mission.hiddenWorkflow.requiredWords) || ["deploy"];
+    const anyPhrases = (mission.hiddenWorkflow && mission.hiddenWorkflow.anyPhrases) || ["every commit", "direct"];
+    const valid = requiredWords.every((word) => text.includes(String(word).toLowerCase()))
+      && anyPhrases.some((phrase) => text.includes(String(phrase).toLowerCase()));
 
     if (!valid) {
       workflowResult.textContent = "Hint: identify the workflow that deploys directly without checks.";
-      window.HyruleState.increaseCorruption(4);
+      dispatchAction({
+        type: window.HyruleActions.TYPES.HIDDEN_WORKFLOW_CHECK,
+        valid: false,
+        allCardsDone: false
+      });
       return;
     }
 
-    window.HyruleState.withState((state) => {
-      state.hiddenWorkflowFound = true;
-      const allCardsDone = Array.from(cards).every((n) => n.getAttribute("data-cleared") === "true");
-      if (allCardsDone) {
-        state.wisdom = true;
-        state.corruption -= 7;
-      }
+    const allCardsDone = Array.from(cards).every((n) => n.getAttribute("data-cleared") === "true");
+    dispatchAction({
+      type: window.HyruleActions.TYPES.HIDDEN_WORKFLOW_CHECK,
+      valid: true,
+      allCardsDone
     });
 
     workflowResult.textContent = "Hidden workflow exposed. Wisdom restored.";
   });
 }
 
-function setupCouragePage() {
+async function setupCouragePage() {
+  const mission = await window.HyruleMissionLoader.loadMission("courage");
+  const objectiveNode = document.getElementById("courage-objective");
+  const prereqsNode = document.getElementById("courage-prereqs");
   const approveButton = document.getElementById("approve-release");
   const deployButton = document.getElementById("deploy-release");
   const rushButton = document.getElementById("rush-release");
   const statusNode = document.getElementById("courage-status");
 
+  if (objectiveNode && mission.objective) {
+    objectiveNode.textContent = mission.objective;
+  }
+
+  if (prereqsNode && Array.isArray(mission.prereqsDisplay)) {
+    prereqsNode.innerHTML = mission.prereqsDisplay.map((item) => `<li>${item}</li>`).join("");
+  }
+
   approveButton?.addEventListener("click", () => {
-    window.HyruleState.withState((state) => {
-      state.approvalGranted = true;
-      state.corruption -= 3;
+    dispatchAction({
+      type: window.HyruleActions.TYPES.GRANT_APPROVAL
     });
     statusNode.textContent = "Royal approval granted. Deployment gate unlocked.";
     deployButton.disabled = false;
   });
 
   deployButton?.addEventListener("click", () => {
-    window.HyruleState.withState((state) => {
-      if (!state.approvalGranted || !(state.power && state.wisdom)) {
-        statusNode.textContent = "Cannot deploy yet. Complete Power and Wisdom, then obtain approval.";
-        state.corruption += 5;
-        return;
-      }
-
-      state.courage = true;
-      state.corruption -= 8;
-      statusNode.textContent = "Deployment successful. Temple of Courage restored.";
+    const state = window.HyruleEngine.getState();
+    const requiredKeys = Array.isArray(mission.requiredStateKeys)
+      ? mission.requiredStateKeys
+      : ["approvalGranted", "power", "wisdom"];
+    const prereqsMet = requiredKeys.every((key) => Boolean(state[key]));
+    const result = dispatchAction({
+      type: window.HyruleActions.TYPES.DEPLOY_RELEASE,
+      prereqsMet
     });
+
+    if (!result.outcome.ok) {
+      statusNode.textContent = "Cannot deploy yet. Complete Power and Wisdom, then obtain approval.";
+      return;
+    }
+
+    statusNode.textContent = "Deployment successful. Temple of Courage restored.";
     deployButton.disabled = true;
   });
 
   rushButton?.addEventListener("click", () => {
-    window.HyruleState.increaseCorruption(12);
+    dispatchAction({ type: window.HyruleActions.TYPES.RUSH_RELEASE });
     statusNode.textContent = "Emergency rollback triggered. Reckless deployment failed.";
   });
 }
 
-function setupFinalBattlePage() {
-  const checks = document.querySelectorAll("input[data-final-task]");
+async function setupFinalBattlePage() {
+  const mission = await window.HyruleMissionLoader.loadMission("final-battle");
+  const objectiveNode = document.getElementById("final-objective");
+  const checklistNode = document.getElementById("final-checklist");
+  const pipelineNode = document.getElementById("final-pipeline");
   const finishButton = document.getElementById("finish-battle");
   const resultNode = document.getElementById("battle-result");
   const certificate = document.getElementById("certificate");
   const printButton = document.getElementById("print-badge");
 
+  if (objectiveNode && mission.objective) {
+    objectiveNode.textContent = mission.objective;
+  }
+
+  if (checklistNode && Array.isArray(mission.checklist)) {
+    checklistNode.innerHTML = mission.checklist
+      .map((item) => `<label class="quiz-option"><input data-final-task type="checkbox"> ${item}</label>`)
+      .join("");
+  }
+
+  if (pipelineNode && Array.isArray(mission.pipelineStages)) {
+    pipelineNode.innerHTML = mission.pipelineStages
+      .map((stage) => `<div class="pipeline-step active">${stage}</div>`)
+      .join("");
+  }
+
+  const checks = document.querySelectorAll("input[data-final-task]");
+  const requiredKeys = Array.isArray(mission.requiredStateKeys)
+    ? mission.requiredStateKeys
+    : ["power", "wisdom", "courage"];
+  const failureMessage = mission.messages && mission.messages.failure
+    ? mission.messages.failure
+    : "Ganonix resists. Complete every task and restore all three temples first.";
+  const successMessage = mission.messages && mission.messages.success
+    ? mission.messages.success
+    : "Victory. The kingdom and production are secure.";
+
   finishButton?.addEventListener("click", () => {
     const allMarked = Array.from(checks).every((node) => node.checked);
+    const state = window.HyruleEngine.getState();
+    const requiredKeysMet = requiredKeys.every((key) => Boolean(state[key]));
 
-    window.HyruleState.withState((state) => {
-      const triforceComplete = state.power && state.wisdom && state.courage;
-      if (!allMarked || !triforceComplete) {
-        state.corruption += 8;
-        resultNode.textContent = "Ganonix resists. Complete every task and restore all three temples first.";
-        return;
-      }
-
-      state.corruption -= 10;
-      resultNode.textContent = "Victory. The kingdom and production are secure.";
-      certificate.classList.remove("hidden");
+    const result = dispatchAction({
+      type: window.HyruleActions.TYPES.FINAL_BATTLE_RESOLVE,
+      allMarked,
+      requiredKeysMet
     });
+
+    if (!result.outcome.ok) {
+      resultNode.textContent = failureMessage;
+      return;
+    }
+
+    resultNode.textContent = successMessage;
+    certificate.classList.remove("hidden");
   });
 
   printButton?.addEventListener("click", () => {

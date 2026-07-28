@@ -1,0 +1,16 @@
+{
+  "id": "power",
+  "title": "Temple of Power",
+  "objective": "Stabilize CI by completing all forge gates.",
+  "ciSteps": [
+    "Checkout source",
+    "Install dependencies",
+    "Run lint",
+    "Run unit tests",
+    "Package artifact"
+  ],
+  "reward": {
+    "temple": "power",
+    "corruptionReduction": 7
+  }
+}

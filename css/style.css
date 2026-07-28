@@ -113,6 +113,31 @@ a {
   margin: 1rem 0 1.4rem;
 }
 
+.hud-panel {
+  margin: -0.65rem 0 1.2rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(8, 21, 26, 0.82);
+}
+
+.hud-title {
+  margin: 0 0 0.3rem;
+  font-family: "Cinzel", "Times New Roman", serif;
+  letter-spacing: 0.04em;
+  color: var(--gold-soft);
+}
+
+#hud-objective {
+  margin: 0 0 0.45rem;
+}
+
+#hud-gates {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.94rem;
+}
+
 .triforce-progress {
   display: flex;
   align-items: end;

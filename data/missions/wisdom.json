@@ -1,0 +1,33 @@
+{
+  "id": "wisdom",
+  "title": "Temple of Wisdom",
+  "objective": "Secure the pipeline by clearing all security wards and exposing the hidden direct-deploy workflow.",
+  "securityCards": [
+    {
+      "id": "secrets",
+      "title": "Secret Curse",
+      "description": "Rotate leaked credentials and enable secret scanning.",
+      "fixLabel": "Apply Fix"
+    },
+    {
+      "id": "dependency",
+      "title": "Dependency Blight",
+      "description": "Patch vulnerable packages and re-run dependency checks.",
+      "fixLabel": "Apply Fix"
+    },
+    {
+      "id": "codeql",
+      "title": "Theft of Wisdom",
+      "description": "Enable code analysis and least-privilege workflow permissions.",
+      "fixLabel": "Apply Fix"
+    }
+  ],
+  "hiddenWorkflow": {
+    "requiredWords": ["deploy"],
+    "anyPhrases": ["every commit", "direct"]
+  },
+  "reward": {
+    "temple": "wisdom",
+    "corruptionReduction": 7
+  }
+}

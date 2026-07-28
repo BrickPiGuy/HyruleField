@@ -42,12 +42,7 @@
     <section class="card-grid">
       <article class="card">
         <h2>Pipeline Stages</h2>
-        <div class="pipeline">
-          <div class="pipeline-step" data-ci-step="1">Checkout</div>
-          <div class="pipeline-step" data-ci-step="2">Install Dependencies</div>
-          <div class="pipeline-step" data-ci-step="3">Lint</div>
-          <div class="pipeline-step" data-ci-step="4">Unit Tests</div>
-          <div class="pipeline-step" data-ci-step="5">Artifact Build</div>
+        <div class="pipeline" id="ci-pipeline">
         </div>
       </article>
 
@@ -62,6 +57,13 @@
     </section>
   </div>
 
+  <script src="js/engine/game-state.js"></script>
+  <script src="js/engine/migrations.js"></script>
+  <script src="js/engine/save-schema.js"></script>
+  <script src="js/engine/actions.js"></script>
+  <script src="js/engine/rules-engine.js"></script>
+  <script src="js/content/mission-loader.js"></script>
+  <script src="js/ui/hud.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/challenges.js"></script>
 </body>

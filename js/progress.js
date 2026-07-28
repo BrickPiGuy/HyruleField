@@ -1,42 +1,9 @@
-const STORAGE_KEY = "devopsTriforceState";
-
-const DEFAULT_STATE = {
-  power: false,
-  wisdom: false,
-  courage: false,
-  corruption: 35,
-  hiddenWorkflowFound: false,
-  approvalGranted: false,
-  quizzes: {},
-  challenges: {}
-};
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
 function loadState() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    return {
-      ...DEFAULT_STATE,
-      ...parsed,
-      quizzes: {
-        ...DEFAULT_STATE.quizzes,
-        ...(parsed.quizzes || {})
-      },
-      challenges: {
-        ...DEFAULT_STATE.challenges,
-        ...(parsed.challenges || {})
-      }
-    };
-  } catch (_error) {
-    return { ...DEFAULT_STATE };
-  }
+  return window.HyruleSave.loadState();
 }
 
 function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  window.HyruleSave.saveState(state);
 }
 
 function getTempleProgressCount(state) {
@@ -78,35 +45,33 @@ function updateGlobalUI(state) {
       : Boolean(state[key]);
     badge.classList.toggle("unlocked", unlocked);
   });
+
+  if (window.HyruleHUD && typeof window.HyruleHUD.update === "function") {
+    window.HyruleHUD.update(state);
+  }
 }
 
-function withState(callback) {
-  const state = loadState();
-  callback(state);
-  state.corruption = clamp(state.corruption, 0, 100);
-  saveState(state);
-  updateGlobalUI(state);
+function dispatch(action) {
+  const current = loadState();
+  const result = window.HyruleRules.reduceGameState(current, action);
+  saveState(result.state);
+  updateGlobalUI(result.state);
+  return result;
 }
 
+window.HyruleEngine = {
+  getState: loadState,
+  dispatch,
+  reset() {
+    return dispatch({ type: window.HyruleActions.TYPES.RESET_GAME });
+  }
+};
+
+// Backwards-compatible adapter while page scripts are migrated.
 window.HyruleState = {
   getState: loadState,
-  saveState,
-  withState,
-  increaseCorruption(amount) {
-    withState((state) => {
-      state.corruption += amount;
-    });
-  },
-  decreaseCorruption(amount) {
-    withState((state) => {
-      state.corruption -= amount;
-    });
-  },
   completeTemple(piece) {
-    withState((state) => {
-      state[piece] = true;
-      state.corruption -= 7;
-    });
+    return dispatch({ type: window.HyruleActions.TYPES.COMPLETE_TEMPLE, piece });
   }
 };
 
@@ -116,8 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetButton = document.getElementById("reset-progress");
   if (resetButton) {
     resetButton.addEventListener("click", () => {
-      saveState({ ...DEFAULT_STATE });
-      updateGlobalUI(loadState());
+      window.HyruleEngine.reset();
       location.reload();
     });
   }

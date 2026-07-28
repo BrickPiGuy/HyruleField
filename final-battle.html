@@ -37,30 +37,19 @@
     </section>
 
     <h1>The Final Battle</h1>
-    <p>Complete every operation in order to defeat Lord Ganonix.</p>
+    <p id="final-objective">Complete every operation in order to defeat Lord Ganonix.</p>
 
     <section class="card-grid">
       <article class="card">
         <h2>Battle Checklist</h2>
-        <label class="quiz-option"><input data-final-task type="checkbox"> Repair the build.</label>
-        <label class="quiz-option"><input data-final-task type="checkbox"> Make all tests pass.</label>
-        <label class="quiz-option"><input data-final-task type="checkbox"> Resolve all security findings.</label>
-        <label class="quiz-option"><input data-final-task type="checkbox"> Protect production environment.</label>
-        <label class="quiz-option"><input data-final-task type="checkbox"> Obtain release approval.</label>
-        <label class="quiz-option"><input data-final-task type="checkbox"> Deploy the restored release.</label>
+        <div id="final-checklist"></div>
         <p><button id="finish-battle">Resolve Release</button></p>
         <p id="battle-result"></p>
       </article>
 
       <article class="card">
         <h2>Pipeline Health Dashboard</h2>
-        <div class="pipeline">
-          <div class="pipeline-step active">Commit</div>
-          <div class="pipeline-step active">Build</div>
-          <div class="pipeline-step active">Test</div>
-          <div class="pipeline-step active">Security Scan</div>
-          <div class="pipeline-step active">Review / Approval</div>
-          <div class="pipeline-step active">Deploy</div>
+        <div class="pipeline" id="final-pipeline">
         </div>
       </article>
     </section>
@@ -73,6 +62,13 @@
     </section>
   </div>
 
+  <script src="js/engine/game-state.js"></script>
+  <script src="js/engine/migrations.js"></script>
+  <script src="js/engine/save-schema.js"></script>
+  <script src="js/engine/actions.js"></script>
+  <script src="js/engine/rules-engine.js"></script>
+  <script src="js/content/mission-loader.js"></script>
+  <script src="js/ui/hud.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/challenges.js"></script>
 </body>

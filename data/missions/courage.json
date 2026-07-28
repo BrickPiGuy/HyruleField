@@ -1,0 +1,15 @@
+{
+  "id": "courage",
+  "title": "Temple of Courage",
+  "objective": "Deploy only after approval and upstream gates are complete.",
+  "requiredStateKeys": ["approvalGranted", "power", "wisdom"],
+  "prereqsDisplay": [
+    "Royal approval granted",
+    "Temple of Power restored",
+    "Temple of Wisdom restored"
+  ],
+  "reward": {
+    "temple": "courage",
+    "corruptionReduction": 8
+  }
+}

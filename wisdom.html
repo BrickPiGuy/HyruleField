@@ -37,26 +37,9 @@
     </section>
 
     <h1>Temple of Wisdom: DevSecOps Wards</h1>
-    <p>Secure the gates by clearing each threat and exposing the hidden unsafe workflow.</p>
+    <p id="wisdom-objective">Secure the gates by clearing each threat and exposing the hidden unsafe workflow.</p>
 
-    <section class="card-grid">
-      <article class="card" data-security-card="secrets">
-        <h2>Secret Curse</h2>
-        <p>Rotate leaked credentials and add secret scanning rules.</p>
-        <button>Apply Fix</button>
-      </article>
-
-      <article class="card" data-security-card="dependency">
-        <h2>Dependency Blight</h2>
-        <p>Patch a vulnerable third-party package and re-run checks.</p>
-        <button>Apply Fix</button>
-      </article>
-
-      <article class="card" data-security-card="codeql">
-        <h2>Theft of Wisdom</h2>
-        <p>Enable code analysis and least-privilege workflow permissions.</p>
-        <button>Apply Fix</button>
-      </article>
+    <section class="card-grid" id="security-cards">
     </section>
 
     <section class="card" style="margin-top: 1rem;">
@@ -69,6 +52,13 @@
     </section>
   </div>
 
+  <script src="js/engine/game-state.js"></script>
+  <script src="js/engine/migrations.js"></script>
+  <script src="js/engine/save-schema.js"></script>
+  <script src="js/engine/actions.js"></script>
+  <script src="js/engine/rules-engine.js"></script>
+  <script src="js/content/mission-loader.js"></script>
+  <script src="js/ui/hud.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/challenges.js"></script>
 </body>
