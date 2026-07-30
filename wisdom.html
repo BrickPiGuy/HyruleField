@@ -43,17 +43,18 @@
     <section class="card-grid" id="security-cards">
     </section>
 
-    <section class="card" style="margin-top: 1rem;">
+    <section class="card wisdom-workflow-card">
       <h2>Hidden Ganonix Workflow</h2>
-      <p>Describe the unsafe pattern you detected in one sentence.</p>
-      <p>Format hint: include 1) the risky action, 2) how often it happens, and 3) what safety gates are skipped.</p>
-      <p>Your choices are patterns like:</p>
-      <ul>
+      <p>Assemble the corrupted workflow from the dropdowns below.</p>
+      <p>Choose the risky action, how often it happens, where it goes, and which safety gates are skipped.</p>
+      <p>Your choices should expose a pattern like:</p>
+      <ul class="workflow-patterns">
         <li>Continuous direct promotion to production.</li>
         <li>Releasing without tests, security scans, or review gates.</li>
         <li>Bypassing approvals and shipping immediately.</li>
       </ul>
-      <input id="hidden-workflow-input" type="text" aria-label="Describe unsafe workflow" style="width:100%; padding:0.55rem; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:#0a1518; color:#eaf1e7;" placeholder="Example format: [action] [frequency] [destination], skipping [gates]">
+      <div id="hidden-workflow-composer" class="hidden-workflow-composer" aria-label="Build unsafe workflow sentence"></div>
+      <p id="hidden-workflow-preview" aria-live="polite">Select one option from each dropdown to reveal the sentence.</p>
       <p><button id="hidden-workflow-check">Reveal Corruption</button></p>
       <p id="hidden-workflow-result" aria-live="polite"></p>
       <p id="wisdom-status" aria-live="polite"></p>
@@ -64,6 +65,7 @@
   <script src="js/engine/migrations.js"></script>
   <script src="js/engine/save-schema.js"></script>
   <script src="js/engine/actions.js"></script>
+  <script src="js/engine/random-seed.js"></script>
   <script src="js/engine/scoring.js"></script>
   <script src="js/engine/rewards.js"></script>
   <script src="js/engine/rules-engine.js"></script>

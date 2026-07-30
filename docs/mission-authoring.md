@@ -31,7 +31,8 @@ Every mission must define:
 - `reward` must define either `temple` or `victory`.
 - Array fields must contain non-empty strings.
 - `securityCards` entries must define `id`, `title`, and `description`.
-- `hiddenWorkflow.requiredWords` and `hiddenWorkflow.anyPhrases` are required when `hiddenWorkflow` is present.
+- `hiddenWorkflow.previewTemplate`, `hiddenWorkflow.requiredWords`, and `hiddenWorkflow.anyPhrases` are required when `hiddenWorkflow` is present.
+- `hiddenWorkflow.segments` must define each dropdown part with `id`, `label`, `correctValue`, and exactly 5 string `options`.
 - Any dependency fields must point at existing mission ids.
 - Dependency loops are rejected.
 

@@ -70,6 +70,168 @@ function hiddenWorkflowMessage(context) {
   return `Attempt ${attempt}: corruption pattern confirmed again.`;
 }
 
+const HIDDEN_WORKFLOW_RUNE_SIGILS = {
+  action: "ᚨᚲᛏ",
+  frequency: "ᚠᚱᛖᛩ",
+  destination: "ᚷᚨᛏᛖ",
+  gates: "ᚹᚨᚱᛞ"
+};
+
+function hiddenWorkflowPlaceholder(segment) {
+  if (!segment || !segment.id) {
+    return "ᚱᚢᚾᛖ";
+  }
+
+  const sigil = HIDDEN_WORKFLOW_RUNE_SIGILS[segment.id] || "ᚱᚢᚾᛖ";
+  return `ᚱᚢᚾᛖ-${sigil}`;
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function renderHiddenWorkflowPreview(hiddenWorkflow, values) {
+  if (!hiddenWorkflow || !Array.isArray(hiddenWorkflow.segments)) {
+    return "";
+  }
+
+  const template = hiddenWorkflow.previewTemplate || "{action} {frequency} {destination}, skipping {gates}.";
+  return hiddenWorkflow.segments.reduce((sentence, segment) => {
+    const replacement = values[segment.id] || hiddenWorkflowPlaceholder(segment);
+    return sentence.replace(`{${segment.id}}`, replacement);
+  }, template);
+}
+
+function renderHiddenWorkflowPreviewMarkup(hiddenWorkflow, values, previousValues) {
+  if (!hiddenWorkflow || !Array.isArray(hiddenWorkflow.segments)) {
+    return "";
+  }
+
+  const template = hiddenWorkflow.previewTemplate || "{action} {frequency} {destination}, skipping {gates}.";
+  return hiddenWorkflow.segments.reduce((markup, segment) => {
+    const value = values[segment.id] || "";
+    const rune = hiddenWorkflowPlaceholder(segment);
+    const justResolved = !previousValues[segment.id] && value;
+    const tokenMarkup = `<span class="workflow-token${value ? " is-filled" : ""}${justResolved ? " just-resolved" : ""}" data-token-id="${escapeHtml(segment.id)}" data-filled="${value ? "true" : "false"}"><span class="workflow-rune">${escapeHtml(rune)}</span><span class="workflow-solved">${escapeHtml(value || rune)}</span></span>`;
+    return markup.replace(`{${segment.id}}`, tokenMarkup);
+  }, template);
+}
+
+function seededShuffleOptions(options, seedText) {
+  const list = Array.isArray(options) ? options.slice() : [];
+  const randomApi = typeof window !== "undefined" ? window.HyruleRandomSeed : null;
+  if (!randomApi || typeof randomApi.hashString !== "function" || typeof randomApi.createRng !== "function") {
+    return list;
+  }
+
+  const seed = randomApi.hashString(seedText);
+  const rng = randomApi.createRng(seed);
+  for (let i = list.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    const temp = list[i];
+    list[i] = list[j];
+    list[j] = temp;
+  }
+
+  return list;
+}
+
+function renderHiddenWorkflowComposer(root, previewNode, hiddenWorkflow) {
+  const segments = hiddenWorkflow && Array.isArray(hiddenWorkflow.segments)
+    ? hiddenWorkflow.segments
+    : [];
+
+  if (!root || segments.length === 0) {
+    return {
+      readValues() {
+        return {};
+      },
+      isValid() {
+        return false;
+      }
+    };
+  }
+
+  const sessionSeed = (typeof window !== "undefined"
+    && window.HyruleTelemetrySession
+    && typeof window.HyruleTelemetrySession.getSession === "function"
+    && window.HyruleTelemetrySession.getSession().sessionId)
+    || `wisdom-${new Date().toISOString()}`;
+
+  root.innerHTML = segments.map((segment) => {
+    const selectId = `hidden-workflow-${segment.id}`;
+    const options = seededShuffleOptions(segment.options, `${sessionSeed}|wisdom|${segment.id}`);
+    return `
+      <label class="hidden-workflow-segment" for="${selectId}">
+        <span class="hidden-workflow-label">${segment.label}</span>
+        <select class="hidden-workflow-select" id="${selectId}" data-hidden-workflow-segment="${segment.id}">
+          <option value="">Choose one</option>
+          ${options.map((option) => `<option value="${option}">${option}</option>`).join("")}
+        </select>
+      </label>`;
+  }).join("");
+
+  const selects = Array.from(root.querySelectorAll("[data-hidden-workflow-segment]"));
+  const readValues = () => selects.reduce((values, select) => {
+    values[select.getAttribute("data-hidden-workflow-segment")] = select.value;
+    return values;
+  }, {});
+  let previousValues = {};
+
+  const updatePreview = () => {
+    const values = readValues();
+    const allFilled = segments.every((segment) => Boolean(values[segment.id]));
+
+    selects.forEach((select) => {
+      const label = select.closest(".hidden-workflow-segment");
+      const isFilled = Boolean(select.value);
+      select.setAttribute("data-filled", isFilled ? "true" : "false");
+      if (label) {
+        label.setAttribute("data-filled", isFilled ? "true" : "false");
+      }
+    });
+
+    root.setAttribute("data-complete", allFilled ? "true" : "false");
+
+    if (!previewNode) {
+      previousValues = values;
+      return;
+    }
+
+    previewNode.innerHTML = renderHiddenWorkflowPreviewMarkup(hiddenWorkflow, values, previousValues);
+    previewNode.setAttribute("aria-label", renderHiddenWorkflowPreview(hiddenWorkflow, values));
+    const wasComplete = previewNode.getAttribute("data-complete") === "true";
+    previewNode.setAttribute("data-complete", allFilled ? "true" : "false");
+    if (allFilled && !wasComplete) {
+      previewNode.classList.remove("decoded");
+      void previewNode.offsetWidth;
+      previewNode.classList.add("decoded");
+    } else if (!allFilled) {
+      previewNode.classList.remove("decoded");
+    }
+
+    previousValues = values;
+  };
+
+  selects.forEach((select) => {
+    select.addEventListener("change", updatePreview);
+  });
+  updatePreview();
+
+  return {
+    readValues,
+    isValid() {
+      const values = readValues();
+      return segments.every((segment) => values[segment.id] === segment.correctValue);
+    }
+  };
+}
+
 function emitStory(eventKey, actionResult) {
   if (!window.HyruleStoryEngine || !window.HyruleStoryLog) {
     return;
@@ -357,8 +519,9 @@ async function setupWisdomPage() {
   const cardsRoot = document.getElementById("security-cards");
   const objectiveNode = document.getElementById("wisdom-objective");
   const resolveNode = document.getElementById("wisdom-status");
-  const workflowInput = document.getElementById("hidden-workflow-input");
+  const workflowComposerNode = document.getElementById("hidden-workflow-composer");
   const workflowCheck = document.getElementById("hidden-workflow-check");
+  const workflowPreview = document.getElementById("hidden-workflow-preview");
   const workflowResult = document.getElementById("hidden-workflow-result");
   const mission = await window.HyruleMissionLoader.loadMission("wisdom");
 
@@ -379,6 +542,11 @@ async function setupWisdomPage() {
   }
 
   const cards = document.querySelectorAll("[data-security-card]");
+  const workflowComposer = renderHiddenWorkflowComposer(
+    workflowComposerNode,
+    workflowPreview,
+    mission.hiddenWorkflow || {}
+  );
   let workflowAttempts = 0;
   let workflowRevealed = false;
 
@@ -402,11 +570,7 @@ async function setupWisdomPage() {
 
   workflowCheck?.addEventListener("click", () => {
     workflowAttempts += 1;
-    const text = (workflowInput?.value || "").toLowerCase();
-    const requiredWords = (mission.hiddenWorkflow && mission.hiddenWorkflow.requiredWords) || ["deploy"];
-    const anyPhrases = (mission.hiddenWorkflow && mission.hiddenWorkflow.anyPhrases) || ["every commit", "direct"];
-    const valid = requiredWords.every((word) => text.includes(String(word).toLowerCase()))
-      && anyPhrases.some((phrase) => text.includes(String(phrase).toLowerCase()));
+    const valid = workflowComposer.isValid();
 
     if (!valid) {
       dispatchAction({
@@ -549,6 +713,9 @@ if (typeof module !== "undefined" && module.exports) {
     computeBaseStepDelay,
     estimateReadableDelay,
     stepDelayForText,
-    hiddenWorkflowMessage
+    hiddenWorkflowMessage,
+    renderHiddenWorkflowPreview,
+    renderHiddenWorkflowPreviewMarkup,
+    seededShuffleOptions
   };
 }

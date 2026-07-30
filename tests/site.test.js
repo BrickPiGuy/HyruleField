@@ -35,6 +35,9 @@ pages.forEach((page) => {
   assert.match(html, /js\/challenges\.js/, `${page} should load challenge script`);
 });
 
+const wisdomHtml = read("wisdom.html");
+assert.match(wisdomHtml, /js\/engine\/random-seed\.js/, "wisdom page should load random seed engine for shuffled workflow options");
+
 const indexHtml = read("index.html");
 assert.match(indexHtml, /DevOps Triforce: Rise of Lord Ganonix/, "index page title text missing");
 assert.match(indexHtml, /id="quiz-submit"/, "index quiz interaction missing");
@@ -55,6 +58,8 @@ assert.match(css, /\.hero img\s*\{[\s\S]*height:\s*auto;/, "hero image should pr
 const jsChallenges = read("js/challenges.js");
 assert.match(jsChallenges, /setupFinalBattlePage/, "final battle setup missing");
 assert.match(jsChallenges, /HIDDEN_WORKFLOW_CHECK/, "hidden workflow action dispatch missing");
+assert.match(jsChallenges, /renderHiddenWorkflowComposer/, "hidden workflow dropdown composer missing");
+assert.match(jsChallenges, /seededShuffleOptions/, "hidden workflow option shuffling missing");
 assert.match(jsChallenges, /setupKeyboardShortcuts/, "keyboard shortcut setup missing");
 assert.match(jsChallenges, /MISSION_STARTED/, "telemetry mission start tracking missing");
 

@@ -25,6 +25,11 @@ missionFiles.forEach((file) => {
 const wisdom = readJson("data/missions/wisdom.json");
 assert.ok(Array.isArray(wisdom.securityCards) && wisdom.securityCards.length >= 3, "wisdom should define security cards");
 assert.ok(wisdom.hiddenWorkflow && Array.isArray(wisdom.hiddenWorkflow.requiredWords), "wisdom should define workflow requiredWords");
+assert.ok(Array.isArray(wisdom.hiddenWorkflow.segments) && wisdom.hiddenWorkflow.segments.length === 4, "wisdom should define four workflow dropdown segments");
+wisdom.hiddenWorkflow.segments.forEach((segment) => {
+  assert.ok(Array.isArray(segment.options) && segment.options.length === 5, `workflow segment ${segment.id} should define five choices`);
+  assert.ok(segment.options.includes(segment.correctValue), `workflow segment ${segment.id} should include its correct choice`);
+});
 
 const courage = readJson("data/missions/courage.json");
 assert.ok(Array.isArray(courage.requiredStateKeys) && courage.requiredStateKeys.length > 0, "courage should define requiredStateKeys");

@@ -25,7 +25,12 @@ test("hidden workflow reveal supports repeated submissions", async ({ page }) =>
   await resetGame(page);
 
   await page.goto("/wisdom.html");
-  await page.fill("#hidden-workflow-input", "Deploy every commit directly to production");
+  await page.selectOption("#hidden-workflow-action", "Deploy");
+  await page.selectOption("#hidden-workflow-frequency", "every commit");
+  await page.selectOption("#hidden-workflow-destination", "directly to production");
+  await page.selectOption("#hidden-workflow-gates", "tests, security scans, and review gates");
+  await expect(page.locator("#hidden-workflow-preview")).toHaveAttribute("data-complete", "true");
+  await expect(page.locator(".hidden-workflow-segment[data-filled='true']")).toHaveCount(4);
 
   await page.click("#hidden-workflow-check");
   await expect(page.locator("#hidden-workflow-result")).toContainText("clear all wards", { ignoreCase: true });

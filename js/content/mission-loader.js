@@ -27,6 +27,33 @@
         { id: "codeql", title: "Theft of Wisdom", description: "Enable code analysis and least-privilege permissions." }
       ],
       hiddenWorkflow: {
+        previewTemplate: "{action} {frequency} {destination}, skipping {gates}.",
+        segments: [
+          {
+            id: "action",
+            label: "Risky action",
+            correctValue: "Deploy",
+            options: ["Promote", "Deploy", "Scan", "Approve", "Attest"]
+          },
+          {
+            id: "frequency",
+            label: "How often",
+            correctValue: "every commit",
+            options: ["after approval", "every commit", "per release train", "after a security waiver", "only for emergency fixes"]
+          },
+          {
+            id: "destination",
+            label: "Destination",
+            correctValue: "directly to production",
+            options: ["to staging for soak", "directly to production", "to a canary ring", "to an isolated review app", "to a hardened pre-prod gate"]
+          },
+          {
+            id: "gates",
+            label: "Skipped gates",
+            correctValue: "tests, security scans, and review gates",
+            options: ["artifact signing and provenance checks", "tests, security scans, and review gates", "secret rotation and dashboard reviews", "rollback drills and alert tuning", "dependency pinning and branch protection"]
+          }
+        ],
         requiredWords: ["deploy"],
         anyPhrases: ["every commit", "direct"]
       }

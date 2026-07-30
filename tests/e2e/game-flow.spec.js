@@ -41,7 +41,10 @@ test("core journey restores all temples and wins final battle", async ({ page })
   for (let i = 0; i < buttonCount; i += 1) {
     await securityFixButtons.nth(i).click();
   }
-  await page.fill("#hidden-workflow-input", "Deploy every commit directly to production");
+  await page.selectOption("#hidden-workflow-action", "Deploy");
+  await page.selectOption("#hidden-workflow-frequency", "every commit");
+  await page.selectOption("#hidden-workflow-destination", "directly to production");
+  await page.selectOption("#hidden-workflow-gates", "tests, security scans, and review gates");
   await page.click("#hidden-workflow-check");
   await expect(page.locator("#hidden-workflow-result")).toContainText("Wisdom restored", { ignoreCase: true });
 

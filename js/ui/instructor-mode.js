@@ -48,8 +48,8 @@
       title: "Temple of Wisdom Notes",
       label: "Security Wards",
       expectedAnswers: [
-        "Describe one unsafe workflow in a single sentence.",
-        "Include action, frequency, and skipped safety gates.",
+        "Build the unsafe workflow from the dropdown sentence.",
+        "Choose the risky action, frequency, destination, and skipped gates.",
         "Reference direct production flow and bypassed checks."
       ],
       riskMap: [
@@ -57,9 +57,9 @@
         "The hidden workflow hint points to direct deploy without checks."
       ],
       hints: [
-        "The hidden workflow box is the clue to expose the corruption.",
+        "The hidden workflow dropdowns are the clue to expose the corruption.",
         "Clear all three security cards before validating the hidden workflow.",
-        "Guide learners to describe the pattern type without giving the exact phrase."
+        "Guide learners to identify the right pattern parts without giving the exact sequence."
       ]
     },
     courage: {

@@ -7,6 +7,16 @@ global.HyruleActions = actions;
 const rules = require("../js/engine/rules-engine.js");
 const challenges = require("../js/challenges.js");
 
+const hiddenWorkflow = {
+  previewTemplate: "{action} {frequency} {destination}, skipping {gates}.",
+  segments: [
+    { id: "action", label: "Risky action" },
+    { id: "frequency", label: "How often" },
+    { id: "destination", label: "Destination" },
+    { id: "gates", label: "Skipped gates" }
+  ]
+};
+
 function step(state, action) {
   return rules.reduceGameState(state, action);
 }
@@ -102,5 +112,24 @@ message = challenges.hiddenWorkflowMessage({
   hasWisdomNow: false
 });
 assert.match(message, /hint/i, "invalid reveal should provide hint message");
+
+const previewWithRunes = challenges.renderHiddenWorkflowPreview(hiddenWorkflow, {});
+assert.match(previewWithRunes, /ᚱᚢᚾᛖ-ᚨᚲᛏ/, "empty preview should show rune placeholder for action");
+assert.match(previewWithRunes, /ᚱᚢᚾᛖ-ᚠᚱᛖᛩ/, "empty preview should show rune placeholder for frequency");
+
+const previewMarkup = challenges.renderHiddenWorkflowPreviewMarkup(hiddenWorkflow, {
+  action: "Deploy"
+}, {});
+assert.match(previewMarkup, /workflow-token is-filled just-resolved/, "resolved preview token markup should include animation classes");
+assert.match(previewMarkup, /workflow-rune/, "preview markup should preserve rune layer for fade-out animation");
+assert.match(previewMarkup, /workflow-solved/, "preview markup should include solved text layer");
+
+const decodedPreview = challenges.renderHiddenWorkflowPreview(hiddenWorkflow, {
+  action: "Deploy",
+  frequency: "every commit",
+  destination: "directly to production",
+  gates: "tests, security scans, and review gates"
+});
+assert.match(decodedPreview, /Deploy every commit directly to production, skipping tests, security scans, and review gates\./, "filled preview should resolve to the decoded corruption sentence");
 
 console.log("Wisdom workflow contract checks passed.");

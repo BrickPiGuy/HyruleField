@@ -34,6 +34,12 @@ function ensureStringArray(value, label, fileName) {
   }
 }
 
+function ensurePlainObject(value, label, fileName) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    fail(`${fileName} must define ${label} as an object`);
+  }
+}
+
 function validateReward(reward, fileName) {
   if (!reward || typeof reward !== "object" || Array.isArray(reward)) {
     fail(`${fileName} must define a reward object`);
@@ -99,9 +105,25 @@ for (const fileName of missionFiles) {
     });
   }
   if (mission.hiddenWorkflow) {
-    if (!mission.hiddenWorkflow || typeof mission.hiddenWorkflow !== "object" || Array.isArray(mission.hiddenWorkflow)) {
-      fail(`${fileName} hiddenWorkflow must be an object`);
+    ensurePlainObject(mission.hiddenWorkflow, "hiddenWorkflow", fileName);
+    ensureString(mission.hiddenWorkflow.previewTemplate, "hiddenWorkflow.previewTemplate", fileName);
+    if (!Array.isArray(mission.hiddenWorkflow.segments) || mission.hiddenWorkflow.segments.length === 0) {
+      fail(`${fileName} must define hiddenWorkflow.segments when hiddenWorkflow is present`);
     }
+    mission.hiddenWorkflow.segments.forEach((segment, index) => {
+      const label = `${fileName}.hiddenWorkflow.segments[${index}]`;
+      ensurePlainObject(segment, label, fileName);
+      ensureString(segment.id, `${label}.id`, fileName);
+      ensureString(segment.label, `${label}.label`, fileName);
+      ensureString(segment.correctValue, `${label}.correctValue`, fileName);
+      ensureStringArray(segment.options, `${label}.options`, fileName);
+      if (segment.options.length !== 5) {
+        fail(`${label}.options must contain exactly 5 choices`);
+      }
+      if (!segment.options.includes(segment.correctValue)) {
+        fail(`${label}.correctValue must match one of its options`);
+      }
+    });
     ensureStringArray(mission.hiddenWorkflow.requiredWords, "hiddenWorkflow.requiredWords", fileName);
     ensureStringArray(mission.hiddenWorkflow.anyPhrases, "hiddenWorkflow.anyPhrases", fileName);
   }
