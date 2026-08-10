@@ -43,4 +43,19 @@ assert.strictEqual(finalComplete.href, "index.html", "final battle should return
 assert.strictEqual(finalComplete.showAction, true, "final battle should show the return action after victory");
 assert.strictEqual(finalComplete.complete, true, "final battle should mark the banner complete after victory");
 
+hud.resetGuideFocusState();
+const focusCalls = [];
+const mockLinkNode = {
+	focus(options) {
+		focusCalls.push(options || null);
+	}
+};
+
+assert.strictEqual(hud.autoFocusGuide("power", powerBeforeCompletion, mockLinkNode), false, "incomplete guides should not auto-focus the next link");
+assert.strictEqual(focusCalls.length, 0, "incomplete guides should not trigger focus calls");
+assert.strictEqual(hud.autoFocusGuide("power", powerAfterCompletion, mockLinkNode), true, "completed guides should auto-focus the next link once");
+assert.strictEqual(focusCalls.length, 1, "completed guides should focus once");
+assert.strictEqual(hud.autoFocusGuide("power", powerAfterCompletion, mockLinkNode), false, "repeated updates should not refocus the same guide");
+assert.strictEqual(focusCalls.length, 1, "repeated updates should not add more focus calls");
+
 console.log("HUD navigation checks passed.");

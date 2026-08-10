@@ -46,6 +46,29 @@
   let pathTitleNode = null;
   let pathCopyNode = null;
   let pathLinkNode = null;
+  let lastGuideFocusKey = null;
+
+  function resolveGuideFocusKey(page, guide) {
+    return `${page}:${guide && guide.complete ? "complete" : "incomplete"}:${guide ? guide.href : ""}`;
+  }
+
+  function autoFocusGuide(page, guide, linkNode) {
+    const key = resolveGuideFocusKey(page, guide);
+    const shouldFocus = Boolean(guide && guide.complete && guide.showAction && linkNode && typeof linkNode.focus === "function" && key !== lastGuideFocusKey);
+    lastGuideFocusKey = key;
+
+    if (!shouldFocus) {
+      return false;
+    }
+
+    try {
+      linkNode.focus({ preventScroll: true });
+    } catch (_error) {
+      linkNode.focus();
+    }
+
+    return true;
+  }
 
   function getActiveRoute(page) {
     if (page === "index") {
@@ -261,6 +284,8 @@
       pathLinkNode.hidden = !guide.showAction;
       pathLinkNode.setAttribute("aria-hidden", guide.showAction ? "false" : "true");
     }
+
+    autoFocusGuide(page, guide, pathLinkNode);
   }
 
   if (typeof document !== "undefined") {
@@ -272,6 +297,10 @@
   return {
     update,
     getCampaignGuide,
-    missionStatusSummary
+    missionStatusSummary,
+    autoFocusGuide,
+    resetGuideFocusState() {
+      lastGuideFocusKey = null;
+    }
   };
 });
