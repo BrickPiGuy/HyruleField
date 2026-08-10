@@ -19,9 +19,12 @@ assert.strictEqual(scoring.rankForCorruption(18), "Legend", "rank boundary for l
 assert.strictEqual(scoring.rankForCorruption(35), "Gold", "rank boundary for gold should be <= 35");
 assert.strictEqual(scoring.rankForCorruption(55), "Silver", "rank boundary for silver should be <= 55");
 assert.strictEqual(scoring.rankForCorruption(80), "Bronze", "high corruption should map to bronze");
+assert.strictEqual(rewards.campaignRouteForRank("Legend"), "mastery", "legend rank should take the mastery route");
+assert.strictEqual(rewards.campaignRouteForRank("Bronze"), "recovery", "bronze rank should take the recovery route");
 
 const afterPower = run({ type: actions.TYPES.COMPLETE_TEMPLE, piece: "power" }, start);
 assert.strictEqual(afterPower.rewards.templeRanks.power, "Gold", "power rank should be assigned on completion");
+assert.strictEqual(afterPower.rewards.lastTempleAward.branch, "mastery", "clean power completion should unlock the mastery route");
 assert.strictEqual(afterPower.rewards.totalScore, 143, "gold completion should apply multiplier-based score");
 assert.strictEqual(afterPower.rewards.rewardPoints, 143, "gold completion should apply multiplier-based reward points");
 

@@ -13,9 +13,14 @@
   };
 
   const FINAL_VICTORY_BONUS = 250;
+  const MASTERY_RANKS = new Set(["Legend", "Gold"]);
 
   function pointsForRank(rank) {
     return rankPoints[rank] || 0;
+  }
+
+  function campaignRouteForRank(rank) {
+    return MASTERY_RANKS.has(rank) ? "mastery" : "recovery";
   }
 
   function finalVictoryBonus() {
@@ -24,6 +29,7 @@
 
   return {
     pointsForRank,
+    campaignRouteForRank,
     finalVictoryBonus,
     rankPoints
   };

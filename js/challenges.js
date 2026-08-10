@@ -523,14 +523,31 @@ async function setupWisdomPage() {
   const workflowCheck = document.getElementById("hidden-workflow-check");
   const workflowPreview = document.getElementById("hidden-workflow-preview");
   const workflowResult = document.getElementById("hidden-workflow-result");
+  const stateBeforeMission = window.HyruleEngine.getState();
+  const previousBranch = stateBeforeMission && stateBeforeMission.rewards && stateBeforeMission.rewards.lastTempleAward
+    ? stateBeforeMission.rewards.lastTempleAward.branch
+    : "recovery";
   const mission = await window.HyruleMissionLoader.loadMission("wisdom");
 
   if (objectiveNode && mission.objective) {
-    objectiveNode.textContent = mission.objective;
+    const branchPrefix = previousBranch === "mastery"
+      ? "Mastery route: Power was cleared cleanly, so this ward set adds one more audit."
+      : "Recovery route: Power was messy, so focus on stabilizing the wards before the hidden workflow. ";
+    objectiveNode.textContent = `${branchPrefix} ${mission.objective}`;
   }
 
   if (cardsRoot && Array.isArray(mission.securityCards)) {
-    cardsRoot.innerHTML = mission.securityCards.map((card) => {
+    const branchCard = previousBranch === "mastery"
+      ? {
+          id: "branch-audit",
+          title: "Mastery Audit",
+          description: "A clean Power run unlocks one extra review pass before Wisdom is restored.",
+          fixLabel: "Apply Audit"
+        }
+      : null;
+    const securityCards = branchCard ? [...mission.securityCards, branchCard] : mission.securityCards;
+
+    cardsRoot.innerHTML = securityCards.map((card) => {
       const buttonLabel = card.fixLabel || "Apply Fix";
       return `
       <article class="card" data-security-card="${card.id}">
@@ -612,6 +629,10 @@ async function setupWisdomPage() {
 }
 
 async function setupCouragePage() {
+  const stateBeforeMission = window.HyruleEngine.getState();
+  const previousBranch = stateBeforeMission && stateBeforeMission.rewards && stateBeforeMission.rewards.lastTempleAward
+    ? stateBeforeMission.rewards.lastTempleAward.branch
+    : "recovery";
   const mission = await window.HyruleMissionLoader.loadMission("courage");
   const objectiveNode = document.getElementById("courage-objective");
   const prereqsNode = document.getElementById("courage-prereqs");
@@ -621,11 +642,17 @@ async function setupCouragePage() {
   const statusNode = document.getElementById("courage-status");
 
   if (objectiveNode && mission.objective) {
-    objectiveNode.textContent = mission.objective;
+    const branchPrefix = previousBranch === "mastery"
+      ? "Mastery route: Wisdom was restored cleanly, so Courage opens with a stricter approval check."
+      : "Recovery route: Wisdom needed extra repair, so Courage emphasizes stable release gates first. ";
+    objectiveNode.textContent = `${branchPrefix} ${mission.objective}`;
   }
 
   if (prereqsNode && Array.isArray(mission.prereqsDisplay)) {
-    prereqsNode.innerHTML = mission.prereqsDisplay.map((item) => `<li>${item}</li>`).join("");
+    const branchPrereqs = previousBranch === "mastery"
+      ? [...mission.prereqsDisplay, "Mastery route: review the additional audit gate before deployment."]
+      : mission.prereqsDisplay;
+    prereqsNode.innerHTML = branchPrereqs.map((item) => `<li>${item}</li>`).join("");
   }
 
   approveButton?.addEventListener("click", () => {

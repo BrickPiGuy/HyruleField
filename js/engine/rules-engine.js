@@ -39,6 +39,9 @@
       const map = { Legend: 180, Gold: 130, Silver: 90, Bronze: 60 };
       return map[rank] || 0;
     },
+    campaignRouteForRank(rank) {
+      return rank === "Legend" || rank === "Gold" ? "mastery" : "recovery";
+    },
     finalVictoryBonus() {
       return 250;
     }
@@ -107,6 +110,7 @@
     state.rewards.lastTempleAward = {
       piece,
       rank,
+      branch: rewards.campaignRouteForRank(rank),
       ...award
     };
   }

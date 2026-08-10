@@ -128,6 +128,12 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+.top-nav a.is-current {
+  border-color: var(--gold);
+  background: rgba(242, 200, 75, 0.16);
+  color: var(--gold-soft);
+}
+
 .top-nav a:hover,
 .top-nav a:focus-visible {
   border-color: var(--gold);
@@ -156,6 +162,47 @@ select:focus-visible {
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: rgba(8, 21, 26, 0.82);
+}
+
+.hud-path {
+  margin-top: 0.7rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1px dashed rgba(242, 200, 75, 0.28);
+  background: rgba(242, 200, 75, 0.06);
+}
+
+.hud-path.is-complete {
+  padding: 0.95rem 1rem 1.05rem;
+  border-style: solid;
+  border-color: rgba(242, 200, 75, 0.42);
+  background:
+    radial-gradient(circle at top left, rgba(242, 200, 75, 0.18), transparent 42%),
+    linear-gradient(160deg, rgba(28, 23, 12, 0.92), rgba(12, 23, 20, 0.92));
+  box-shadow: 0 0 0 1px rgba(242, 200, 75, 0.08), 0 18px 36px rgba(0, 0, 0, 0.24);
+}
+
+.hud-path-kicker {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a7e4cd;
+}
+
+.hud-path-title {
+  margin: 0.15rem 0 0.25rem;
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  color: var(--gold-soft);
+}
+
+.hud-path p {
+  margin: 0;
+}
+
+.hud-path-link {
+  margin-top: 0.55rem;
 }
 
 .rewards-panel {
