@@ -8,6 +8,13 @@ async function resetGame(page) {
   await page.reload();
 }
 
+async function recoverUnsafeWorkflow(page) {
+  await page.getByRole("radio", { name: "Deploy", exact: true }).click();
+  await page.getByRole("radio", { name: "every commit", exact: true }).click();
+  await page.getByRole("radio", { name: "directly to production", exact: true }).click();
+  await page.getByRole("radio", { name: "tests, security scans, and review gates", exact: true }).click();
+}
+
 test("core journey restores all temples and wins final battle", async ({ page }) => {
   await resetGame(page);
 
@@ -41,10 +48,7 @@ test("core journey restores all temples and wins final battle", async ({ page })
   for (let i = 0; i < buttonCount; i += 1) {
     await securityFixButtons.nth(i).click();
   }
-  await page.selectOption("#hidden-workflow-action", "Deploy");
-  await page.selectOption("#hidden-workflow-frequency", "every commit");
-  await page.selectOption("#hidden-workflow-destination", "directly to production");
-  await page.selectOption("#hidden-workflow-gates", "tests, security scans, and review gates");
+  await recoverUnsafeWorkflow(page);
   await page.click("#hidden-workflow-check");
   await expect(page.locator("#hidden-workflow-result")).toContainText("Wisdom restored", { ignoreCase: true });
 

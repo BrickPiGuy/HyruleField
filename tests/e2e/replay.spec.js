@@ -8,6 +8,13 @@ async function resetGame(page) {
   await page.reload();
 }
 
+async function recoverUnsafeWorkflow(page) {
+  await page.getByRole("radio", { name: "Deploy", exact: true }).click();
+  await page.getByRole("radio", { name: "every commit", exact: true }).click();
+  await page.getByRole("radio", { name: "directly to production", exact: true }).click();
+  await page.getByRole("radio", { name: "tests, security scans, and review gates", exact: true }).click();
+}
+
 test("reckless and incomplete path fails final battle", async ({ page }) => {
   await resetGame(page);
 
@@ -25,10 +32,7 @@ test("hidden workflow reveal supports repeated submissions", async ({ page }) =>
   await resetGame(page);
 
   await page.goto("/wisdom.html");
-  await page.selectOption("#hidden-workflow-action", "Deploy");
-  await page.selectOption("#hidden-workflow-frequency", "every commit");
-  await page.selectOption("#hidden-workflow-destination", "directly to production");
-  await page.selectOption("#hidden-workflow-gates", "tests, security scans, and review gates");
+  await recoverUnsafeWorkflow(page);
   await expect(page.locator("#hidden-workflow-preview")).toHaveAttribute("data-complete", "true");
   await expect(page.locator(".hidden-workflow-segment[data-filled='true']")).toHaveCount(4);
 

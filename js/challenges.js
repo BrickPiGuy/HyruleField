@@ -187,37 +187,29 @@ function renderHiddenWorkflowComposer(root, previewNode, hiddenWorkflow) {
     && window.HyruleTelemetrySession.getSession().sessionId)
     || `wisdom-${new Date().toISOString()}`;
 
+  const selectedValues = {};
   root.innerHTML = segments.map((segment) => {
-    const selectId = `hidden-workflow-${segment.id}`;
     const options = seededShuffleOptions(segment.options, `${sessionSeed}|wisdom|${segment.id}`);
     return `
-      <label class="hidden-workflow-segment" for="${selectId}">
-        <span class="hidden-workflow-label">${segment.label}</span>
-        <select class="hidden-workflow-select" id="${selectId}" data-hidden-workflow-segment="${segment.id}">
-          <option value="">Choose one</option>
-          ${options.map((option) => `<option value="${option}">${option}</option>`).join("")}
-        </select>
-      </label>`;
+      <fieldset class="hidden-workflow-segment" data-hidden-workflow-segment="${escapeHtml(segment.id)}">
+        <legend class="hidden-workflow-label">${escapeHtml(segment.label)}</legend>
+        <div class="rune-fragments" role="radiogroup" aria-label="${escapeHtml(segment.label)}">
+          ${options.map((option) => `<button class="rune-fragment" type="button" role="radio" aria-checked="false" data-rune-value="${escapeHtml(option)}"><span aria-hidden="true">${escapeHtml(hiddenWorkflowPlaceholder(segment))}</span>${escapeHtml(option)}</button>`).join("")}
+        </div>
+      </fieldset>`;
   }).join("");
 
-  const selects = Array.from(root.querySelectorAll("[data-hidden-workflow-segment]"));
-  const readValues = () => selects.reduce((values, select) => {
-    values[select.getAttribute("data-hidden-workflow-segment")] = select.value;
-    return values;
-  }, {});
+  const segmentNodes = Array.from(root.querySelectorAll(".hidden-workflow-segment"));
+  const readValues = () => ({ ...selectedValues });
   let previousValues = {};
 
   const updatePreview = () => {
     const values = readValues();
     const allFilled = segments.every((segment) => Boolean(values[segment.id]));
 
-    selects.forEach((select) => {
-      const label = select.closest(".hidden-workflow-segment");
-      const isFilled = Boolean(select.value);
-      select.setAttribute("data-filled", isFilled ? "true" : "false");
-      if (label) {
-        label.setAttribute("data-filled", isFilled ? "true" : "false");
-      }
+    segmentNodes.forEach((segmentNode) => {
+      const segmentId = segmentNode.getAttribute("data-hidden-workflow-segment");
+      segmentNode.setAttribute("data-filled", selectedValues[segmentId] ? "true" : "false");
     });
 
     root.setAttribute("data-complete", allFilled ? "true" : "false");
@@ -242,8 +234,22 @@ function renderHiddenWorkflowComposer(root, previewNode, hiddenWorkflow) {
     previousValues = values;
   };
 
-  selects.forEach((select) => {
-    select.addEventListener("change", updatePreview);
+  root.querySelectorAll("[data-rune-value]").forEach((fragment) => {
+    fragment.addEventListener("click", () => {
+      const segmentNode = fragment.closest(".hidden-workflow-segment");
+      if (!segmentNode) {
+        return;
+      }
+
+      const segmentId = segmentNode.getAttribute("data-hidden-workflow-segment");
+      selectedValues[segmentId] = fragment.getAttribute("data-rune-value");
+      segmentNode.querySelectorAll("[data-rune-value]").forEach((option) => {
+        const selected = option === fragment;
+        option.classList.toggle("is-selected", selected);
+        option.setAttribute("aria-checked", selected ? "true" : "false");
+      });
+      updatePreview();
+    });
   });
   updatePreview();
 
