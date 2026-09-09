@@ -8,9 +8,32 @@
   const SESSION_KEY = "hyruleTelemetrySession";
   let inMemorySession = null;
 
+  function createRandomToken() {
+    const cryptoApi = typeof globalThis !== "undefined" && globalThis.crypto;
+    if (cryptoApi && typeof cryptoApi.randomUUID === "function") {
+      return cryptoApi.randomUUID().replace(/-/g, "");
+    }
+
+    if (cryptoApi && typeof cryptoApi.getRandomValues === "function") {
+      const bytes = new Uint8Array(12);
+      cryptoApi.getRandomValues(bytes);
+      return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+    }
+
+    if (typeof require === "function") {
+      try {
+        return require("node:crypto").randomBytes(12).toString("hex");
+      } catch (_error) {
+        // Ignore and fall through to the explicit error below.
+      }
+    }
+
+    throw new Error("Secure random generator unavailable for telemetry session IDs.");
+  }
+
   function createSession() {
     return {
-      sessionId: `sess_${Math.random().toString(36).slice(2)}_${Date.now().toString(36)}`,
+      sessionId: `sess_${createRandomToken()}_${Date.now().toString(36)}`,
       startedAt: new Date().toISOString(),
       sequence: 0
     };
