@@ -3,6 +3,30 @@ function appendLog(node, line) {
   node.scrollTop = node.scrollHeight;
 }
 
+// Surfaces a "Continue to next temple" link right where the mission was completed, so
+// players don't have to scroll back up to the HUD banner to know what to do next.
+function renderNextTempleCta(anchorNode, page) {
+  if (!anchorNode || !window.HyruleHUD || typeof window.HyruleHUD.getCampaignGuide !== "function") {
+    return;
+  }
+
+  const state = window.HyruleEngine.getState();
+  const guide = window.HyruleHUD.getCampaignGuide(page, state);
+  if (!guide.complete || !guide.showAction) {
+    return;
+  }
+
+  let cta = anchorNode.parentElement.querySelector(".next-temple-cta");
+  if (!cta) {
+    cta = document.createElement("p");
+    cta.className = "next-temple-cta";
+    anchorNode.insertAdjacentElement("afterend", cta);
+  }
+
+  cta.innerHTML = `<a class="btn-link" href="${guide.href}">${guide.actionLabel}</a>`;
+  cta.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 function dispatchAction(action) {
   return window.HyruleEngine.dispatch(action);
 }
@@ -511,6 +535,7 @@ async function setupPowerPage() {
         piece: "power"
       });
       runButton.disabled = true;
+      renderNextTempleCta(doneNode, "power");
     }, delay + completionDelay);
   });
 }
@@ -625,6 +650,10 @@ async function setupWisdomPage() {
       hadWisdomBefore,
       hasWisdomNow
     });
+
+    if (hasWisdomNow) {
+      renderNextTempleCta(workflowResult, "wisdom");
+    }
   });
 }
 
@@ -682,6 +711,7 @@ async function setupCouragePage() {
 
     statusNode.textContent = "Deployment successful. Temple of Courage restored.";
     deployButton.disabled = true;
+    renderNextTempleCta(statusNode, "courage");
   });
 
   rushButton?.addEventListener("click", () => {

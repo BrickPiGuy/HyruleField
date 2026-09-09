@@ -61,6 +61,12 @@
       return false;
     }
 
+    // Bring the "next temple" banner into view so completion is obvious even when scrolled away.
+    const container = typeof linkNode.closest === "function" ? linkNode.closest(".hud-path") : null;
+    if (container && typeof container.scrollIntoView === "function") {
+      container.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
     try {
       linkNode.focus({ preventScroll: true });
     } catch (_error) {

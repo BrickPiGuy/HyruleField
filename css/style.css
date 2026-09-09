@@ -840,6 +840,18 @@ button:disabled {
   white-space: pre-wrap;
 }
 
+.next-temple-cta {
+  margin: 0.8rem 0 0;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(242, 200, 75, 0.42);
+  background:
+    radial-gradient(circle at top left, rgba(242, 200, 75, 0.18), transparent 42%),
+    linear-gradient(160deg, rgba(28, 23, 12, 0.92), rgba(12, 23, 20, 0.92));
+  box-shadow: 0 0 0 1px rgba(242, 200, 75, 0.08), 0 18px 36px rgba(0, 0, 0, 0.24);
+  animation: certificateReveal 400ms ease both;
+}
+
 .quiz-option {
   display: block;
   margin-bottom: 0.5rem;
