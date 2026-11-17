@@ -1,7 +1,7 @@
 {
   "id": "final-battle",
   "title": "The Final Battle",
-  "objective": "Complete every battle checklist item with all three temples restored.",
+  "objective": "Complete every battle checklist item with all six temples restored.",
   "checklist": [
     "Repair the build.",
     "Make all tests pass.",
@@ -18,13 +18,28 @@
     "Review / Approval",
     "Deploy"
   ],
-  "requiredStateKeys": ["power", "wisdom", "courage"],
+  "requiredStateKeys": [
+    "power",
+    "wisdom",
+    "courage",
+    "fire",
+    "water",
+    "forest"
+  ],
   "messages": {
-    "failure": "Ganonix resists. Complete every task and restore all three temples first.",
+    "failure": "Ganonix resists. Complete every task and restore all six temples first.",
     "success": "Victory. The kingdom and production are secure."
   },
   "reward": {
     "victory": true,
     "corruptionReduction": 10
-  }
+  },
+  "requires": [
+    "power",
+    "wisdom",
+    "courage",
+    "fire",
+    "water",
+    "forest"
+  ]
 }

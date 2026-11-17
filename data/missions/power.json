@@ -12,5 +12,144 @@
   "reward": {
     "temple": "power",
     "corruptionReduction": 7
-  }
+  },
+  "intro": "The forge has gone cold. Pass four chambers to prove each commit can be built, linted and tested before the fire is lit.",
+  "trials": [
+    {
+      "id": "power-forge-order",
+      "type": "order",
+      "title": "Light the Forge",
+      "prompt": "Put the CI job steps in the order the forge must run them.",
+      "hint": "Code has to exist and its tools must be installed before anything can check it. Packaging comes last.",
+      "success": "The first flames catch. Checkout, install, lint, test, package: the safe order.",
+      "items": [
+        {
+          "id": "checkout",
+          "text": "Checkout source"
+        },
+        {
+          "id": "install",
+          "text": "Install dependencies"
+        },
+        {
+          "id": "lint",
+          "text": "Run lint"
+        },
+        {
+          "id": "test",
+          "text": "Run unit tests"
+        },
+        {
+          "id": "package",
+          "text": "Package artifact"
+        }
+      ],
+      "answer": [
+        "checkout",
+        "install",
+        "lint",
+        "test",
+        "package"
+      ]
+    },
+    {
+      "id": "power-forge-match",
+      "type": "match",
+      "title": "Names on the Anvil",
+      "prompt": "Match each GitHub Actions keyword to what it does.",
+      "hint": "'on' is about when. 'runs-on' is about where. 'needs' is about waiting.",
+      "success": "Every rune on the anvil answers to its name.",
+      "pairs": [
+        {
+          "left": "on: push",
+          "right": "Starts the workflow when code is pushed"
+        },
+        {
+          "left": "runs-on",
+          "right": "Chooses the machine that runs the job"
+        },
+        {
+          "left": "needs",
+          "right": "Makes one job wait for another"
+        },
+        {
+          "left": "upload-artifact",
+          "right": "Saves build output for later stages"
+        },
+        {
+          "left": "matrix",
+          "right": "Repeats a job across several versions"
+        }
+      ]
+    },
+    {
+      "id": "power-forge-spot",
+      "type": "spot",
+      "title": "The Cursed Workflow",
+      "fileName": "ci.yml",
+      "prompt": "Ganonix edited this workflow so failures slip through. Flag the lines that let broken code pass.",
+      "hint": "Look for commands that can never fail, and settings that let a failed step be ignored.",
+      "success": "Found them. A check that cannot fail protects nothing.",
+      "lines": [
+        "name: ci",
+        "on: [push, pull_request]",
+        "jobs:",
+        "  build:",
+        "    runs-on: ubuntu-latest",
+        "    steps:",
+        "      - uses: actions/checkout@v4",
+        "      - run: npm ci",
+        "      - run: npm run lint || true",
+        "      - run: npm test",
+        "        continue-on-error: true",
+        "      - run: npm run build"
+      ],
+      "answer": [
+        8,
+        10
+      ]
+    },
+    {
+      "id": "power-forge-switches",
+      "type": "switches",
+      "title": "The Bellows Room",
+      "prompt": "Five sigils control the forge. Light the ones that keep the build safe and leave the shadow's tricks dark.",
+      "hint": "Three sigils help the forge. The two that say 'skip' or 'direct' are Ganonix's work.",
+      "success": "The bellows roar. Lint, tests and caching burn bright; the shortcuts stay dark.",
+      "clues": [
+        "Every commit must be linted and tested before it can merge.",
+        "Caching dependencies makes the forge faster without hiding failures.",
+        "Skipping tests and pushing straight to main are the shadow's tricks."
+      ],
+      "switches": [
+        {
+          "id": "lint",
+          "label": "Lint every push"
+        },
+        {
+          "id": "tests",
+          "label": "Run unit tests"
+        },
+        {
+          "id": "cache",
+          "label": "Cache dependencies"
+        },
+        {
+          "id": "skip",
+          "label": "Skip tests when in a hurry"
+        },
+        {
+          "id": "direct",
+          "label": "Allow direct pushes to main"
+        }
+      ],
+      "target": {
+        "lint": true,
+        "tests": true,
+        "cache": true,
+        "skip": false,
+        "direct": false
+      }
+    }
+  ]
 }

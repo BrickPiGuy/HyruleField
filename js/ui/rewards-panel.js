@@ -11,7 +11,10 @@
     const entries = [
       ["Power", templeRanks.power],
       ["Wisdom", templeRanks.wisdom],
-      ["Courage", templeRanks.courage]
+      ["Courage", templeRanks.courage],
+      ["Fire", templeRanks.fire],
+      ["Water", templeRanks.water],
+      ["Forest", templeRanks.forest]
     ];
 
     return entries.map(([name, rank]) => `${name}: ${rank || "-"}`).join(" | ");

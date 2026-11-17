@@ -268,6 +268,19 @@ Target: 2 to 3 weeks after P1
 
 - [x] P2-4 Instructor Mode and Analytics View
 
+## Temples Overhaul (in progress)
+
+Goal: smoother navigation, real puzzles and more temples while keeping the Zelda theme.
+
+- [x] Hyrule map hub on the home page with a single "next quest" marker
+- [x] Navigation shows restored, next and sealed temples on every page
+- [x] Shared puzzle engine with 5 types: order, spot, match, switches, choice (see docs/puzzle-authoring.md)
+- [x] Power, Wisdom and Courage rebuilt with 4 chambers each, original activity kept as the finale
+- [x] New temples: Fire (testing), Water (monitoring), Forest (infrastructure as code), 5 chambers each
+- [x] Final battle now needs all six temples; save version 5 migrates older saves
+- [ ] Playwright e2e specs updated but not yet run in CI
+- [ ] Optional: Git and branching temple, mini-boss per temple, sound and art pass
+
 ## Execution Order
 
 1. Complete all P0 items before broad content expansion.

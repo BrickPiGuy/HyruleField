@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { skipChambers } = require("./helpers");
 
 async function resetGame(page) {
   await page.goto("/index.html");
@@ -30,6 +31,7 @@ test("reckless and incomplete path fails final battle", async ({ page }) => {
 
 test("hidden workflow reveal supports repeated submissions", async ({ page }) => {
   await resetGame(page);
+  await skipChambers(page, "wisdom");
 
   await page.goto("/wisdom.html");
   await recoverUnsafeWorkflow(page);

@@ -31,6 +31,79 @@ function dispatchAction(action) {
   return window.HyruleEngine.dispatch(action);
 }
 
+// Shows the temple's finale (the original activity) once its chambers are cleared.
+function revealFinale(animate) {
+  const finale = document.getElementById("finale");
+  if (!finale || !finale.hidden) {
+    return;
+  }
+
+  finale.hidden = false;
+  if (animate) {
+    const reduced = Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    finale.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }
+}
+
+// Runs the chambers for a temple page, then calls onComplete(animate). The finale of a
+// temple that is already restored is shown straight away so returning players are not blocked.
+function runTemple(page, mission, onComplete) {
+  const introNode = document.getElementById("trial-intro");
+  if (introNode && mission.intro) {
+    introNode.textContent = mission.intro;
+  }
+
+  if (!window.HyruleTrials) {
+    revealFinale(false);
+    return null;
+  }
+
+  if (window.HyruleEngine.getState()[page]) {
+    revealFinale(false);
+  }
+
+  let started = false;
+  const handle = window.HyruleTrials.run({
+    temple: page,
+    root: document.getElementById("trial-root"),
+    mission,
+    getState: window.HyruleEngine.getState,
+    dispatch: dispatchAction,
+    onComplete: () => onComplete(started)
+  });
+  started = true;
+  return handle;
+}
+
+// New temples have no separate finale: clearing the chambers restores the temple.
+async function setupSagePage(page) {
+  const mission = await window.HyruleMissionLoader.loadMission(page);
+  const objectiveNode = document.getElementById("temple-objective");
+  const rewardNode = document.getElementById("sage-reward");
+  const statusNode = document.getElementById("sage-status");
+
+  if (objectiveNode && mission.objective) {
+    objectiveNode.textContent = mission.objective;
+  }
+
+  runTemple(page, mission, (animate) => {
+    if (!window.HyruleEngine.getState()[page]) {
+      dispatchAction({ type: window.HyruleActions.TYPES.COMPLETE_TEMPLE, piece: page });
+    }
+
+    if (rewardNode) {
+      rewardNode.hidden = false;
+    }
+    if (statusNode) {
+      statusNode.textContent = `${mission.title} restored. The sage's blessing lowers Ganonix's hold on the kingdom.`;
+      renderNextTempleCta(statusNode, page);
+    }
+    if (animate && rewardNode) {
+      rewardNode.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+}
+
 function telemetryEventName(key) {
   return (window.HyruleActions && window.HyruleActions.TELEMETRY_EVENTS && window.HyruleActions.TELEMETRY_EVENTS[key]) || key.toLowerCase();
 }
@@ -497,6 +570,7 @@ async function setupPowerPage() {
   const doneNode = document.getElementById("power-status");
   const mission = await window.HyruleMissionLoader.loadMission("power");
   const steps = mission.ciSteps || [];
+  runTemple("power", mission, revealFinale);
 
   if (pipelineNode) {
     pipelineNode.innerHTML = steps
@@ -559,6 +633,7 @@ async function setupWisdomPage() {
     ? stateBeforeMission.rewards.lastTempleAward.branch
     : "recovery";
   const mission = await window.HyruleMissionLoader.loadMission("wisdom");
+  runTemple("wisdom", mission, revealFinale);
 
   if (objectiveNode && mission.objective) {
     const branchPrefix = previousBranch === "mastery"
@@ -669,6 +744,7 @@ async function setupCouragePage() {
     ? stateBeforeMission.rewards.lastTempleAward.branch
     : "recovery";
   const mission = await window.HyruleMissionLoader.loadMission("courage");
+  runTemple("courage", mission, revealFinale);
   const objectiveNode = document.getElementById("courage-objective");
   const prereqsNode = document.getElementById("courage-prereqs");
   const approveButton = document.getElementById("approve-release");
@@ -747,6 +823,9 @@ if (typeof document !== "undefined") {
       power: "power",
       wisdom: "wisdom",
       courage: "courage",
+      fire: "fire",
+      water: "water",
+      forest: "forest",
       final: "final-battle"
     }[page] || "unknown";
 
@@ -763,6 +842,8 @@ if (typeof document !== "undefined") {
       setupWisdomPage();
     } else if (page === "courage") {
       setupCouragePage();
+    } else if (["fire", "water", "forest"].includes(page)) {
+      setupSagePage(page);
     } else if (page === "final") {
       setupFinalBattlePage();
     }

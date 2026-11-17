@@ -9,6 +9,9 @@ const pages = [
   "power.html",
   "wisdom.html",
   "courage.html",
+  "fire.html",
+  "water.html",
+  "forest.html",
   "final-battle.html"
 ];
 
@@ -20,7 +23,7 @@ pages.forEach((page) => {
   const html = read(page);
   assert.match(html, /class="skip-link"/, `${page} should include a skip link`);
   assert.match(html, /id="main-content"/, `${page} should include main content landmark`);
-  assert.match(html, /<nav class="top-nav">/, `${page} should include top navigation`);
+  assert.match(html, /<nav class="top-nav"[^>]*>/, `${page} should include top navigation`);
   assert.match(html, /aria-live="polite"/, `${page} should include at least one live region`);
   assert.match(html, /js\/engine\/game-state\.js/, `${page} should load game state engine`);
   assert.match(html, /js\/engine\/rules-engine\.js/, `${page} should load rules engine`);

@@ -1,14 +1,18 @@
 (function (root, factory) {
-  const api = factory(root.HyruleMissionLoader);
+  const api = factory(root.HyruleMissionLoader, root.HyruleGameState || (typeof require === "function" ? require("../engine/game-state.js") : undefined));
   root.HyruleHUD = api;
   if (typeof module !== "undefined" && module.exports) {
     module.exports = api;
   }
-})(typeof globalThis !== "undefined" ? globalThis : window, function (HyruleMissionLoader) {
+})(typeof globalThis !== "undefined" ? globalThis : window, function (HyruleMissionLoader, HyruleGameState) {
+  const requirements = (HyruleGameState && HyruleGameState.TEMPLE_REQUIREMENTS) || {};
   const pageToMission = {
     power: "power",
     wisdom: "wisdom",
     courage: "courage",
+    fire: "fire",
+    water: "water",
+    forest: "forest",
     final: "final-battle"
   };
 
@@ -16,6 +20,9 @@
     power: "power",
     wisdom: "wisdom",
     courage: "courage",
+    fire: "fire",
+    water: "water",
+    forest: "forest",
     final: "final"
   };
 
@@ -32,13 +39,25 @@
       label: "Temple of Courage",
       href: "courage.html"
     },
+    fire: {
+      label: "Temple of Fire",
+      href: "fire.html"
+    },
+    water: {
+      label: "Temple of Water",
+      href: "water.html"
+    },
+    forest: {
+      label: "Temple of the Forest",
+      href: "forest.html"
+    },
     final: {
       label: "Final Battle",
       href: "final-battle.html"
     }
   };
 
-  const campaignRouteOrder = ["power", "wisdom", "courage", "final"];
+  const campaignRouteOrder = ["power", "wisdom", "courage", "fire", "water", "forest", "final"];
 
   let objectiveNode = null;
   let gateNode = null;
@@ -105,6 +124,31 @@
     const lastAward = state && state.rewards ? state.rewards.lastTempleAward : null;
     const branchLabel = lastAward && lastAward.branch === "mastery" ? "Mastery Route" : "Recovery Route";
 
+    if (page === "index" && HyruleGameState && typeof HyruleGameState.nextDestination === "function" && state && state.power) {
+      const destination = HyruleGameState.nextDestination(state);
+      const route = destination ? missionRoutes[destination] : null;
+      if (!route) {
+        return {
+          message: "Every temple is restored and Lord Ganonix is defeated. Well played, hero.",
+          bannerTitle: "The kingdom is safe",
+          bannerKicker: "Campaign complete",
+          actionLabel: "Review the map",
+          href: "index.html#map",
+          showAction: false,
+          complete: true
+        };
+      }
+      return {
+        message: `Your next quest: ${route.label}.`,
+        bannerTitle: `Next: ${route.label}`,
+        bannerKicker: "Next destination",
+        actionLabel: `Go to ${route.label}`,
+        href: route.href,
+        showAction: true,
+        complete: false
+      };
+    }
+
     if (page === "index") {
       return {
         message: "Start at the Temple of Power. Restore the gates in order.",
@@ -138,7 +182,7 @@
     if (!complete) {
       if (page === "final") {
         return {
-          message: "Restore Power, Wisdom, and Courage to unlock the final battle.",
+          message: "Restore all six temples to unlock the final battle.",
           bannerTitle: "Final Battle Locked",
           bannerKicker: "Complete all temples first",
           actionLabel: "Go to Temple of Power",
@@ -149,7 +193,9 @@
       }
 
       return {
-        message: `Complete ${currentRoute.label} to unlock ${nextRoute.label}.`,
+        message: (requirements[nextKey] || []).includes(pageToCampaignStep[page])
+          ? `Complete ${currentRoute.label} to unlock ${nextRoute.label}.`
+          : `Complete ${currentRoute.label}, then continue to ${nextRoute.label}.`,
         bannerTitle: `Next: ${nextRoute.label}`,
         bannerKicker: `${branchLabel} pending`,
         actionLabel: `Continue to ${nextRoute.label}`,
@@ -205,13 +251,16 @@
       power: "Power",
       wisdom: "Wisdom",
       courage: "Courage",
+      fire: "Fire",
+      water: "Water",
+      forest: "Forest",
       finalBattle: "Final Battle"
     };
     return labels[key] || key;
   }
 
   function missionStatusSummary(state) {
-    const missionKeys = ["power", "wisdom", "courage", "finalBattle"];
+    const missionKeys = ["power", "wisdom", "courage", "fire", "water", "forest", "finalBattle"];
     return missionKeys.map((key) => {
       const mission = state.missions && state.missions[key] ? state.missions[key] : { status: "locked" };
       return `${missionLabel(key)}: ${mission.status}`;

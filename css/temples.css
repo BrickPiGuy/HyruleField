@@ -1,0 +1,367 @@
+/* Temple chambers and puzzle rooms. Loaded only by the temple pages. */
+
+/* Temple chambers */
+.trials {
+  margin-bottom: 1.25rem;
+}
+
+.trial-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.trial-pips {
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trial-pip {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.trial-pip[data-state="done"] {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #0a1a10;
+}
+
+.trial-pip[data-state="current"] {
+  border-color: var(--gold);
+  color: var(--gold-soft);
+  box-shadow: 0 0 10px rgba(242, 200, 75, 0.5);
+}
+
+.trial-slips {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.trial-footer {
+  margin-top: 0.75rem;
+}
+
+.trial-sealed,
+.trial-cleared {
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(242, 200, 75, 0.4);
+  background: rgba(242, 200, 75, 0.08);
+}
+
+.trial-cleared {
+  border-color: rgba(73, 209, 125, 0.6);
+  background: rgba(73, 209, 125, 0.1);
+}
+
+.trial-sealed h2,
+.trial-cleared h3 {
+  margin-top: 0;
+}
+
+.finale {
+  margin-top: 1.25rem;
+}
+
+.finale-title {
+  font-family: "Cinzel", Georgia, serif;
+  color: var(--gold-soft);
+}
+
+.finale:not([hidden]) {
+  animation: finale-rise 400ms ease-out;
+}
+
+@keyframes finale-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Puzzle rooms */
+.puzzle-kind {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--emerald);
+  font-weight: 700;
+}
+
+.puzzle-title {
+  margin: 0.15rem 0 0.4rem;
+  font-family: "Cinzel", Georgia, serif;
+  color: var(--gold-soft);
+}
+
+.puzzle-meta {
+  margin: 0 0 0.5rem;
+  font-size: 0.92rem;
+  opacity: 0.85;
+}
+
+.puzzle-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.puzzle-hint {
+  margin: 0.6rem 0 0;
+  padding: 0.55rem 0.75rem;
+  border-left: 3px solid var(--warn);
+  background: rgba(255, 180, 84, 0.1);
+  border-radius: 6px;
+}
+
+.puzzle-feedback {
+  min-height: 1.4em;
+  margin: 0.6rem 0 0;
+  font-weight: 600;
+}
+
+.puzzle-feedback[data-tone="success"] { color: var(--ok); }
+.puzzle-feedback[data-tone="error"] { color: var(--warn); }
+
+.puzzle-room button.order-move,
+.puzzle-room button.code-line,
+.puzzle-room button.match-item,
+.puzzle-room button.sigil,
+.puzzle-room button.choice-option {
+  background: rgba(5, 12, 15, 0.75);
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-weight: 600;
+}
+
+.puzzle-room button.order-move:hover:not(:disabled),
+.puzzle-room button.code-line:hover:not(:disabled),
+.puzzle-room button.match-item:hover:not(:disabled),
+.puzzle-room button.sigil:hover:not(:disabled),
+.puzzle-room button.choice-option:hover:not(:disabled) {
+  border-color: var(--gold);
+}
+
+/* Order */
+.puzzle-order {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(5, 12, 15, 0.7);
+  cursor: grab;
+}
+
+.order-item.is-dragging {
+  opacity: 0.45;
+}
+
+.order-number {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #221c10;
+  font-weight: 800;
+}
+
+.order-text {
+  flex: 1;
+}
+
+.order-controls {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.puzzle-room button.order-move {
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  padding: 0;
+}
+
+/* Spot the flaw */
+.puzzle-code {
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0;
+  border-radius: 10px;
+  background: #050b0e;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: "IBM Plex Mono", monospace;
+  overflow-x: auto;
+}
+
+.puzzle-room button.code-line {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  font-weight: 400;
+}
+
+.puzzle-room button.code-line code {
+  font-family: inherit;
+  white-space: pre;
+}
+
+.line-no {
+  flex: none;
+  width: 1.6rem;
+  text-align: right;
+  opacity: 0.55;
+}
+
+.puzzle-room button.code-line.is-flagged {
+  background: rgba(240, 108, 79, 0.2);
+  border-color: var(--ember);
+}
+
+/* Match */
+.puzzle-match {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.match-col {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.puzzle-room button.match-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+}
+
+.puzzle-room button.match-item.is-selected {
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(242, 200, 75, 0.5);
+}
+
+.puzzle-room button.match-item.is-paired {
+  border-color: var(--emerald);
+}
+
+.pair-tag {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  font-size: 0.8rem;
+}
+
+.pair-tag.is-set {
+  border-style: solid;
+  background: var(--emerald);
+  border-color: var(--emerald);
+  color: #04130d;
+  font-weight: 800;
+}
+
+/* Switches */
+.puzzle-clues {
+  margin: 0 0 0.75rem;
+  padding-left: 1.2rem;
+  font-style: italic;
+}
+
+.puzzle-switches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.6rem;
+}
+
+.puzzle-room button.sigil {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+}
+
+.sigil-flame {
+  font-size: 1.6rem;
+}
+
+.sigil-state {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.puzzle-room button.sigil.is-lit {
+  border-color: var(--gold);
+  background: rgba(242, 200, 75, 0.16);
+  box-shadow: 0 0 14px rgba(242, 200, 75, 0.45);
+}
+
+/* Choice */
+.puzzle-choice {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.puzzle-room button.choice-option {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+}
+
+.puzzle-room button.choice-option.is-selected {
+  border-color: var(--gold);
+  background: rgba(242, 200, 75, 0.14);
+}
+
+.sage-reward {
+  margin-top: 1rem;
+  border-color: rgba(73, 209, 125, 0.6);
+}
+
+@media (max-width: 880px) {
+  .puzzle-match {
+    grid-template-columns: 1fr;
+  }
+}
+

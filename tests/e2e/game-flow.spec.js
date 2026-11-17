@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { clearTemple } = require("./helpers");
 
 async function resetGame(page) {
   await page.goto("/index.html");
@@ -26,6 +27,8 @@ test("core journey restores all temples and wins final battle", async ({ page })
   await expect(page.locator("#quiz-result")).toContainText("Correct", { ignoreCase: true });
 
   await page.goto("/power.html");
+  await clearTemple(page, "power");
+  await expect(page.locator("#finale")).toBeVisible();
   await page.click("#run-ci");
   await expect.poll(async () => page.evaluate(() => {
     const raw = localStorage.getItem("devopsTriforceState");
@@ -43,6 +46,7 @@ test("core journey restores all temples and wins final battle", async ({ page })
   await expect(page.locator("#power-status")).toContainText("Temple of Power restored.", { timeout: 5000 });
 
   await page.goto("/wisdom.html");
+  await clearTemple(page, "wisdom");
   const securityFixButtons = page.locator("[data-security-card] button");
   const buttonCount = await securityFixButtons.count();
   for (let i = 0; i < buttonCount; i += 1) {
@@ -53,9 +57,19 @@ test("core journey restores all temples and wins final battle", async ({ page })
   await expect(page.locator("#hidden-workflow-result")).toContainText("Wisdom restored", { ignoreCase: true });
 
   await page.goto("/courage.html");
+  await clearTemple(page, "courage");
   await page.click("#approve-release");
   await page.click("#deploy-release");
   await expect(page.locator("#courage-status")).toContainText("Temple of Courage restored.");
+
+  for (const temple of ["fire", "water", "forest"]) {
+    await page.goto(`/${temple}.html`);
+    await clearTemple(page, temple);
+    await expect(page.locator("#sage-reward")).toBeVisible();
+  }
+
+  await page.goto("/index.html");
+  await expect(page.locator("#temple-count")).toContainText("6 / 6");
 
   await page.goto("/final-battle.html");
   const checklist = page.locator("input[data-final-task]");

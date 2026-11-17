@@ -18,15 +18,20 @@ function saveState(state) {
   window.HyruleSave.saveState(state);
 }
 
+const ALL_TEMPLES = ["power", "wisdom", "courage", "fire", "water", "forest"];
+
 function getTempleProgressCount(state) {
-  return [state.power, state.wisdom, state.courage].filter(Boolean).length;
+  return ALL_TEMPLES.filter((key) => Boolean(state[key])).length;
 }
 
 function updateGlobalUI(state) {
   const pieceMap = {
     power: state.power,
     wisdom: state.wisdom,
-    courage: state.courage
+    courage: state.courage,
+    fire: state.fire,
+    water: state.water,
+    forest: state.forest
   };
 
   document.querySelectorAll("[data-piece]").forEach((node) => {
@@ -47,16 +52,24 @@ function updateGlobalUI(state) {
 
   const completionNode = document.getElementById("temple-count");
   if (completionNode) {
-    completionNode.textContent = `${getTempleProgressCount(state)} / 3 temples restored`;
+    completionNode.textContent = `${getTempleProgressCount(state)} / ${ALL_TEMPLES.length} temples restored`;
   }
 
   document.querySelectorAll("[data-badge]").forEach((badge) => {
     const key = badge.getAttribute("data-badge");
     const unlocked = key === "champion"
-      ? state.power && state.wisdom && state.courage && state.corruption <= 45
+      ? ALL_TEMPLES.every((temple) => state[temple]) && state.corruption <= 45
       : Boolean(state[key]);
     badge.classList.toggle("unlocked", unlocked);
   });
+
+  if (window.HyruleSiteNav && typeof window.HyruleSiteNav.update === "function") {
+    window.HyruleSiteNav.update(state);
+  }
+
+  if (window.HyruleHubMap && typeof window.HyruleHubMap.update === "function") {
+    window.HyruleHubMap.update(state);
+  }
 
   if (window.HyruleHUD && typeof window.HyruleHUD.update === "function") {
     window.HyruleHUD.update(state);
@@ -82,7 +95,7 @@ function dispatch(action) {
     corruptionAfter: result.state.corruption
   });
 
-  ["power", "wisdom", "courage"].forEach((piece) => {
+  ALL_TEMPLES.forEach((piece) => {
     if (!current[piece] && result.state[piece]) {
       trackTelemetry(telemetryEventName("MISSION_COMPLETED"), {
         mission: piece,

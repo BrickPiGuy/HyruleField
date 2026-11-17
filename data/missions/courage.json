@@ -2,7 +2,11 @@
   "id": "courage",
   "title": "Temple of Courage",
   "objective": "Deploy only after approval and upstream gates are complete.",
-  "requiredStateKeys": ["approvalGranted", "power", "wisdom"],
+  "requiredStateKeys": [
+    "approvalGranted",
+    "power",
+    "wisdom"
+  ],
   "prereqsDisplay": [
     "Royal approval granted",
     "Temple of Power restored",
@@ -11,5 +15,148 @@
   "reward": {
     "temple": "courage",
     "corruptionReduction": 8
-  }
+  },
+  "requires": [
+    "power",
+    "wisdom"
+  ],
+  "intro": "The gates to production stand ahead. Prove your nerve in four chambers before the release is allowed through.",
+  "trials": [
+    {
+      "id": "courage-train-order",
+      "type": "order",
+      "title": "The Release Train",
+      "prompt": "Arrange the release so it reaches production safely.",
+      "hint": "Prove it somewhere safe first, ask for approval, then go live, and keep watching afterwards.",
+      "success": "The train runs on time with every gate checked.",
+      "items": [
+        {
+          "id": "build",
+          "text": "Build the release artifact"
+        },
+        {
+          "id": "staging",
+          "text": "Deploy to staging"
+        },
+        {
+          "id": "smoke",
+          "text": "Run smoke tests"
+        },
+        {
+          "id": "approve",
+          "text": "Get release approval"
+        },
+        {
+          "id": "prod",
+          "text": "Deploy to production"
+        },
+        {
+          "id": "watch",
+          "text": "Monitor the release"
+        }
+      ],
+      "answer": [
+        "build",
+        "staging",
+        "smoke",
+        "approve",
+        "prod",
+        "watch"
+      ]
+    },
+    {
+      "id": "courage-strategy-match",
+      "type": "match",
+      "title": "Ways to Cross the Bridge",
+      "prompt": "Match each deployment strategy to how it works.",
+      "hint": "Canary birds warn of danger early. Blue and green are two colours, so two environments.",
+      "success": "You know every road across the chasm.",
+      "pairs": [
+        {
+          "left": "Blue-green",
+          "right": "Switch traffic between two identical environments"
+        },
+        {
+          "left": "Canary",
+          "right": "Release to a small share of users first"
+        },
+        {
+          "left": "Rolling",
+          "right": "Replace instances a few at a time"
+        },
+        {
+          "left": "Feature flag",
+          "right": "Ship the code switched off, enable it later"
+        }
+      ]
+    },
+    {
+      "id": "courage-gate-switches",
+      "type": "switches",
+      "title": "The Gate Room",
+      "prompt": "Configure the production environment. Light the protections that belong there.",
+      "hint": "Production needs approval, protected secrets and an escape route. It does not need auto-deploys from anywhere.",
+      "success": "Production is guarded and a way back is always open.",
+      "clues": [
+        "Humans approve production releases.",
+        "Secrets live in the environment, never in the repository.",
+        "Only the main branch may deploy, and every deploy stays on record so you can roll back."
+      ],
+      "switches": [
+        {
+          "id": "approval",
+          "label": "Require approval for production"
+        },
+        {
+          "id": "anybranch",
+          "label": "Let any branch deploy to production"
+        },
+        {
+          "id": "envsecrets",
+          "label": "Keep secrets in environment secrets"
+        },
+        {
+          "id": "auto",
+          "label": "Auto-deploy every commit to production"
+        },
+        {
+          "id": "history",
+          "label": "Keep deployment history for rollback"
+        }
+      ],
+      "target": {
+        "approval": true,
+        "anybranch": false,
+        "envsecrets": true,
+        "auto": false,
+        "history": true
+      }
+    },
+    {
+      "id": "courage-rollback-choice",
+      "type": "choice",
+      "title": "The Moment of Truth",
+      "prompt": "Minutes after release, production errors spike. What is the bravest move?",
+      "hint": "Courage here means restoring service quickly, then investigating calmly.",
+      "success": "Restore first, investigate second. The kingdom stays standing.",
+      "options": [
+        {
+          "id": "hotfix",
+          "text": "Push an untested hotfix straight to production.",
+          "why": "Rushing an untested fix can make things worse."
+        },
+        {
+          "id": "wait",
+          "text": "Wait and hope it settles down.",
+          "why": "Users are hurting while you wait."
+        },
+        {
+          "id": "rollback",
+          "text": "Roll back to the last good release, then investigate.",
+          "why": ""
+        }
+      ],
+      "answer": "rollback"
+    }
+  ]
 }
