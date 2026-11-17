@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, "..");
 
 const pages = [
   "index.html",
+  "training.html",
   "power.html",
   "wisdom.html",
   "courage.html",
@@ -43,11 +44,18 @@ assert.match(wisdomHtml, /js\/engine\/random-seed\.js/, "wisdom page should load
 
 const indexHtml = read("index.html");
 assert.match(indexHtml, /DevOps Triforce: Rise of Lord Ganonix/, "index page title text missing");
-assert.match(indexHtml, /id="quiz-submit"/, "index quiz interaction missing");
+assert.match(indexHtml, /id="hub-map"/, "index should show the map");
+assert.match(indexHtml, /js\/ui\/hub-map\.js/, "index should load the map module");
 assert.match(indexHtml, /assets\/icons\/triforce\.png/, "index should use optimized asset path for hero image");
-assert.match(indexHtml, /js\/engine\/random-seed\.js/, "index should load random seed engine");
-assert.match(indexHtml, /js\/engine\/incidents\.js/, "index should load incidents engine");
-assert.match(indexHtml, /js\/ui\/daily-mode\.js/, "index should load daily mode UI module");
+assert.doesNotMatch(indexHtml, /id="quiz-submit"/, "the quiz now lives on the training page");
+
+const trainingHtml = read("training.html");
+assert.match(trainingHtml, /id="quiz-submit"/, "training quiz interaction missing");
+assert.match(trainingHtml, /id="timeline-run"/, "training pipeline simulator missing");
+assert.match(trainingHtml, /id="safe-path"/, "training fate choice missing");
+assert.match(trainingHtml, /js\/engine\/random-seed\.js/, "training should load random seed engine");
+assert.match(trainingHtml, /js\/engine\/incidents\.js/, "training should load incidents engine");
+assert.match(trainingHtml, /js\/ui\/daily-mode\.js/, "training should load daily mode UI module");
 
 const jsProgress = read("js/progress.js");
 assert.match(jsProgress, /HyruleEngine/, "central engine interface missing from progress layer");

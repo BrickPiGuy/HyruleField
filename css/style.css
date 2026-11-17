@@ -1137,24 +1137,58 @@ button:disabled {
 }
 
 /* Sage seals beside the triforce */
+.triforce-progress {
+  padding-bottom: 1.4rem;
+}
+
+.triangle {
+  position: relative;
+}
+
+.triangle::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(234, 241, 231, 0.75);
+  white-space: nowrap;
+}
+
+.triangle.complete::after {
+  color: var(--gold-soft);
+}
+
 .seal-progress {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
 }
 
 .seal {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.06);
-  transition: background 220ms ease, box-shadow 220ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 0.82rem;
+  font-weight: 700;
+  opacity: 0.6;
+  transition: background 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
 }
 
-.seal[data-seal="fire"].complete { background: #ff7a45; box-shadow: 0 0 10px #ff7a45; border-color: #ff7a45; }
-.seal[data-seal="water"].complete { background: #4aa8ff; box-shadow: 0 0 10px #4aa8ff; border-color: #4aa8ff; }
-.seal[data-seal="forest"].complete { background: #49d17d; box-shadow: 0 0 10px #49d17d; border-color: #49d17d; }
+.seal.complete {
+  opacity: 1;
+}
+
+.seal[data-seal="fire"].complete { background: rgba(255, 122, 69, 0.28); box-shadow: 0 0 10px #ff7a45; border-color: #ff7a45; }
+.seal[data-seal="water"].complete { background: rgba(74, 168, 255, 0.28); box-shadow: 0 0 10px #4aa8ff; border-color: #4aa8ff; }
+.seal[data-seal="forest"].complete { background: rgba(73, 209, 125, 0.28); box-shadow: 0 0 10px #49d17d; border-color: #49d17d; }
 
 /* Home page: the map */
 .hub {
@@ -1300,4 +1334,10 @@ body[data-page="index"] #hud-gates,
 body[data-page="index"] #rewards-multipliers,
 body[data-page="index"] #rewards-last-award {
   display: none;
+}
+
+.hub-status {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+  color: var(--gold-soft);
 }

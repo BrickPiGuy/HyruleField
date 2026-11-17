@@ -86,6 +86,14 @@
     }
 
     mount.innerHTML = render(state);
+
+    const statusNode = document.getElementById("hub-status");
+    if (statusNode) {
+      const restored = HyruleGameState.TEMPLE_PIECES.filter((piece) => state[piece]).length;
+      const next = HyruleGameState.nextDestination(state);
+      const nextNode = NODES.find((node) => node.key === next);
+      statusNode.textContent = `${restored} of ${HyruleGameState.TEMPLE_PIECES.length} temples restored. ${nextNode ? `Next quest: ${nextNode.name}.` : "Every quest is complete."}`;
+    }
   }
 
   return { NODES, describeNode, render, update };

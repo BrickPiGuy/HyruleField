@@ -17,6 +17,7 @@
       <strong>Temple of Courage</strong>
       <ul>
         <li><a href="index.html" data-temple="map">Map</a></li>
+        <li><a href="training.html" data-temple="training">Training</a></li>
         <li><a href="power.html" data-temple="power">Power</a></li>
         <li><a href="wisdom.html" data-temple="wisdom">Wisdom</a></li>
         <li><a href="courage.html" data-temple="courage">Courage</a></li>
@@ -30,14 +31,14 @@
     <section class="status-bar">
       <div>
         <div class="triforce-progress">
-          <div class="triangle" data-piece="power"></div>
-          <div class="triangle" data-piece="wisdom"></div>
-          <div class="triangle" data-piece="courage"></div>
+          <div class="triangle" data-piece="power" data-label="Power" title="Power"></div>
+          <div class="triangle" data-piece="wisdom" data-label="Wisdom" title="Wisdom"></div>
+          <div class="triangle" data-piece="courage" data-label="Courage" title="Courage"></div>
         </div>
         <div class="seal-progress" aria-label="Sage seals">
-          <span class="seal" data-piece="fire" data-seal="fire" title="Fire"></span>
-          <span class="seal" data-piece="water" data-seal="water" title="Water"></span>
-          <span class="seal" data-piece="forest" data-seal="forest" title="Forest"></span>
+          <span class="seal" data-piece="fire" data-seal="fire"><span class="seal-icon" aria-hidden="true">🔥</span> Fire</span>
+          <span class="seal" data-piece="water" data-seal="water"><span class="seal-icon" aria-hidden="true">💧</span> Water</span>
+          <span class="seal" data-piece="forest" data-seal="forest"><span class="seal-icon" aria-hidden="true">🌲</span> Forest</span>
         </div>
         <p id="temple-count">0 / 6 temples restored</p>
       </div>

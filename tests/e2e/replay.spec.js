@@ -2,7 +2,7 @@ const { test, expect } = require("@playwright/test");
 const { skipChambers } = require("./helpers");
 
 async function resetGame(page) {
-  await page.goto("/index.html");
+  await page.goto("/training.html");
   await page.evaluate(() => {
     localStorage.clear();
   });
