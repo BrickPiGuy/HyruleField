@@ -30,15 +30,19 @@
 
     <section class="status-bar">
       <div>
-        <div class="triforce-progress">
-          <div class="triangle" data-piece="power" data-label="Power" title="Power"></div>
-          <div class="triangle" data-piece="wisdom" data-label="Wisdom" title="Wisdom"></div>
-          <div class="triangle" data-piece="courage" data-label="Courage" title="Courage"></div>
-        </div>
-        <div class="seal-progress" aria-label="Sage seals">
-          <span class="seal" data-piece="fire" data-seal="fire"><span class="seal-icon" aria-hidden="true">🔥</span> Fire</span>
-          <span class="seal" data-piece="water" data-seal="water"><span class="seal-icon" aria-hidden="true">💧</span> Water</span>
-          <span class="seal" data-piece="forest" data-seal="forest"><span class="seal-icon" aria-hidden="true">🌲</span> Forest</span>
+        <div class="triforce-progress" role="group" aria-label="Temple progress">
+          <div class="tri-row">
+            <div class="triangle" data-piece="power" data-name="Power" title="Power" role="img" aria-label="Power temple"><span class="tri-icon" aria-hidden="true">⚔️</span></div>
+          </div>
+          <div class="tri-row">
+            <div class="triangle" data-piece="fire" data-name="Fire" title="Fire" role="img" aria-label="Fire temple"><span class="tri-icon" aria-hidden="true">🔥</span></div>
+            <div class="triangle" data-piece="water" data-name="Water" title="Water" role="img" aria-label="Water temple"><span class="tri-icon" aria-hidden="true">💧</span></div>
+          </div>
+          <div class="tri-row">
+            <div class="triangle" data-piece="wisdom" data-name="Wisdom" title="Wisdom" role="img" aria-label="Wisdom temple"><span class="tri-icon" aria-hidden="true">📜</span></div>
+            <div class="triangle" data-piece="forest" data-name="Forest" title="Forest" role="img" aria-label="Forest temple"><span class="tri-icon" aria-hidden="true">🌲</span></div>
+            <div class="triangle" data-piece="courage" data-name="Courage" title="Courage" role="img" aria-label="Courage temple"><span class="tri-icon" aria-hidden="true">🛡️</span></div>
+          </div>
         </div>
         <p id="temple-count">0 / 6 temples restored</p>
       </div>

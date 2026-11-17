@@ -37,6 +37,9 @@ function updateGlobalUI(state) {
   document.querySelectorAll("[data-piece]").forEach((node) => {
     const key = node.getAttribute("data-piece");
     node.classList.toggle("complete", Boolean(pieceMap[key]));
+    if (node.hasAttribute("data-name")) {
+      node.setAttribute("aria-label", `${node.getAttribute("data-name")} temple${pieceMap[key] ? ", restored" : ""}`);
+    }
   });
 
   const corruptionFill = document.querySelector(".meter-fill");
