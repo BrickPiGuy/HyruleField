@@ -377,7 +377,7 @@ function shouldIgnoreShortcut(target) {
 
 function setupKeyboardShortcuts(page) {
   const keyMap = {
-    index: {
+    training: {
       "1": "safe-path",
       "2": "reckless-path",
       q: "quiz-submit",
@@ -820,6 +820,7 @@ if (typeof document !== "undefined") {
     const page = document.body.getAttribute("data-page");
     const missionName = {
       index: "kingdom",
+      training: "training",
       power: "power",
       wisdom: "wisdom",
       courage: "courage",
@@ -834,7 +835,7 @@ if (typeof document !== "undefined") {
       page
     });
 
-    if (page === "index") {
+    if (page === "training") {
       setupIndexPage();
     } else if (page === "power") {
       setupPowerPage();

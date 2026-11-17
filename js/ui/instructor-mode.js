@@ -103,6 +103,12 @@
     }
   };
 
+  PAGE_CONFIG.training = {
+    ...PAGE_CONFIG.index,
+    title: "Training Grounds Notes",
+    label: "Warm-up Page"
+  };
+
   function getPageId() {
     return document.body.getAttribute("data-page") || "index";
   }

@@ -54,7 +54,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    if (document.body.getAttribute("data-page") === "index") {
+    if (document.body.getAttribute("data-page") === "training") {
       setup();
     }
   });

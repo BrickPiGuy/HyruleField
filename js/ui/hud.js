@@ -96,6 +96,13 @@
   }
 
   function getActiveRoute(page) {
+    if (page === "training") {
+      return {
+        label: "Training Grounds",
+        href: "training.html"
+      };
+    }
+
     if (page === "index") {
       return {
         label: "Kingdom",
@@ -108,7 +115,7 @@
   }
 
   function isRouteComplete(page, state) {
-    if (page === "index") {
+    if (page === "index" || page === "training") {
       return false;
     }
 
@@ -124,7 +131,8 @@
     const lastAward = state && state.rewards ? state.rewards.lastTempleAward : null;
     const branchLabel = lastAward && lastAward.branch === "mastery" ? "Mastery Route" : "Recovery Route";
 
-    if (page === "index" && HyruleGameState && typeof HyruleGameState.nextDestination === "function" && state && state.power) {
+    const isHub = page === "index" || page === "training";
+    if (isHub && HyruleGameState && typeof HyruleGameState.nextDestination === "function" && state && state.power) {
       const destination = HyruleGameState.nextDestination(state);
       const route = destination ? missionRoutes[destination] : null;
       if (!route) {
@@ -149,7 +157,7 @@
       };
     }
 
-    if (page === "index") {
+    if (isHub) {
       return {
         message: "Start at the Temple of Power. Restore the gates in order.",
         bannerTitle: "Campaign Start: Temple of Power",

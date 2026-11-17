@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Training Grounds | DevOps Triforce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="training">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
+    <nav class="top-nav" aria-label="Main">
+      <strong>Training Grounds</strong>
+      <ul>
+        <li><a href="index.html" data-temple="map">Map</a></li>
+        <li><a href="training.html" data-temple="training">Training</a></li>
+        <li><a href="power.html" data-temple="power">Power</a></li>
+        <li><a href="wisdom.html" data-temple="wisdom">Wisdom</a></li>
+        <li><a href="courage.html" data-temple="courage">Courage</a></li>
+        <li><a href="fire.html" data-temple="fire">Fire</a></li>
+        <li><a href="water.html" data-temple="water">Water</a></li>
+        <li><a href="forest.html" data-temple="forest">Forest</a></li>
+        <li><a href="final-battle.html" data-temple="final">Final Battle</a></li>
+      </ul>
+      <button id="reset-progress" class="secondary">Reset Progress</button>
+    </nav>
+
+    <section class="status-bar">
+      <div>
+        <div class="triforce-progress" aria-label="Triforce progress">
+          <div class="triangle" data-piece="power" data-label="Power" title="Power"></div>
+          <div class="triangle" data-piece="wisdom" data-label="Wisdom" title="Wisdom"></div>
+          <div class="triangle" data-piece="courage" data-label="Courage" title="Courage"></div>
+        </div>
+        <div class="seal-progress" aria-label="Sage seals">
+          <span class="seal" data-piece="fire" data-seal="fire"><span class="seal-icon" aria-hidden="true">🔥</span> Fire</span>
+          <span class="seal" data-piece="water" data-seal="water"><span class="seal-icon" aria-hidden="true">💧</span> Water</span>
+          <span class="seal" data-piece="forest" data-seal="forest"><span class="seal-icon" aria-hidden="true">🌲</span> Forest</span>
+        </div>
+        <p id="temple-count">0 / 6 temples restored</p>
+      </div>
+      <div class="corruption">
+        <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
+        <div class="meter"><div class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <h1>Training Grounds</h1>
+    <p>Practice away from the temples. Nothing here is required, but it is a good warm-up for new heroes and a quick refresher for returning ones. Ready for the real thing? <a href="index.html#map">Return to the map</a>.</p>
+
+    <section class="card" style="margin-bottom:1rem;">
+      <div class="choice-panel">
+        <h2>Pipeline Fate Choice</h2>
+        <p>Choose your next command:</p>
+        <button id="safe-path">Run Full Gate Sequence</button>
+        <button id="reckless-path" class="danger">Deploy Immediately</button>
+        <p id="choice-result" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="timeline-panel" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">Pipeline Timeline Simulator</h2>
+      <p>Run the release path and watch each gate ignite in sequence.</p>
+      <div class="timeline-controls">
+        <button id="timeline-run">Run Timeline</button>
+        <button id="timeline-replay" class="secondary">Replay</button>
+      </div>
+      <div class="timeline-track" id="timeline-track">
+        <div class="timeline-node" data-timeline-step="commit"><span>Commit</span></div>
+        <div class="timeline-node" data-timeline-step="build"><span>Build</span></div>
+        <div class="timeline-node" data-timeline-step="test"><span>Test</span></div>
+        <div class="timeline-node" data-timeline-step="scan"><span>Security Scan</span></div>
+        <div class="timeline-node" data-timeline-step="review"><span>Review</span></div>
+        <div class="timeline-node" data-timeline-step="deploy"><span>Deploy</span></div>
+      </div>
+      <p id="timeline-status" class="timeline-status" aria-live="polite">Timeline idle. Awaiting command.</p>
+    </section>
+
+    <section id="daily-mode-panel" class="card" aria-labelledby="daily-mode-title" style="margin-bottom:1rem;">
+      <h2 id="daily-mode-title">Daily Challenge Seed</h2>
+      <p id="daily-seed">Daily Seed: loading...</p>
+      <ul id="daily-challenge-list"></ul>
+      <p><button id="daily-mode-reroll" class="secondary" data-mode="standard">Switch to Heroic Seed</button></p>
+    </section>
+
+    <section class="card-grid">
+      <article class="card">
+        <h2>Knowledge Check</h2>
+        <p>Which release order keeps production secure?</p>
+        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="deploy-build-fix"> Deploy, then patch errors</label>
+        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-test-scan-review-deploy"> Build, test, scan, review, deploy</label>
+        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-scan-deploy-test"> Build, scan, deploy, then test</label>
+        <button id="quiz-submit">Submit Answer</button>
+        <p id="quiz-result" aria-live="polite"></p>
+      </article>
+
+      <article class="compare-panel">
+        <h2>CI vs CD vs DevOps vs DevSecOps</h2>
+        <table>
+          <thead>
+            <tr><th>Practice</th><th>Primary Focus</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>CI</td><td>Frequent integration with build and test automation</td></tr>
+            <tr><td>CD</td><td>Reliable release flow to deploy-ready state or production</td></tr>
+            <tr><td>DevOps</td><td>Shared ownership between development and operations</td></tr>
+            <tr><td>DevSecOps</td><td>Security checks integrated into delivery workflows</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/engine/game-state.js"></script>
+  <script src="js/engine/migrations.js"></script>
+  <script src="js/engine/save-schema.js"></script>
+  <script src="js/engine/actions.js"></script>
+  <script src="js/engine/scoring.js"></script>
+  <script src="js/engine/rewards.js"></script>
+  <script src="js/engine/random-seed.js"></script>
+  <script src="js/engine/incidents.js"></script>
+  <script src="js/engine/rules-engine.js"></script>
+  <script src="js/content/mission-loader.js"></script>
+  <script src="js/content/story-engine.js"></script>
+  <script src="js/telemetry/session.js"></script>
+  <script src="js/telemetry/events.js"></script>
+  <script src="js/ui/instructor-mode.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/rewards-panel.js"></script>
+  <script src="js/ui/story-log.js"></script>
+  <script src="js/ui/daily-mode.js"></script>
+  <script src="js/ui/site-nav.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/challenges.js"></script>
+</body>
+</body>
+</html>

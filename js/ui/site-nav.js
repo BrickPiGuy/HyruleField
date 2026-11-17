@@ -23,7 +23,7 @@
   };
 
   function statusFor(state, key) {
-    if (key === "map") {
+    if (key === "map" || key === "training") {
       return null;
     }
 

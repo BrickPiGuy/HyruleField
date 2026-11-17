@@ -18,6 +18,7 @@
       <strong>HyruleField Academy</strong>
       <ul>
         <li><a href="index.html" data-temple="map">Map</a></li>
+        <li><a href="training.html" data-temple="training">Training</a></li>
         <li><a href="power.html" data-temple="power">Power</a></li>
         <li><a href="wisdom.html" data-temple="wisdom">Wisdom</a></li>
         <li><a href="courage.html" data-temple="courage">Courage</a></li>
@@ -32,14 +33,14 @@
     <section class="status-bar">
       <div>
         <div class="triforce-progress" aria-label="Triforce progress">
-          <div class="triangle" data-piece="power" title="Power"></div>
-          <div class="triangle" data-piece="wisdom" title="Wisdom"></div>
-          <div class="triangle" data-piece="courage" title="Courage"></div>
+          <div class="triangle" data-piece="power" data-label="Power" title="Power"></div>
+          <div class="triangle" data-piece="wisdom" data-label="Wisdom" title="Wisdom"></div>
+          <div class="triangle" data-piece="courage" data-label="Courage" title="Courage"></div>
         </div>
         <div class="seal-progress" aria-label="Sage seals">
-          <span class="seal" data-piece="fire" data-seal="fire" title="Fire"></span>
-          <span class="seal" data-piece="water" data-seal="water" title="Water"></span>
-          <span class="seal" data-piece="forest" data-seal="forest" title="Forest"></span>
+          <span class="seal" data-piece="fire" data-seal="fire"><span class="seal-icon" aria-hidden="true">🔥</span> Fire</span>
+          <span class="seal" data-piece="water" data-seal="water"><span class="seal-icon" aria-hidden="true">💧</span> Water</span>
+          <span class="seal" data-piece="forest" data-seal="forest"><span class="seal-icon" aria-hidden="true">🌲</span> Forest</span>
         </div>
         <p id="temple-count">0 / 6 temples restored</p>
       </div>
@@ -60,74 +61,13 @@
 
     <section id="map" class="hub" aria-labelledby="map-title">
       <h2 id="map-title">Map of Hyrule Field</h2>
-      <p>Follow the star to your next quest. A sealed temple opens once the temples before it are restored.</p>
+      <p>Follow the star to your next quest. A sealed temple opens once the temples before it are restored. New here? Warm up in the <a href="training.html">Training Grounds</a>.</p>
+      <p id="hub-status" class="hub-status" aria-live="polite"></p>
       <div id="hub-map" class="hub-map"></div>
       <noscript><p>Enable JavaScript to see the map. Temples: <a href="power.html">Power</a>, <a href="wisdom.html">Wisdom</a>, <a href="courage.html">Courage</a>, <a href="fire.html">Fire</a>, <a href="water.html">Water</a>, <a href="forest.html">Forest</a>, <a href="final-battle.html">Final Battle</a>.</p></noscript>
     </section>
 
-    <h2 class="section-divider">Training Grounds</h2>
-
-    <section class="card" style="margin-bottom:1rem;">
-      <div class="choice-panel">
-        <h2>Pipeline Fate Choice</h2>
-        <p>Choose your next command:</p>
-        <button id="safe-path">Run Full Gate Sequence</button>
-        <button id="reckless-path" class="danger">Deploy Immediately</button>
-        <p id="choice-result" aria-live="polite"></p>
-      </div>
-    </section>
-
-    <section class="timeline-panel" aria-labelledby="timeline-title">
-      <h2 id="timeline-title">Pipeline Timeline Simulator</h2>
-      <p>Run the release path and watch each gate ignite in sequence.</p>
-      <div class="timeline-controls">
-        <button id="timeline-run">Run Timeline</button>
-        <button id="timeline-replay" class="secondary">Replay</button>
-      </div>
-      <div class="timeline-track" id="timeline-track">
-        <div class="timeline-node" data-timeline-step="commit"><span>Commit</span></div>
-        <div class="timeline-node" data-timeline-step="build"><span>Build</span></div>
-        <div class="timeline-node" data-timeline-step="test"><span>Test</span></div>
-        <div class="timeline-node" data-timeline-step="scan"><span>Security Scan</span></div>
-        <div class="timeline-node" data-timeline-step="review"><span>Review</span></div>
-        <div class="timeline-node" data-timeline-step="deploy"><span>Deploy</span></div>
-      </div>
-      <p id="timeline-status" class="timeline-status" aria-live="polite">Timeline idle. Awaiting command.</p>
-    </section>
-
-    <section id="daily-mode-panel" class="card" aria-labelledby="daily-mode-title" style="margin-bottom:1rem;">
-      <h2 id="daily-mode-title">Daily Challenge Seed</h2>
-      <p id="daily-seed">Daily Seed: loading...</p>
-      <ul id="daily-challenge-list"></ul>
-      <p><button id="daily-mode-reroll" class="secondary" data-mode="standard">Switch to Heroic Seed</button></p>
-    </section>
-
     <section class="card-grid">
-      <article class="card">
-        <h2>Knowledge Check</h2>
-        <p>Which release order keeps production secure?</p>
-        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="deploy-build-fix"> Deploy, then patch errors</label>
-        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-test-scan-review-deploy"> Build, test, scan, review, deploy</label>
-        <label class="quiz-option"><input type="radio" name="kingdom-quiz" value="build-scan-deploy-test"> Build, scan, deploy, then test</label>
-        <button id="quiz-submit">Submit Answer</button>
-        <p id="quiz-result" aria-live="polite"></p>
-      </article>
-
-      <article class="compare-panel">
-        <h2>CI vs CD vs DevOps vs DevSecOps</h2>
-        <table>
-          <thead>
-            <tr><th>Practice</th><th>Primary Focus</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>CI</td><td>Frequent integration with build and test automation</td></tr>
-            <tr><td>CD</td><td>Reliable release flow to deploy-ready state or production</td></tr>
-            <tr><td>DevOps</td><td>Shared ownership between development and operations</td></tr>
-            <tr><td>DevSecOps</td><td>Security checks integrated into delivery workflows</td></tr>
-          </tbody>
-        </table>
-      </article>
-
       <article class="badge-panel">
         <h2>Achievement Badges</h2>
         <div class="badges">
@@ -152,8 +92,6 @@
   <script src="js/engine/actions.js"></script>
   <script src="js/engine/scoring.js"></script>
   <script src="js/engine/rewards.js"></script>
-  <script src="js/engine/random-seed.js"></script>
-  <script src="js/engine/incidents.js"></script>
   <script src="js/engine/rules-engine.js"></script>
   <script src="js/content/mission-loader.js"></script>
   <script src="js/content/story-engine.js"></script>
@@ -163,7 +101,6 @@
   <script src="js/ui/hud.js"></script>
   <script src="js/ui/rewards-panel.js"></script>
   <script src="js/ui/story-log.js"></script>
-  <script src="js/ui/daily-mode.js"></script>
   <script src="js/ui/hub-map.js"></script>
   <script src="js/ui/site-nav.js"></script>
   <script src="js/progress.js"></script>
