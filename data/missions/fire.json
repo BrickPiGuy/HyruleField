@@ -1,0 +1,163 @@
+{
+  "id": "fire",
+  "title": "Temple of Fire",
+  "objective": "Forge trustworthy tests: stack the test pyramid, expose flaky checks and set quality gates.",
+  "requires": [
+    "power"
+  ],
+  "intro": "Deep in the volcano, the Fire Sage keeps the flame of quality alive. Ganonix has been slipping flaky tests past the guards. Clear five chambers to relight the flame.",
+  "reward": {
+    "temple": "fire",
+    "corruptionReduction": 7
+  },
+  "trials": [
+    {
+      "id": "fire-pyramid-order",
+      "type": "order",
+      "title": "The Test Pyramid",
+      "prompt": "Stack the tests from the wide, fast base to the narrow, slow peak.",
+      "hint": "You want many cheap tests at the bottom and few expensive ones at the top.",
+      "success": "A sturdy pyramid: lots of fast unit tests, fewer slow end-to-end checks.",
+      "items": [
+        {
+          "id": "unit",
+          "text": "Unit tests (many, fast)"
+        },
+        {
+          "id": "integration",
+          "text": "Integration tests (some)"
+        },
+        {
+          "id": "e2e",
+          "text": "End-to-end tests (few, slow)"
+        },
+        {
+          "id": "explore",
+          "text": "Manual exploratory testing (rare)"
+        }
+      ],
+      "answer": [
+        "unit",
+        "integration",
+        "e2e",
+        "explore"
+      ]
+    },
+    {
+      "id": "fire-flaky-spot",
+      "type": "spot",
+      "title": "The Flickering Flame",
+      "fileName": "quote.spec.js",
+      "prompt": "This test passes some days and fails others. Flag the lines that make it flaky.",
+      "hint": "Look for fixed waiting and for anything left to chance.",
+      "success": "Fixed sleeps and random values make a test unreliable. Wait for conditions and control your inputs.",
+      "lines": [
+        "test(\"shows the daily quote\", async () => {",
+        "  await page.goto(url);",
+        "  await sleep(3000);",
+        "  const quote = await page.textContent(\".quote\");",
+        "  expect(quote).toContain(\"Hyrule\");",
+        "  expect(Math.random()).toBeLessThan(0.9);",
+        "});"
+      ],
+      "answer": [
+        2,
+        5
+      ]
+    },
+    {
+      "id": "fire-doubles-match",
+      "type": "match",
+      "title": "Doubles in the Dark",
+      "prompt": "Match each kind of test double to its job.",
+      "hint": "A stub just answers. A mock checks how it was used. A spy watches a real object.",
+      "success": "You can tell the impostors apart.",
+      "pairs": [
+        {
+          "left": "Stub",
+          "right": "Returns fixed answers"
+        },
+        {
+          "left": "Mock",
+          "right": "Verifies it was called a certain way"
+        },
+        {
+          "left": "Spy",
+          "right": "Wraps a real object and records calls"
+        },
+        {
+          "left": "Fake",
+          "right": "A light working version, like an in-memory database"
+        }
+      ]
+    },
+    {
+      "id": "fire-coverage-choice",
+      "type": "choice",
+      "title": "The Coverage Curse",
+      "prompt": "Coverage reads 95%, yet bugs keep reaching players. What is the best explanation?",
+      "hint": "Coverage counts lines that ran, not whether anything checked the results.",
+      "success": "Coverage shows what ran, not what was verified.",
+      "options": [
+        {
+          "id": "meter",
+          "text": "The coverage meter must be broken.",
+          "why": "The meter is fine. It measures something narrower than quality."
+        },
+        {
+          "id": "asserts",
+          "text": "Lines ran, but some tests assert little or nothing.",
+          "why": ""
+        },
+        {
+          "id": "more",
+          "text": "We just need 100% coverage.",
+          "why": "Chasing the number can produce even more hollow tests."
+        }
+      ],
+      "answer": "asserts"
+    },
+    {
+      "id": "fire-gates-switches",
+      "type": "switches",
+      "title": "The Quality Gate Room",
+      "prompt": "Set the merge rules for the main branch.",
+      "hint": "Gates should block bad changes and flaky tests should be fixed, never hidden.",
+      "success": "The gates stand firm. Only trustworthy changes pass.",
+      "clues": [
+        "A pull request must pass its tests before merging.",
+        "Coverage should not be allowed to drop on a change.",
+        "Flaky tests are quarantined and fixed. Failing tests are never deleted to turn the build green."
+      ],
+      "switches": [
+        {
+          "id": "pass",
+          "label": "Tests must pass to merge"
+        },
+        {
+          "id": "coverage",
+          "label": "Block changes that lower coverage"
+        },
+        {
+          "id": "override",
+          "label": "Merge on a failing build when late"
+        },
+        {
+          "id": "quarantine",
+          "label": "Quarantine and fix flaky tests"
+        },
+        {
+          "id": "delete",
+          "label": "Delete failing tests to go green"
+        }
+      ],
+      "target": {
+        "pass": true,
+        "coverage": true,
+        "override": false,
+        "quarantine": true,
+        "delete": false
+      }
+    }
+  ]
+}

@@ -29,32 +29,182 @@
         "id": "action",
         "label": "Risky action",
         "correctValue": "Deploy",
-        "options": ["Promote", "Deploy", "Scan", "Approve", "Attest"]
+        "options": [
+          "Promote",
+          "Deploy",
+          "Scan",
+          "Approve",
+          "Attest"
+        ]
       },
       {
         "id": "frequency",
         "label": "How often",
         "correctValue": "every commit",
-        "options": ["after approval", "every commit", "per release train", "after a security waiver", "only for emergency fixes"]
+        "options": [
+          "after approval",
+          "every commit",
+          "per release train",
+          "after a security waiver",
+          "only for emergency fixes"
+        ]
       },
       {
         "id": "destination",
         "label": "Destination",
         "correctValue": "directly to production",
-        "options": ["to staging for soak", "directly to production", "to a canary ring", "to an isolated review app", "to a hardened pre-prod gate"]
+        "options": [
+          "to staging for soak",
+          "directly to production",
+          "to a canary ring",
+          "to an isolated review app",
+          "to a hardened pre-prod gate"
+        ]
       },
       {
         "id": "gates",
         "label": "Skipped gates",
         "correctValue": "tests, security scans, and review gates",
-        "options": ["artifact signing and provenance checks", "tests, security scans, and review gates", "secret rotation and dashboard reviews", "rollback drills and alert tuning", "dependency pinning and branch protection"]
+        "options": [
+          "artifact signing and provenance checks",
+          "tests, security scans, and review gates",
+          "secret rotation and dashboard reviews",
+          "rollback drills and alert tuning",
+          "dependency pinning and branch protection"
+        ]
       }
     ],
-    "requiredWords": ["deploy"],
-    "anyPhrases": ["every commit", "direct"]
+    "requiredWords": [
+      "deploy"
+    ],
+    "anyPhrases": [
+      "every commit",
+      "direct"
+    ]
   },
   "reward": {
     "temple": "wisdom",
     "corruptionReduction": 7
-  }
+  },
+  "requires": [
+    "power"
+  ],
+  "intro": "Dark whispers fill the library. Clear four chambers of lore to see through Ganonix's disguises, then break the final ward.",
+  "trials": [
+    {
+      "id": "wisdom-leak-spot",
+      "type": "spot",
+      "title": "The Leaky Scroll",
+      "fileName": "config.js",
+      "prompt": "This config file is about to be committed. Flag every line that should never be in source code.",
+      "hint": "Passwords and access keys belong in a secret manager, not in the repository.",
+      "success": "Two secrets caught before they reach Git history. Keep them in a vault.",
+      "lines": [
+        "const config = {",
+        "  apiUrl: \"https://api.hyrule.example\",",
+        "  dbPassword: \"Triforce123!\",",
+        "  region: \"us-east-1\",",
+        "  awsKey: \"AKIAIOSFODNN7EXAMPLE\",",
+        "  timeoutMs: 3000",
+        "};"
+      ],
+      "answer": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": "wisdom-wards-match",
+      "type": "match",
+      "title": "Wards and Their Weaknesses",
+      "prompt": "Pair each security control with the threat it guards against.",
+      "hint": "Think about what each tool looks at: commits, packages, source code, merges, or permissions.",
+      "success": "Each ward is bound to its threat.",
+      "pairs": [
+        {
+          "left": "Secret scanning",
+          "right": "Finds leaked credentials in commits"
+        },
+        {
+          "left": "Dependabot",
+          "right": "Opens pull requests for vulnerable packages"
+        },
+        {
+          "left": "CodeQL",
+          "right": "Finds vulnerabilities in your source code"
+        },
+        {
+          "left": "Branch protection",
+          "right": "Requires reviews before code merges"
+        },
+        {
+          "left": "Least privilege",
+          "right": "Gives a workflow only the access it needs"
+        }
+      ]
+    },
+    {
+      "id": "wisdom-leak-order",
+      "type": "order",
+      "title": "The Leak Ritual",
+      "prompt": "A key just leaked. Put the response steps in the right order.",
+      "hint": "Stop the bleeding first. Cleaning up and learning from it come afterwards.",
+      "success": "Revoke first, then rotate, clean, prevent, and learn.",
+      "items": [
+        {
+          "id": "revoke",
+          "text": "Revoke the exposed credential"
+        },
+        {
+          "id": "rotate",
+          "text": "Issue a new one and store it in a secret manager"
+        },
+        {
+          "id": "clean",
+          "text": "Remove it from the code and Git history"
+        },
+        {
+          "id": "prevent",
+          "text": "Turn on secret scanning to stop a repeat"
+        },
+        {
+          "id": "review",
+          "text": "Hold a blameless review"
+        }
+      ],
+      "answer": [
+        "revoke",
+        "rotate",
+        "clean",
+        "prevent",
+        "review"
+      ]
+    },
+    {
+      "id": "wisdom-hooded-choice",
+      "type": "choice",
+      "title": "The Hooded Reviewer",
+      "prompt": "A pull request bumps a package to a version from an unknown fork. Tests are green. What do you do?",
+      "hint": "Passing tests show the code works. They do not show where the code came from.",
+      "success": "Wise. Supply chain risk hides behind green checks.",
+      "options": [
+        {
+          "id": "merge",
+          "text": "Merge it. The tests passed.",
+          "why": "Green tests do not prove a dependency is trustworthy."
+        },
+        {
+          "id": "review",
+          "text": "Run dependency review and verify the package source first.",
+          "why": ""
+        },
+        {
+          "id": "disable",
+          "text": "Turn off dependency review so PRs stop blocking.",
+          "why": "Disabling the check is exactly what Ganonix wants."
+        }
+      ],
+      "answer": "review"
+    }
+  ]
 }

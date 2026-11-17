@@ -58,7 +58,7 @@
       ],
       hints: [
         "The hidden workflow dropdowns are the clue to expose the corruption.",
-        "Clear all three security cards before validating the hidden workflow.",
+        "Clear all security cards before validating the hidden workflow.",
         "Guide learners to identify the right pattern parts without giving the exact sequence."
       ]
     },
@@ -92,7 +92,7 @@
         "Deploy the restored release."
       ],
       riskMap: [
-        "The final battle requires all three temples to be restored.",
+        "The final battle requires all six temples to be restored.",
         "If any checklist item is missed, Ganonix resists the release."
       ],
       hints: [
@@ -132,10 +132,50 @@
     }
   }
 
+  // Plain-language answer key for a puzzle, shown to instructors.
+  function describeSolution(puzzle) {
+    if (puzzle.type === "order") {
+      const text = Object.fromEntries(puzzle.items.map((item) => [item.id, item.text]));
+      return puzzle.answer.map((id) => text[id]).join(" > ");
+    }
+    if (puzzle.type === "spot") {
+      return puzzle.answer.map((index) => `line ${index + 1}`).join(", ");
+    }
+    if (puzzle.type === "match") {
+      return puzzle.pairs.map((pair) => `${pair.left} = ${pair.right}`).join("; ");
+    }
+    if (puzzle.type === "switches") {
+      const on = puzzle.switches.filter((entry) => puzzle.target[entry.id]).map((entry) => entry.label);
+      return `ON: ${on.join(", ")}`;
+    }
+    if (puzzle.type === "choice") {
+      const option = puzzle.options.find((entry) => entry.id === puzzle.answer);
+      return option ? option.text : "";
+    }
+    return "";
+  }
+
+  function buildTrialModel(pageId, mission) {
+    return {
+      title: `${mission.title} Notes`,
+      label: "Chamber Answer Key",
+      expectedAnswers: mission.trials.map((puzzle) => `${puzzle.title}: ${describeSolution(puzzle)}`),
+      riskMap: [
+        "A wrong answer adds 2 corruption; a solved chamber removes 1.",
+        "After two wrong attempts the chamber shows its hint automatically."
+      ],
+      hints: [
+        mission.objective || "Work through each chamber in order.",
+        "Chambers can be solved in one sitting or across visits; progress is saved.",
+        "Use the on-screen hint before giving the answer."
+      ]
+    };
+  }
+
   function buildModel(pageId, mission) {
     const config = PAGE_CONFIG[pageId];
     if (!config) {
-      return null;
+      return mission && Array.isArray(mission.trials) ? buildTrialModel(pageId, mission) : null;
     }
 
     if (pageId === "power" && mission) {
@@ -239,7 +279,7 @@
 
   async function initializePage() {
     const pageId = getPageId();
-    if (!PAGE_CONFIG[pageId]) {
+    if (!PAGE_CONFIG[pageId] && !["fire", "water", "forest"].includes(pageId)) {
       return;
     }
 

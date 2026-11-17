@@ -3,6 +3,7 @@ const path = require("node:path");
 
 const root = path.resolve(__dirname, "..");
 const missionsDir = path.join(root, "data/missions");
+const puzzleEngine = require("../js/puzzles/puzzle-engine.js");
 
 const requiredTopLevelFields = ["id", "title", "objective", "reward"];
 const missionFiles = fs.readdirSync(missionsDir).filter((file) => file.endsWith(".json"));
@@ -126,6 +127,23 @@ for (const fileName of missionFiles) {
     });
     ensureStringArray(mission.hiddenWorkflow.requiredWords, "hiddenWorkflow.requiredWords", fileName);
     ensureStringArray(mission.hiddenWorkflow.anyPhrases, "hiddenWorkflow.anyPhrases", fileName);
+  }
+  if (mission.trials !== undefined) {
+    if (!Array.isArray(mission.trials) || mission.trials.length < 4) {
+      fail(`${fileName} must define at least 4 trials (puzzle chambers)`);
+    }
+    ensureString(mission.intro, "intro", fileName);
+    const trialIds = new Set();
+    mission.trials.forEach((puzzle) => {
+      puzzleEngine.validatePuzzle(puzzle).forEach((problem) => fail(`${fileName} trial ${problem}`));
+      if (trialIds.has(puzzle.id)) {
+        fail(`${fileName} has duplicate trial id: ${puzzle.id}`);
+      }
+      trialIds.add(puzzle.id);
+      if (!puzzleEngine.checkAnswer(puzzle, puzzleEngine.solutionFor(puzzle)).correct) {
+        fail(`${fileName} trial ${puzzle.id} rejects its own solution`);
+      }
+    });
   }
   if (mission.requiredStateKeys) {
     ensureStringArray(mission.requiredStateKeys, "requiredStateKeys", fileName);

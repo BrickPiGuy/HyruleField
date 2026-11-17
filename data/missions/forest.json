@@ -1,0 +1,174 @@
+{
+  "id": "forest",
+  "title": "Temple of the Forest",
+  "objective": "Grow infrastructure as code: plan before you apply, fix risky configs and keep environments from drifting.",
+  "requires": [
+    "power"
+  ],
+  "intro": "Roots of old servers tangle the Forest Temple. Ganonix clicks through consoles and leaves drift behind. Clear five chambers to grow infrastructure from code.",
+  "reward": {
+    "temple": "forest",
+    "corruptionReduction": 7
+  },
+  "trials": [
+    {
+      "id": "forest-plant-order",
+      "type": "order",
+      "title": "Planting the Grove",
+      "prompt": "Put the infrastructure-as-code workflow in order.",
+      "hint": "Always look at the plan before you apply it.",
+      "success": "Write, init, plan, review, apply: no surprises.",
+      "items": [
+        {
+          "id": "write",
+          "text": "Write the Terraform configuration"
+        },
+        {
+          "id": "init",
+          "text": "Run terraform init"
+        },
+        {
+          "id": "plan",
+          "text": "Run terraform plan"
+        },
+        {
+          "id": "review",
+          "text": "Review the plan in a pull request"
+        },
+        {
+          "id": "apply",
+          "text": "Run terraform apply"
+        }
+      ],
+      "answer": [
+        "write",
+        "init",
+        "plan",
+        "review",
+        "apply"
+      ]
+    },
+    {
+      "id": "forest-thorns-spot",
+      "type": "spot",
+      "title": "Thorns in the Config",
+      "fileName": "main.tf",
+      "prompt": "This Terraform would open the kingdom to attackers. Flag every risky line.",
+      "hint": "Look for public access and for a secret written in plain text.",
+      "success": "Public storage, an exposed database and a hard-coded password are all gone.",
+      "lines": [
+        "resource \"aws_s3_bucket\" \"saves\" {",
+        "  bucket = \"hyrule-saves\"",
+        "  acl    = \"public-read\"",
+        "}",
+        "resource \"aws_db_instance\" \"main\" {",
+        "  password            = \"hunter2\"",
+        "  publicly_accessible = true",
+        "}"
+      ],
+      "answer": [
+        2,
+        5,
+        6
+      ]
+    },
+    {
+      "id": "forest-vocab-match",
+      "type": "match",
+      "title": "Words of the Woods",
+      "prompt": "Match each infrastructure-as-code term to its meaning.",
+      "hint": "Drift is what happens when reality wanders away from the code.",
+      "success": "You speak the language of the forest.",
+      "pairs": [
+        {
+          "left": "State file",
+          "right": "Record of what Terraform manages"
+        },
+        {
+          "left": "Drift",
+          "right": "Real infrastructure differs from the code"
+        },
+        {
+          "left": "Module",
+          "right": "A reusable bundle of resources"
+        },
+        {
+          "left": "Idempotent",
+          "right": "Running it again gives the same result"
+        },
+        {
+          "left": "Immutable server",
+          "right": "Replaced, never patched in place"
+        }
+      ]
+    },
+    {
+      "id": "forest-container-switches",
+      "type": "switches",
+      "title": "The Container Glade",
+      "prompt": "Prepare the Dockerfile. Light the good practices and leave the risky ones dark.",
+      "hint": "Smaller, scanned, non-root images with no secrets baked in.",
+      "success": "A lean, scanned image that holds no secrets.",
+      "clues": [
+        "Pin the base image to a version so builds are repeatable.",
+        "Containers should not run as root, and .env files must never be copied into an image.",
+        "Scan every image for known vulnerabilities, and use multi-stage builds to keep it small."
+      ],
+      "switches": [
+        {
+          "id": "pin",
+          "label": "Pin the base image version"
+        },
+        {
+          "id": "root",
+          "label": "Run as root"
+        },
+        {
+          "id": "env",
+          "label": "Copy .env into the image"
+        },
+        {
+          "id": "multi",
+          "label": "Use multi-stage builds"
+        },
+        {
+          "id": "scan",
+          "label": "Scan the image for CVEs"
+        }
+      ],
+      "target": {
+        "pin": true,
+        "root": false,
+        "env": false,
+        "multi": true,
+        "scan": true
+      }
+    },
+    {
+      "id": "forest-drift-choice",
+      "type": "choice",
+      "title": "Drift in the Grove",
+      "prompt": "Someone changed a security group by hand in the cloud console. The code no longer matches. What should happen?",
+      "hint": "The code is the source of truth. Changes go through pull requests.",
+      "success": "Code is the source of truth, and every change is reviewed.",
+      "options": [
+        {
+          "id": "leave",
+          "text": "Leave it. It works.",
+          "why": "Unreviewed drift becomes the next outage."
+        },
+        {
+          "id": "code",
+          "text": "Capture the intent in code through a pull request, then re-apply.",
+          "why": ""
+        },
+        {
+          "id": "copy",
+          "text": "Repeat the console edit in every environment.",
+          "why": "That spreads the drift instead of removing it."
+        }
+      ],
+      "answer": "code"
+    }
+  ]
+}

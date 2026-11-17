@@ -13,13 +13,17 @@
 <body data-page="final">
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <main id="main-content" class="site-shell" tabindex="-1">
-    <nav class="top-nav">
+    <nav class="top-nav" aria-label="Main">
       <strong>Final Battle</strong>
       <ul>
-        <li><a href="index.html">Kingdom</a></li>
-        <li><a href="power.html">Power</a></li>
-        <li><a href="wisdom.html">Wisdom</a></li>
-        <li><a href="courage.html">Courage</a></li>
+        <li><a href="index.html" data-temple="map">Map</a></li>
+        <li><a href="power.html" data-temple="power">Power</a></li>
+        <li><a href="wisdom.html" data-temple="wisdom">Wisdom</a></li>
+        <li><a href="courage.html" data-temple="courage">Courage</a></li>
+        <li><a href="fire.html" data-temple="fire">Fire</a></li>
+        <li><a href="water.html" data-temple="water">Water</a></li>
+        <li><a href="forest.html" data-temple="forest">Forest</a></li>
+        <li><a href="final-battle.html" data-temple="final">Final Battle</a></li>
       </ul>
     </nav>
 
@@ -30,7 +34,12 @@
           <div class="triangle" data-piece="wisdom"></div>
           <div class="triangle" data-piece="courage"></div>
         </div>
-        <p id="temple-count">0 / 3 temples restored</p>
+        <div class="seal-progress" aria-label="Sage seals">
+          <span class="seal" data-piece="fire" data-seal="fire" title="Fire"></span>
+          <span class="seal" data-piece="water" data-seal="water" title="Water"></span>
+          <span class="seal" data-piece="forest" data-seal="forest" title="Forest"></span>
+        </div>
+        <p id="temple-count">0 / 6 temples restored</p>
       </div>
       <div class="corruption">
         <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
@@ -117,6 +126,7 @@
   <script src="js/ui/hud.js"></script>
   <script src="js/ui/rewards-panel.js"></script>
   <script src="js/ui/story-log.js"></script>
+  <script src="js/ui/site-nav.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/challenges.js"></script>
   <script src="js/final-battle-challenge.js"></script>

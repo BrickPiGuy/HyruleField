@@ -14,6 +14,10 @@
         ...defaultState.quizzes,
         ...(legacyState.quizzes || {})
       },
+      trials: {
+        ...defaultState.trials,
+        ...(legacyState.trials || {})
+      },
       challenges: {
         ...defaultState.challenges,
         ...(legacyState.challenges || {}),
@@ -28,6 +32,10 @@
         templeRanks: {
           ...defaultState.rewards.templeRanks,
           ...((legacyState.rewards && legacyState.rewards.templeRanks) || {})
+        },
+        templeScores: {
+          ...defaultState.rewards.templeScores,
+          ...((legacyState.rewards && legacyState.rewards.templeScores) || {})
         }
       },
       missions: {
@@ -60,6 +68,13 @@
     return merged;
   }
 
+  function toV5(state) {
+    // v5 adds the Fire, Water and Forest temples and per-temple trial progress.
+    const merged = mergeLegacyState(state);
+    merged.saveVersion = 5;
+    return merged;
+  }
+
   function migrateState(inputState) {
     const raw = inputState && typeof inputState === "object" ? inputState : {};
     const version = Number(raw.saveVersion || 1);
@@ -75,6 +90,10 @@
 
     if (version < 4) {
       migrated = toV4(migrated);
+    }
+
+    if (version < 5) {
+      migrated = toV5(migrated);
     }
 
     migrated.corruption = HyruleGameState.clampCorruption(Number(migrated.corruption || 35));

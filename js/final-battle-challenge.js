@@ -44,7 +44,7 @@ async function setupFinalBattlePageImpl(deps) {
     : ["power", "wisdom", "courage"];
   const failureMessage = mission.messages && mission.messages.failure
     ? mission.messages.failure
-    : "Ganonix resists. Complete every task and restore all three temples first.";
+    : "Ganonix resists. Complete every task and restore all six temples first.";
   const successMessage = mission.messages && mission.messages.success
     ? mission.messages.success
     : "Victory. The kingdom and production are secure.";

@@ -1,0 +1,166 @@
+{
+  "id": "water",
+  "title": "Temple of Water",
+  "objective": "Watch the pipeline: read the three pillars, tune alerts and respond to incidents calmly.",
+  "requires": [
+    "power"
+  ],
+  "intro": "The Water Sage can hear every ripple in production. Ganonix drowns teams in noise. Clear five chambers to hear clearly again.",
+  "reward": {
+    "temple": "water",
+    "corruptionReduction": 7
+  },
+  "trials": [
+    {
+      "id": "water-pillars-match",
+      "type": "match",
+      "title": "The Three Pillars",
+      "prompt": "Match each observability signal to what it tells you.",
+      "hint": "Logs are events, metrics are numbers over time, traces follow one request.",
+      "success": "Logs, metrics and traces: you can see inside the system.",
+      "pairs": [
+        {
+          "left": "Logs",
+          "right": "Timestamped records of events"
+        },
+        {
+          "left": "Metrics",
+          "right": "Numbers measured over time"
+        },
+        {
+          "left": "Traces",
+          "right": "The path of one request across services"
+        },
+        {
+          "left": "Alerts",
+          "right": "Notices when a limit is at risk"
+        }
+      ]
+    },
+    {
+      "id": "water-incident-order",
+      "type": "order",
+      "title": "The Rising Tide",
+      "prompt": "Production is failing. Put the incident response in order.",
+      "hint": "Notice, assess, stop the damage, fix the cause, then learn.",
+      "success": "Calm and in order, the flood recedes.",
+      "items": [
+        {
+          "id": "detect",
+          "text": "Detect the problem from an alert"
+        },
+        {
+          "id": "triage",
+          "text": "Assess severity and gather responders"
+        },
+        {
+          "id": "mitigate",
+          "text": "Mitigate with a rollback or failover"
+        },
+        {
+          "id": "fix",
+          "text": "Fix the root cause"
+        },
+        {
+          "id": "review",
+          "text": "Hold a blameless postmortem"
+        }
+      ],
+      "answer": [
+        "detect",
+        "triage",
+        "mitigate",
+        "fix",
+        "review"
+      ]
+    },
+    {
+      "id": "water-alerts-spot",
+      "type": "spot",
+      "title": "The Noisy Alarms",
+      "fileName": "alert-rules.txt",
+      "prompt": "On-call is exhausted. Flag the alert rules that cause noise instead of action.",
+      "hint": "An alert should be urgent, real and worth waking someone up for.",
+      "success": "Pages that fire on blips or for everyone get ignored. Alert on what users feel.",
+      "lines": [
+        "# alert rules",
+        "HighErrorRate: error_rate > 5% for 5m -> page on-call",
+        "CPUBlip: cpu > 1% for 0s -> page on-call",
+        "DiskFilling: disk_used > 85% for 10m -> ticket",
+        "Heartbeat: every 30s -> page the whole company"
+      ],
+      "answer": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": "water-dashboard-switches",
+      "type": "switches",
+      "title": "The Dashboard Grotto",
+      "prompt": "Decide what belongs on the service dashboard.",
+      "hint": "Show what users feel and give responders a next step. Skip vanity numbers.",
+      "success": "A dashboard that answers 'is it healthy?' at a glance.",
+      "clues": [
+        "Latency and error rate show what users feel.",
+        "A dashboard should link to the runbook that explains what to do.",
+        "Counting lines of code shipped says nothing about service health."
+      ],
+      "switches": [
+        {
+          "id": "latency",
+          "label": "p95 latency"
+        },
+        {
+          "id": "errors",
+          "label": "Error rate"
+        },
+        {
+          "id": "loc",
+          "label": "Lines of code shipped"
+        },
+        {
+          "id": "runbook",
+          "label": "Link to the runbook"
+        },
+        {
+          "id": "pageviews",
+          "label": "Total page views only"
+        }
+      ],
+      "target": {
+        "latency": true,
+        "errors": true,
+        "loc": false,
+        "runbook": true,
+        "pageviews": false
+      }
+    },
+    {
+      "id": "water-budget-choice",
+      "type": "choice",
+      "title": "The Error Budget",
+      "prompt": "Your service has used up its error budget for the month. What should the team do?",
+      "hint": "An empty error budget means reliability needs attention before new features.",
+      "success": "Pause risky changes and spend time on reliability.",
+      "options": [
+        {
+          "id": "ship",
+          "text": "Keep shipping features at full speed.",
+          "why": "That spends reliability you no longer have."
+        },
+        {
+          "id": "raise",
+          "text": "Raise the target so the budget looks healthy.",
+          "why": "Moving the goalposts hides the problem."
+        },
+        {
+          "id": "freeze",
+          "text": "Slow risky releases and invest in reliability work.",
+          "why": ""
+        }
+      ],
+      "answer": "freeze"
+    }
+  ]
+}

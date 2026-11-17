@@ -54,19 +54,19 @@
         rewardPoints: 0,
         safeActionStreak: 0,
         recklessActionCount: 0,
-        templeRanks: { power: null, wisdom: null, courage: null },
-        templeScores: { power: 0, wisdom: 0, courage: 0 },
+        templeRanks: { power: null, wisdom: null, courage: null, fire: null, water: null, forest: null },
+        templeScores: { power: 0, wisdom: 0, courage: 0, fire: 0, water: 0, forest: 0 },
         lastTempleAward: null,
         finalVictoryAwarded: false
       };
     }
 
     if (!state.rewards.templeRanks) {
-      state.rewards.templeRanks = { power: null, wisdom: null, courage: null };
+      state.rewards.templeRanks = { power: null, wisdom: null, courage: null, fire: null, water: null, forest: null };
     }
 
     if (!state.rewards.templeScores) {
-      state.rewards.templeScores = { power: 0, wisdom: 0, courage: 0 };
+      state.rewards.templeScores = { power: 0, wisdom: 0, courage: 0, fire: 0, water: 0, forest: 0 };
     }
 
     if (typeof state.rewards.safeActionStreak !== "number") {
@@ -115,6 +115,10 @@
     };
   }
   function updateMissionStatus(state) {
+    const sageStatus = state.power ? "available" : "locked";
+    state.missions.fire = { status: state.fire ? "complete" : sageStatus };
+    state.missions.water = { status: state.water ? "complete" : sageStatus };
+    state.missions.forest = { status: state.forest ? "complete" : sageStatus };
     state.missions.wisdom.status = state.power ? "available" : "locked";
     state.missions.courage.status = state.power && state.wisdom ? "available" : "locked";
     state.missions.finalBattle.status = state.power && state.wisdom && state.courage ? "available" : "locked";
@@ -164,13 +168,36 @@
 
       case HyruleActions.TYPES.COMPLETE_TEMPLE: {
         const piece = action.piece;
-        if (["power", "wisdom", "courage"].includes(piece)) {
+        if (HyruleGameState.TEMPLE_PIECES.includes(piece)) {
           if (!next[piece]) {
             next[piece] = true;
             next.corruption -= 7;
             awardTempleCompletion(next, piece);
           }
         }
+        break;
+      }
+
+      case HyruleActions.TYPES.PUZZLE_SOLVED: {
+        const temple = action.temple;
+        const puzzleId = action.puzzleId;
+        if (HyruleGameState.TEMPLE_PIECES.includes(temple) && puzzleId) {
+          if (!Array.isArray(next.trials[temple])) {
+            next.trials[temple] = [];
+          }
+          if (!next.trials[temple].includes(puzzleId)) {
+            next.trials[temple].push(puzzleId);
+            next.corruption -= 1;
+            incrementSafeStreak(next);
+          }
+        }
+        result.outcome = { ok: true, reason: "puzzle_solved" };
+        break;
+      }
+
+      case HyruleActions.TYPES.PUZZLE_MISTAKE: {
+        next.corruption += 2;
+        result.outcome = { ok: false, reason: "puzzle_mistake" };
         break;
       }
 

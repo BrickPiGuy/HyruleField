@@ -14,14 +14,17 @@
 <body data-page="index">
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <main id="main-content" class="site-shell" tabindex="-1">
-    <nav class="top-nav">
+    <nav class="top-nav" aria-label="Main">
       <strong>HyruleField Academy</strong>
       <ul>
-        <li><a href="index.html">Kingdom</a></li>
-        <li><a href="power.html">Power</a></li>
-        <li><a href="wisdom.html">Wisdom</a></li>
-        <li><a href="courage.html">Courage</a></li>
-        <li><a href="final-battle.html">Final Battle</a></li>
+        <li><a href="index.html" data-temple="map">Map</a></li>
+        <li><a href="power.html" data-temple="power">Power</a></li>
+        <li><a href="wisdom.html" data-temple="wisdom">Wisdom</a></li>
+        <li><a href="courage.html" data-temple="courage">Courage</a></li>
+        <li><a href="fire.html" data-temple="fire">Fire</a></li>
+        <li><a href="water.html" data-temple="water">Water</a></li>
+        <li><a href="forest.html" data-temple="forest">Forest</a></li>
+        <li><a href="final-battle.html" data-temple="final">Final Battle</a></li>
       </ul>
       <button id="reset-progress" class="secondary">Reset Progress</button>
     </nav>
@@ -33,7 +36,12 @@
           <div class="triangle" data-piece="wisdom" title="Wisdom"></div>
           <div class="triangle" data-piece="courage" title="Courage"></div>
         </div>
-        <p id="temple-count">0 / 3 temples restored</p>
+        <div class="seal-progress" aria-label="Sage seals">
+          <span class="seal" data-piece="fire" data-seal="fire" title="Fire"></span>
+          <span class="seal" data-piece="water" data-seal="water" title="Water"></span>
+          <span class="seal" data-piece="forest" data-seal="forest" title="Forest"></span>
+        </div>
+        <p id="temple-count">0 / 6 temples restored</p>
       </div>
       <div class="corruption">
         <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
@@ -46,15 +54,27 @@
         <h1>DevOps Triforce: Rise of Lord Ganonix</h1>
         <p><strong>Master CI/CD, secure the pipeline, and stop the Shadow Deploy Lord from corrupting production.</strong></p>
         <p class="warning">Do not assemble the Triforce before the gates are secure. Build, test, scan, review, then deploy.</p>
-        <div class="choice-panel">
-          <h2>Pipeline Fate Choice</h2>
-          <p>Choose your next command:</p>
-          <button id="safe-path">Run Full Gate Sequence</button>
-          <button id="reckless-path" class="danger">Deploy Immediately</button>
-          <p id="choice-result" aria-live="polite"></p>
-        </div>
       </div>
       <img src="assets/icons/triforce.png" alt="Golden triforce symbol glowing over a dark kingdom map" width="1536" height="1024" decoding="async" fetchpriority="high">
+    </section>
+
+    <section id="map" class="hub" aria-labelledby="map-title">
+      <h2 id="map-title">Map of Hyrule Field</h2>
+      <p>Follow the star to your next quest. A sealed temple opens once the temples before it are restored.</p>
+      <div id="hub-map" class="hub-map"></div>
+      <noscript><p>Enable JavaScript to see the map. Temples: <a href="power.html">Power</a>, <a href="wisdom.html">Wisdom</a>, <a href="courage.html">Courage</a>, <a href="fire.html">Fire</a>, <a href="water.html">Water</a>, <a href="forest.html">Forest</a>, <a href="final-battle.html">Final Battle</a>.</p></noscript>
+    </section>
+
+    <h2 class="section-divider">Training Grounds</h2>
+
+    <section class="card" style="margin-bottom:1rem;">
+      <div class="choice-panel">
+        <h2>Pipeline Fate Choice</h2>
+        <p>Choose your next command:</p>
+        <button id="safe-path">Run Full Gate Sequence</button>
+        <button id="reckless-path" class="danger">Deploy Immediately</button>
+        <p id="choice-result" aria-live="polite"></p>
+      </div>
     </section>
 
     <section class="timeline-panel" aria-labelledby="timeline-title">
@@ -114,13 +134,16 @@
           <span class="badge" data-badge="power">Power Keeper</span>
           <span class="badge" data-badge="wisdom">Wisdom Warden</span>
           <span class="badge" data-badge="courage">Courage Captain</span>
+          <span class="badge" data-badge="fire">Flame Keeper</span>
+          <span class="badge" data-badge="water">Tide Watcher</span>
+          <span class="badge" data-badge="forest">Grove Warden</span>
           <span class="badge" data-badge="champion">Ganonix Slayer</span>
         </div>
-        <p>Unlock all badges by restoring all temples with low corruption.</p>
+        <p>Unlock all badges by restoring all six temples with low corruption.</p>
       </article>
     </section>
 
-    <p class="footer-note">Start at the Temple of Power and finish at the Final Battle to complete your printable victory badge.</p>
+    <p class="footer-note">Begin at the Temple of Power, restore all six temples, then face Lord Ganonix to earn your printable victory badge.</p>
   </main>
 
   <script src="js/engine/game-state.js"></script>
@@ -141,6 +164,8 @@
   <script src="js/ui/rewards-panel.js"></script>
   <script src="js/ui/story-log.js"></script>
   <script src="js/ui/daily-mode.js"></script>
+  <script src="js/ui/hub-map.js"></script>
+  <script src="js/ui/site-nav.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/challenges.js"></script>
 </body>

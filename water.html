@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Temple of Water | DevOps Triforce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=Spectral:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/temples.css">
+</head>
+<body data-page="water">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main id="main-content" class="site-shell" tabindex="-1">
+    <nav class="top-nav" aria-label="Main">
+      <strong>Temple of Water</strong>
+      <ul>
+        <li><a href="index.html" data-temple="map">Map</a></li>
+        <li><a href="power.html" data-temple="power">Power</a></li>
+        <li><a href="wisdom.html" data-temple="wisdom">Wisdom</a></li>
+        <li><a href="courage.html" data-temple="courage">Courage</a></li>
+        <li><a href="fire.html" data-temple="fire">Fire</a></li>
+        <li><a href="water.html" data-temple="water">Water</a></li>
+        <li><a href="forest.html" data-temple="forest">Forest</a></li>
+        <li><a href="final-battle.html" data-temple="final">Final Battle</a></li>
+      </ul>
+    </nav>
+
+    <section class="status-bar">
+      <div>
+        <div class="triforce-progress">
+          <div class="triangle" data-piece="power"></div>
+          <div class="triangle" data-piece="wisdom"></div>
+          <div class="triangle" data-piece="courage"></div>
+        </div>
+        <div class="seal-progress" aria-label="Sage seals">
+          <span class="seal" data-piece="fire" data-seal="fire" title="Fire"></span>
+          <span class="seal" data-piece="water" data-seal="water" title="Water"></span>
+          <span class="seal" data-piece="forest" data-seal="forest" title="Forest"></span>
+        </div>
+        <p id="temple-count">0 / 6 temples restored</p>
+      </div>
+      <div class="corruption">
+        <p id="corruption-label">Lord Ganonix Corruption: 35%</p>
+        <div class="meter"><div class="meter-fill"></div></div>
+      </div>
+    </section>
+
+    <h1>Temple of Water: Monitoring &amp; Incident Response</h1>
+    <p id="temple-objective"></p>
+
+    <section id="trials" class="card trials" aria-labelledby="trials-title">
+      <h2 id="trials-title">Chambers of the Temple</h2>
+      <p id="trial-intro"></p>
+      <div id="trial-root"></div>
+    </section>
+
+    <section id="sage-reward" class="card sage-reward" hidden aria-labelledby="sage-reward-title">
+      <h2 id="sage-reward-title">Temple of Water restored</h2>
+      <p id="sage-status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="js/engine/game-state.js"></script>
+  <script src="js/engine/migrations.js"></script>
+  <script src="js/engine/save-schema.js"></script>
+  <script src="js/engine/actions.js"></script>
+  <script src="js/engine/scoring.js"></script>
+  <script src="js/engine/rewards.js"></script>
+  <script src="js/engine/rules-engine.js"></script>
+  <script src="js/content/mission-loader.js"></script>
+  <script src="js/content/story-engine.js"></script>
+  <script src="js/telemetry/session.js"></script>
+  <script src="js/telemetry/events.js"></script>
+  <script src="js/ui/instructor-mode.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/rewards-panel.js"></script>
+  <script src="js/ui/story-log.js"></script>
+  <script src="js/ui/site-nav.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/puzzles/puzzle-engine.js"></script>
+  <script src="js/ui/puzzle-ui.js"></script>
+  <script src="js/ui/temple-runner.js"></script>
+  <script src="js/challenges.js"></script>
+</body>
+</html>

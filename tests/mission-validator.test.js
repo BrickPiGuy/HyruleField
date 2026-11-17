@@ -10,10 +10,10 @@ const output = execFileSync(process.execPath, [path.join(root, "scripts/validate
   encoding: "utf8"
 });
 
-assert.match(output, /Validated 4 mission files\./, "validator should report all mission files");
+assert.match(output, /Validated 7 mission files\./, "validator should report all mission files");
 
 const missionsDir = path.join(root, "data/missions");
 const fileNames = fs.readdirSync(missionsDir).filter((file) => file.endsWith(".json"));
-assert.equal(fileNames.length, 4, "mission fixture count should remain stable for this test");
+assert.equal(fileNames.length, 7, "mission fixture count should remain stable for this test");
 
 console.log("Mission validator checks passed.");
