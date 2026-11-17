@@ -1311,3 +1311,118 @@ body[data-page="index"] #rewards-last-award {
   font-weight: 600;
   color: var(--gold-soft);
 }
+
+/* Illustrated map */
+.map-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(242, 200, 75, 0.35);
+}
+
+.map-art .trail-base {
+  stroke: rgba(20, 14, 8, 0.55);
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.map-art .trail-open {
+  stroke: #c9ad6a;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-dasharray: 2 12;
+}
+
+.map-art .trail-walked {
+  stroke: #f2c84b;
+  stroke-width: 6;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgba(242, 200, 75, 0.8));
+}
+
+.map-pin {
+  cursor: pointer;
+  outline: none;
+}
+
+.map-pin .pin-plate {
+  transition: stroke-width 160ms ease;
+}
+
+.map-pin:hover .pin-plate,
+.map-pin:focus-visible .pin-plate {
+  stroke-width: 7;
+  stroke: #ffffff;
+}
+
+.map-pin[data-state="locked"] .pin-emblem {
+  opacity: 0.45;
+}
+
+.map-pin[data-state="next"] .pin-plate {
+  filter: drop-shadow(0 0 10px rgba(242, 200, 75, 0.9));
+}
+
+.map-pin .pin-name {
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  fill: #fdf3cf;
+  stroke: #0a1216;
+  stroke-width: 4px;
+  paint-order: stroke;
+}
+
+.map-pin .pin-status {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 12px;
+  font-weight: 600;
+  fill: #cfe6d6;
+  stroke: #0a1216;
+  stroke-width: 3.5px;
+  paint-order: stroke;
+}
+
+.map-pin[data-state="done"] .pin-status { fill: #7be0a0; }
+.map-pin[data-state="next"] .pin-status { fill: #f6d86a; }
+.map-pin[data-state="locked"] .pin-status { fill: #f3c27a; }
+
+.pin-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-ring 2s ease-out infinite;
+}
+
+@keyframes map-ring {
+  0% { transform: scale(0.85); opacity: 0.9; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.hero-flag {
+  animation: flag-bob 1.6s ease-in-out infinite;
+}
+
+@keyframes flag-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.hyrule-map.is-calm .storm {
+  opacity: 0.25;
+}
+
+/* Big map on wide screens; the card list is the small-screen fallback */
+.map-list {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .map-art {
+    display: none;
+  }
+
+  .map-list {
+    display: block;
+  }
+}

@@ -12,10 +12,10 @@ async function resetGame(page) {
 test("map points at the next quest and seals doors that are not open yet", async ({ page }) => {
   await resetGame(page);
 
-  await expect(page.locator('[data-map-node="power"]')).toHaveAttribute("data-state", "next");
-  await expect(page.locator('[data-map-node="wisdom"]')).toHaveAttribute("data-state", "locked");
-  await expect(page.locator('[data-map-node="fire"]')).toHaveAttribute("data-state", "locked");
-  await expect(page.locator('[data-map-node="final"]')).toHaveAttribute("data-state", "locked");
+  await expect(page.locator('[data-map-pin="power"]')).toHaveAttribute("data-state", "next");
+  await expect(page.locator('[data-map-pin="wisdom"]')).toHaveAttribute("data-state", "locked");
+  await expect(page.locator('[data-map-pin="fire"]')).toHaveAttribute("data-state", "locked");
+  await expect(page.locator('[data-map-pin="final"]')).toHaveAttribute("data-state", "locked");
 
   await page.goto("/fire.html");
   await expect(page.getByRole("heading", { name: "The temple door is sealed" })).toBeVisible();
@@ -29,7 +29,7 @@ test("restoring Power opens Wisdom and the three sage temples", async ({ page })
   await page.goto("/index.html");
 
   for (const key of ["wisdom", "fire", "water", "forest"]) {
-    await expect(page.locator(`[data-map-node="${key}"]`)).not.toHaveAttribute("data-state", "locked");
+    await expect(page.locator(`[data-map-pin="${key}"]`)).not.toHaveAttribute("data-state", "locked");
   }
 });
 

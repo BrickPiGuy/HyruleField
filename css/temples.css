@@ -365,3 +365,43 @@
   }
 }
 
+
+/* Themed temple banners */
+.temple-banner {
+  height: 140px;
+  margin: 0.5rem 0 1rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(242, 200, 75, 0.35);
+}
+
+.temple-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.temple-art .spark,
+.temple-art .ember { fill: #ffb25a; animation: art-rise 4s ease-in infinite; }
+.temple-art .rune { fill: #cfd6ff; opacity: 0.7; animation: art-float 6s ease-in-out infinite; }
+.temple-art .bubble { fill: none; stroke: #b9e4ff; stroke-width: 1.2; animation: art-rise 6s linear infinite; }
+.temple-art .firefly { fill: #f4ff9a; animation: art-float 4s ease-in-out infinite; }
+
+@keyframes art-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-60px); opacity: 0; }
+}
+
+@keyframes art-float {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-10px); opacity: 1; }
+}
+
+/* Each temple tints the page its own colour */
+body[data-page="power"] { background: radial-gradient(circle at 20% 12%, rgba(242, 160, 74, 0.22), transparent 42%), linear-gradient(160deg, #0b1214, #1c1a14 45%, #2a2418); }
+body[data-page="wisdom"] { background: radial-gradient(circle at 80% 8%, rgba(122, 162, 255, 0.22), transparent 42%), linear-gradient(160deg, #0a0f1f, #141b34 45%, #1d2447); }
+body[data-page="courage"] { background: radial-gradient(circle at 20% 12%, rgba(240, 108, 79, 0.2), transparent 42%), linear-gradient(160deg, #140b0d, #2a1519 45%, #3a1f1f); }
+body[data-page="fire"] { background: radial-gradient(circle at 50% 0%, rgba(255, 120, 60, 0.26), transparent 46%), linear-gradient(160deg, #130808, #2a110d 45%, #3a1a12); }
+body[data-page="water"] { background: radial-gradient(circle at 80% 8%, rgba(93, 180, 255, 0.24), transparent 44%), linear-gradient(160deg, #06121f, #0d2a44 45%, #12405f); }
+body[data-page="forest"] { background: radial-gradient(circle at 20% 10%, rgba(88, 217, 138, 0.22), transparent 44%), linear-gradient(160deg, #07120b, #0f2a18 45%, #17381f); }

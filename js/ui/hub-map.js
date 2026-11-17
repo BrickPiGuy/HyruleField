@@ -1,10 +1,10 @@
 (function (root, factory) {
-  const api = factory(root.HyruleGameState);
+  const api = factory(root.HyruleGameState, root.HyruleMapArt);
   root.HyruleHubMap = api;
   if (typeof module !== "undefined" && module.exports) {
     module.exports = api;
   }
-})(typeof globalThis !== "undefined" ? globalThis : window, function (HyruleGameState) {
+})(typeof globalThis !== "undefined" ? globalThis : window, function (HyruleGameState, HyruleMapArt) {
   // The Hyrule map on the home page. One glance shows what is restored, what is sealed
   // and the single next quest, so the player never has to guess where to go.
 
@@ -54,8 +54,10 @@
 
   function render(state) {
     const rows = { sages: [], path: [], castle: [] };
+    const infos = {};
     NODES.forEach((node) => {
       const info = describeNode(state, node);
+      infos[node.key] = info;
       const label = `${node.name}. ${node.topic}. ${info.text}.`;
       rows[node.row].push(`
         <a class="map-node" data-map-node="${node.key}" data-state="${info.status}" href="${node.href}" aria-label="${escapeHtml(label)}"${info.status === "next" ? ' aria-current="step"' : ""}>
@@ -66,13 +68,18 @@
         </a>`);
     });
 
+    const art = HyruleMapArt ? `<div class="map-art">${HyruleMapArt.render(infos)}</div>` : "";
+
     return `
+      ${art}
+      <div class="map-list">
       <p class="map-row-label">The Triforce Path <span>(in order)</span></p>
       <div class="map-row map-path">${rows.path.join("")}</div>
       <p class="map-row-label">Sage Trials <span>(open after Power, any order)</span></p>
       <div class="map-row map-sages">${rows.sages.join("")}</div>
       <p class="map-row-label">The Final Battle <span>(needs all six temples)</span></p>
-      <div class="map-row map-castle">${rows.castle.join("")}</div>`;
+      <div class="map-row map-castle">${rows.castle.join("")}</div>
+      </div>`;
   }
 
   function update(state) {
