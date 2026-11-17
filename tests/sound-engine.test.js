@@ -73,6 +73,20 @@ Object.values(sound.PAGE_THEMES).forEach((theme) => {
 });
 assert.strictEqual(Math.round(sound.midiToFreq(69)), 440, "A4 is 440 Hz");
 
+// Background beds stay musical and quiet: no sub-200 Hz rumble, only faint hush, and a melody.
+Object.entries(sound.AMBIENT).forEach(([theme, bed]) => {
+  bed.drones.forEach((drone) => {
+    assert.ok(sound.midiToFreq(drone.midi) >= 200, `${theme} drones stay above 200 Hz for small speakers`);
+    assert.ok(drone.gain <= 0.035, `${theme} drones are quiet`);
+  });
+  assert.ok(bed.melody && bed.melody.notes.length >= 4, `${theme} has a melody scale`);
+  assert.ok(bed.melody.gain <= 0.06, `${theme} melody is quiet`);
+  if (bed.noise) {
+    assert.ok(bed.noise.gain <= 0.01, `${theme} hush stays very faint`);
+    assert.ok(bed.noise.freq <= 800, `${theme} hush is low-passed, not hissy`);
+  }
+});
+
 // Off by default: nothing is created or played.
 let audio = makeFakeAudio();
 let store = fakeStorage();
