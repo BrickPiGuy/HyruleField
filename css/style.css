@@ -275,28 +275,6 @@ select:focus-visible {
   font-size: 0.94rem;
 }
 
-.triforce-progress {
-  display: flex;
-  align-items: end;
-  gap: 0.65rem;
-}
-
-.triangle {
-  width: 0;
-  height: 0;
-  border-left: 26px solid transparent;
-  border-right: 26px solid transparent;
-  border-bottom: 46px solid rgba(255, 233, 170, 0.18);
-  filter: drop-shadow(0 0 8px rgba(242, 200, 75, 0.12));
-  transition: transform 220ms ease, border-bottom-color 220ms ease;
-}
-
-.triangle.complete {
-  border-bottom-color: var(--gold);
-  transform: translateY(-4px);
-  filter: drop-shadow(0 0 14px rgba(242, 200, 75, 0.65));
-}
-
 .corruption {
   min-width: 230px;
 }
@@ -1137,58 +1115,50 @@ button:disabled {
 }
 
 /* Sage seals beside the triforce */
+/* Six pieces build up like the Triforce: three corners and three inner pieces */
 .triforce-progress {
-  padding-bottom: 1.4rem;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.tri-row {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
 }
 
 .triangle {
   position: relative;
+  width: 58px;
+  height: 50px;
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  background: rgba(255, 233, 170, 0.16);
+  display: grid;
+  place-items: end center;
+  padding-bottom: 5px;
+  transition: background 260ms ease, transform 260ms ease;
 }
 
-.triangle::after {
-  content: attr(data-label);
-  position: absolute;
-  top: 52px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: rgba(234, 241, 231, 0.75);
-  white-space: nowrap;
+.tri-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+  filter: grayscale(1) opacity(0.5);
+  transition: filter 260ms ease;
 }
 
-.triangle.complete::after {
-  color: var(--gold-soft);
+.triangle.complete {
+  background: var(--gold);
 }
 
-.seal-progress {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.4rem;
+.triangle.complete .tri-icon {
+  filter: none;
 }
 
-.seal {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.15rem 0.6rem 0.15rem 0.45rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.05);
-  font-size: 0.82rem;
-  font-weight: 700;
-  opacity: 0.6;
-  transition: background 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
-}
-
-.seal.complete {
-  opacity: 1;
-}
-
-.seal[data-seal="fire"].complete { background: rgba(255, 122, 69, 0.28); box-shadow: 0 0 10px #ff7a45; border-color: #ff7a45; }
-.seal[data-seal="water"].complete { background: rgba(74, 168, 255, 0.28); box-shadow: 0 0 10px #4aa8ff; border-color: #4aa8ff; }
-.seal[data-seal="forest"].complete { background: rgba(73, 209, 125, 0.28); box-shadow: 0 0 10px #49d17d; border-color: #49d17d; }
+.triangle[data-piece="fire"].complete { background: #ff8a55; }
+.triangle[data-piece="water"].complete { background: #5db4ff; }
+.triangle[data-piece="forest"].complete { background: #58d98a; }
 
 /* Home page: the map */
 .hub {
