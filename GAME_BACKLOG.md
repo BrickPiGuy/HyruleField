@@ -279,7 +279,9 @@ Goal: smoother navigation, real puzzles and more temples while keeping the Zelda
 - [x] New temples: Fire (testing), Water (monitoring), Forest (infrastructure as code), 5 chambers each
 - [x] Final battle now needs all six temples; save version 5 migrates older saves
 - [ ] Playwright e2e specs updated but not yet run in CI
-- [ ] Optional: Git and branching temple, mini-boss per temple, sound and art pass
+- [x] Illustrated SVG Hyrule map and themed temple banners
+- [x] Synthesized sound: effects, a quiet ambient bed per temple, and a remembered Sound toggle (off by default)
+- [ ] Optional: Git and branching temple, mini-boss per temple, custom art and recorded audio
 
 ## Execution Order
 

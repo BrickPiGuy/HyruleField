@@ -1426,3 +1426,12 @@ body[data-page="index"] #rewards-last-award {
     display: block;
   }
 }
+
+/* Sound switch */
+.sound-toggle {
+  white-space: nowrap;
+}
+
+.sound-toggle[aria-pressed="true"] {
+  background: linear-gradient(180deg, #ffe6a6, #d9b44f);
+}
