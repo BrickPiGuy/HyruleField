@@ -47,8 +47,10 @@
 
     HyruleSound.onChange(render);
 
-    // Sound was left on last time: wait for the first gesture, as browsers require.
+    // Sound was left on last time: start the bed right away so it carries across pages. If the
+    // browser holds the audio back, the first click or key press releases it.
     if (HyruleSound.isEnabled()) {
+      HyruleSound.startAmbient(theme);
       const resume = () => {
         document.removeEventListener("pointerdown", resume, true);
         document.removeEventListener("keydown", resume, true);
