@@ -862,13 +862,25 @@ button:disabled {
 }
 
 .badge {
+  opacity: 0.55;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.26);
   background: rgba(255, 255, 255, 0.09);
 }
 
+.badge::before {
+  content: "F512  ";
+}
+
+.badge.unlocked::before {
+  content: "°5  ";
+  color: var(--gold);
+}
+
 .badge.unlocked {
+  opacity: 1;
+  font-weight: 600;
   border-color: var(--gold);
   background: rgba(242, 200, 75, 0.17);
 }
