@@ -83,11 +83,43 @@ function updateGlobalUI(state) {
   }
 }
 
+function playSound(name) {
+  if (window.HyruleSound && typeof window.HyruleSound.play === "function") {
+    window.HyruleSound.play(name);
+  }
+}
+
+// Picks the one sound that best describes what just happened.
+function soundForResult(action, current, next, outcome) {
+  if (action.type === window.HyruleActions.TYPES.FINAL_BATTLE_RESOLVE && outcome.ok) {
+    return "victory";
+  }
+
+  if (ALL_TEMPLES.some((piece) => !current[piece] && next[piece])) {
+    return "restored";
+  }
+
+  if (outcome.ok === false) {
+    return "slip";
+  }
+
+  if (action.type === window.HyruleActions.TYPES.PUZZLE_SOLVED) {
+    return "chime";
+  }
+
+  return null;
+}
+
 function dispatch(action) {
   const current = loadState();
   const result = window.HyruleRules.reduceGameState(current, action);
   saveState(result.state);
   updateGlobalUI(result.state);
+
+  const sound = soundForResult(action, current, result.state, result.outcome || {});
+  if (sound && action.type !== window.HyruleActions.TYPES.RESET_GAME) {
+    playSound(sound);
+  }
 
   const outcome = result.outcome || {};
   trackTelemetry(telemetryEventName("ACTION_RESOLVED"), {

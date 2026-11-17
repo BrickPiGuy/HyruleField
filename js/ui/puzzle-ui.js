@@ -17,6 +17,12 @@
       .replaceAll("'", "&#39;");
   }
 
+  function sound(name) {
+    if (typeof window !== "undefined" && window.HyruleSound && typeof window.HyruleSound.play === "function") {
+      window.HyruleSound.play(name);
+    }
+  }
+
   const TYPE_LABELS = {
     order: "Order the ritual",
     spot: "Spot the flaw",
@@ -77,6 +83,9 @@
     }
 
     function showHint() {
+      if (!hintVisible) {
+        sound("hint");
+      }
       hintVisible = true;
       hintNode.hidden = false;
       hintButton.setAttribute("aria-expanded", "true");
@@ -184,6 +193,7 @@
         const id = target.dataset.id;
         const index = state.order.indexOf(id);
         moveOrder(id, target.dataset.move === "up" ? index - 1 : index + 1);
+        sound("move");
         focusKey = `[data-move="${target.dataset.move}"][data-id="${CSS.escape(id)}"]`;
         render();
         if (!body.querySelector(focusKey) || body.querySelector(focusKey).disabled) {
@@ -191,6 +201,7 @@
           other?.focus();
         }
       } else if (puzzle.type === "spot" && target.dataset.line !== undefined) {
+        sound("select");
         const index = Number(target.dataset.line);
         if (state.spot.has(index)) {
           state.spot.delete(index);
@@ -200,6 +211,7 @@
         focusKey = `[data-line="${index}"]`;
         render();
       } else if (puzzle.type === "match") {
+        sound("select");
         if (target.dataset.left !== undefined) {
           const left = target.dataset.left;
           if (state.match[left]) {
@@ -228,10 +240,12 @@
       } else if (puzzle.type === "switches" && target.dataset.switch) {
         const id = target.dataset.switch;
         state.switches[id] = !state.switches[id];
+        sound("select");
         focusKey = `[data-switch="${CSS.escape(id)}"]`;
         render();
       } else if (puzzle.type === "choice" && target.dataset.choice) {
         state.choice = target.dataset.choice;
+        sound("select");
         focusKey = `[data-choice="${CSS.escape(target.dataset.choice)}"]`;
         render();
       }

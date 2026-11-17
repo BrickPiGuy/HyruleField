@@ -82,11 +82,14 @@
       }).join("");
     }
 
-    function finish() {
+    function finish(announce) {
       if (finished) {
         return;
       }
       finished = true;
+      if (announce && window.HyruleSound) {
+        setTimeout(() => window.HyruleSound.play("cleared"), 450);
+      }
       renderPips();
       stageNode.innerHTML = `
         <div class="trial-cleared" role="status">
@@ -127,7 +130,7 @@
           renderPips();
 
           if (index + 1 >= puzzles.length) {
-            finish();
+            finish(true);
             return;
           }
 
@@ -146,7 +149,7 @@
     const done = solvedIds();
     const firstOpen = puzzles.findIndex((puzzle) => !done.includes(puzzle.id));
     if (firstOpen === -1) {
-      finish();
+      finish(false);
     } else {
       showChamber(firstOpen);
     }
