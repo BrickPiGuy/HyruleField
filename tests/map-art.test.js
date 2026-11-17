@@ -18,7 +18,7 @@ assert.strictEqual((fresh.match(/data-fog=/g) || []).length, 6, "sealed places a
 assert.match(fresh, /data-hero="power"/, "the flag marks the next quest");
 assert.match(fresh, /aria-current="step"/, "the next quest is marked for screen readers");
 keys.forEach((key) => {
-  assert.match(fresh, new RegExp(`data-map-pin="${key}"[^>]*href="[a-z-]+\.html"`), `${key} pin links to its page`);
+  assert.match(fresh, new RegExp(`data-map-pin="${key}"[^>]*href="[a-z-]+\\.html"`), `${key} pin links to its page`);
 });
 assert.match(fresh, /aria-label="Map of Hyrule Field"/);
 
