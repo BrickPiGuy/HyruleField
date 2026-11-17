@@ -10,7 +10,9 @@ async function resetGame(page) {
 
 test("instructor mode reveals answers and hints on the front page", async ({ page }) => {
   await resetGame(page);
+  await expect(page.locator("#instructor-toggle")).toHaveCount(0);
 
+  await page.goto("/index.html?instructor=1");
   await page.click("#instructor-toggle");
   const panel = page.locator(".instructor-panel");
   await expect(panel).toBeVisible();

@@ -109,6 +109,31 @@
     label: "Warm-up Page"
   };
 
+  // Instructor mode is hidden from players. Open any page with ?instructor=1 to turn it on
+  // for the rest of the browser session, and ?instructor=0 to turn it off again.
+  const ACCESS_KEY = "hyruleInstructorMode";
+
+  function isInstructorAccessEnabled(search, storage) {
+    const params = new URLSearchParams(search || "");
+    const requested = params.get("instructor");
+
+    try {
+      if (requested === "1") {
+        storage.setItem(ACCESS_KEY, "1");
+        return true;
+      }
+
+      if (requested === "0") {
+        storage.removeItem(ACCESS_KEY);
+        return false;
+      }
+
+      return storage.getItem(ACCESS_KEY) === "1";
+    } catch (_error) {
+      return requested === "1";
+    }
+  }
+
   function getPageId() {
     return document.body.getAttribute("data-page") || "index";
   }
@@ -284,6 +309,10 @@
   }
 
   async function initializePage() {
+    if (!isInstructorAccessEnabled(window.location.search, window.sessionStorage)) {
+      return;
+    }
+
     const pageId = getPageId();
     if (!PAGE_CONFIG[pageId] && !["fire", "water", "forest"].includes(pageId)) {
       return;
@@ -348,13 +377,16 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    initializePage().catch(() => {
-      // Instructor mode should never block the main game flow.
+  if (typeof document !== "undefined") {
+    document.addEventListener("DOMContentLoaded", () => {
+      initializePage().catch(() => {
+        // Instructor mode should never block the main game flow.
+      });
     });
-  });
+  }
 
   return {
-    PAGE_CONFIG
+    PAGE_CONFIG,
+    isInstructorAccessEnabled
   };
 });
