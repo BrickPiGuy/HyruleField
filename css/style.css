@@ -870,11 +870,11 @@ button:disabled {
 }
 
 .badge::before {
-  content: "F512  ";
+  content: "🔖  ";
 }
 
 .badge.unlocked::before {
-  content: "°5  ";
+  content: "⭐  ";
   color: var(--gold);
 }
 
